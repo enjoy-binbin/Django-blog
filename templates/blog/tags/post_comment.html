@@ -1,0 +1,31 @@
+<div id="comments" class="comments-area">
+
+    <div id="respond" class="comment-respond">
+        <h3 id="reply-title" class="comment-reply-title">发表评论</h3>
+        <form action="{% url 'blog:comment' article.id %}" method="post" id="commentform" class="comment-form">
+            <p class="comment-form-comment">
+                {# label_tag会生成一个标签-> <label for="id_content">评论内容:</label> #}
+                {{ comment_form.content.label_tag }}
+                {{ comment_form.content }}
+                {{ comment_form.content.errors }}
+            </p>
+            <p class="comment-form-author">
+                {{ comment_form.name }}
+                {{ comment_form.name.errors }}
+            <p class="comment-form-email">
+                {{ comment_form.email }}
+                {{ comment_form.email.errors }}
+            </p>
+            {{ comment_form.parent_comment_id }}
+            <div class="form-submit">
+                <span class="comment-markdown" style="padding: 10px"> 支持markdown</span>
+                <input name="submit" type="submit" id="submit" class="submit" value="发表评论"/>
+            </div>
+
+            {% csrf_token %}
+        </form>
+    </div>
+
+</div>
+
+

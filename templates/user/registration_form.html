@@ -1,0 +1,32 @@
+{% extends 'base/base_user.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+
+        <h2 class="form-signin-heading text-center">Create Your user</h2>
+
+        <div class="card card-signin">
+            <img class="img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">
+            <form class="form-signin" action="{% url 'user:register' %}" method="post">
+                {% csrf_token %}
+
+                {{ form.non_field_errors }}
+                {% for field in form %}
+                    {{ field }}
+                    {{ field.errors }}
+                {% endfor %}
+
+
+                <button class="btn btn-lg btn-primary btn-block" type="submit" style="margin-top: 10px">
+                    Create Your user
+                </button>
+
+            </form>
+        </div>
+
+        <p class="text-center">
+            <a href="{% url "user:login" %}">Sign In</a>
+        </p>
+
+    </div> <!-- /container -->
+{% endblock %}

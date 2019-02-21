@@ -1,0 +1,18 @@
+<li id="menu-item-{{ top_category.pk }}" class="">
+    <a href="{{ top_category.get_absolute_url }}">{{ top_category.name }}</a>
+
+    {% load blog_tags %}
+    {% queryset_filter_tag nav_category_list parent_category=top_category as sub_categorys %}
+    {% if sub_categorys %}
+        <ul class="sub-menu">
+            {% for sub_category in sub_categorys %}
+                {# with，将sub_category重命名为top_category再进行后面子分类渲染 #}
+                {% with top_category=sub_category %}
+                    {% include 'base/nav_node.html' %}
+                {% endwith %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>
+
+

@@ -1,0 +1,33 @@
+<section id="comments" class="themeform">
+    {% load blog_tags %}
+
+    <ul class="comment-tabs group">
+        <li class="active">
+            <a href="#commentlist-container">
+                评论<span>{{ comment_count }}</span>
+            </a>
+        </li>
+    </ul>
+
+    {% if article_comments %}
+        <div id="commentlist-container" class="comment-tab" style="display: block;">
+
+            <ol class="commentlist">
+                {% queryset_filter_tag article_comments parent_comment=None as parent_comments %}
+
+                {% for comment in parent_comments %}
+                    {% inclusion_comment_item comment %}
+
+                    {% parse_comment_tree article_comments comment as child_comments %}
+                    {% if child_comments %}
+                        <ul class="children">
+                            {% for comment in child_comments %}
+                                {% inclusion_comment_item comment %}
+                            {% endfor %}
+                        </ul><!-- .children -->
+                    {% endif %}
+                {% endfor %}
+            </ol><!--/.commentlist-->
+        </div>
+    {% endif %}
+</section>

@@ -1,0 +1,19 @@
+<nav id="site-navigation" class="main-navigation" role="navigation">
+    <div>
+        <ul class="nav-menu">
+            <li class="current-menu-item">
+                <a href="/">首页</a>
+            </li>
+
+            {% load blog_tags %}
+            {% queryset_filter_tag nav_category_list parent_category=None as top_categorys %}
+            {% for top_category in top_categorys %}
+                {% include 'base/nav_node.html' %}
+            {% endfor %}
+
+            <li class="">
+                <a href="{% url 'blog:archives' %}">文章归档</a>
+            </li>
+        </ul>
+    </div>
+</nav><!-- #site-navigation -->

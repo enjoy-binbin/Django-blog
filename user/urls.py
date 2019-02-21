@@ -1,0 +1,13 @@
+# -*- coding: utf-8 -*-
+from django.urls import path
+
+from . import views
+from .forms import LoginForm
+
+app_name = 'user'
+
+urlpatterns = [
+    path('login/', views.LoginView.as_view(success_url='/'), name='login', kwargs={'authentication_form': LoginForm}),
+    path('register/', views.RegisterView.as_view(success_url="/"), name='register'),
+    path('logout/', views.LogoutView.as_view(), name='logout')
+]

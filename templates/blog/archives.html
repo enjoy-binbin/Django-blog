@@ -1,0 +1,51 @@
+{% extends 'base/base.html' %}
+{% load blog_tags %}
+
+{% block header %}
+    <title>文章归档 | {{ SITE_DESC }}</title>
+    <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
+    <meta name="keywords" content="{{ SITE_KEYWORD }}"/>
+    <meta property="og:type" content="blog"/>
+    <meta property="og:title" content="{{ SITE_NAME }}"/>
+    <meta property="og:description" content="{{ SITE_DESC }}"/>
+    <meta property="og:url" content="{{ SITE_BASE_URL }}"/>
+    <meta property="og:site_name" content="{{ SITE_NAME }}"/>
+{% endblock %}
+
+{% block content %}
+    <div id="primary" class="site-content">
+        <div id="content" role="main">
+            <header class="archive-header">
+                <p class="archive-title">文章归档</p>
+            </header>
+
+            <div class="entry-content">
+                {% regroup article_list by add_time.year as year_list %}
+                <ul>
+                    {% for year in year_list %}
+                        <li>{{ year.grouper }} 年
+                            {% regroup year.list by add_time.month as month_list %}
+                            <ul>
+                                {% for month in month_list %}
+                                    <li>{{ month.grouper }} 月
+                                        <ul>
+                                            {% for article in month.list %}
+                                                <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    {#    {% load_sidebar user 'i' %}#}
+{% endblock %}
+
+

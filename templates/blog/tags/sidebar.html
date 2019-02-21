@@ -1,0 +1,118 @@
+{% load blog_tags %}
+<div class="widget-area">
+    {# 搜索框 #}
+    <aside class="widget widget_search">
+        <form method="get" action="{% url 'haystack_search' %}">
+            <div>
+                <input type="text" placeholder="请输入搜索内容" name="q" title="请输入搜索内容"/>
+                <input type="submit" value="搜索"/>
+            </div>
+        </form>
+    </aside>
+
+    {# sidebar公告栏 #}
+    {% if all_sidebars %}
+        {% for sidebar in all_sidebars %}
+            <aside class="widget">
+                <h3 class="widget-title">{{ sidebar.title }}</h3>
+                <div class="textwidget">{{ sidebar.content|article_markdown }}</div>
+            </aside>
+        {% endfor %}
+    {% endif %}
+
+    {# github的sidebar #}
+    <aside class="widget">
+        <h3 class="widget-title">欢迎您star或者fork本站源代码</h3>
+        <div class="textwidget">
+            <p>
+                <a href="https://github.com/{{ github_sidebar }}">
+                    <img src="https://img.shields.io/github/stars/{{ github_sidebar }}.svg?style=social">
+                </a>
+                <a href="https://github.com/{{ github_sidebar }}">
+                    <img src="https://img.shields.io/github/forks/{{ github_sidebar }}.svg?style=social">
+                </a>
+            </p>
+        </div>
+    </aside>
+
+    {# 最热文章-阅读数 #}
+    {% if hot_articles %}
+        <aside class="widget"><h3 class="widget-title">最热文章</h3>
+            <ul>
+                {% for article in hot_articles %}
+                    <li>
+                        <a href="{{ article.get_absolute_url }}" title="{{ article.title }}">
+                            {{ article.title }}
+                        </a> - {{ article.views }} views
+                    </li>
+                {% endfor %}
+            </ul>
+        </aside>
+    {% endif %}
+
+    {# 分类目录 #}
+    {% if all_categorys %}
+        <aside class="widget"><h3 class="widget-title">分类目录</h3>
+            <ul>
+                {% for category in all_categorys %}
+                    <li class="cat-item">
+                        <a href='{{ category.get_absolute_url }}' title="{{ category.name }}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </aside>
+    {% endif %}
+
+    {# 近期文章-最新 #}
+    {% if new_articles %}
+        <aside class="widget"><h3 class="widget-title">近期文章</h3>
+            <ul>
+                {% for article in  new_articles %}
+                    <li><a href="{{ article.get_absolute_url }}" title="{{ article.title }}">
+                        {{ article.title }} - {{ article.add_time|time_filter }}
+                    </a></li>
+                {% endfor %}
+            </ul>
+        </aside>
+    {% endif %}
+
+    {# 书签链接，友情链接 #}
+    {% if all_links %}
+        <aside class="widget"><h3 class="widget-title">书签链接</h3>
+            <ul>
+                {% for link in all_links %}
+                    <li><a href="{{ link.url }}" target="_blank" title="{{ link.name }}">{{ link.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </aside>
+    {% endif %}
+
+    {# 标签云 #}
+    {% if all_tags %}
+        <aside class="widget"><h3 class="widget-title">标签云</h3>
+            <div>
+                {% for tag, count, size in all_tags %}
+                    <a href="{{ tag.get_absolute_url }}" style="font-size: {{ size }}pt;"
+                       title="{{ count }}个标签"> {{ tag.name }}</a>
+                {% endfor %}
+            </div>
+        </aside>
+    {% endif %}
+
+    {# 站点功能 #}
+    <aside class="widget"><h3 class="widget-title">站点功能</h3>
+        <ul>
+            <li><a href="{% url 'admin:index' %}" rel="nofollow">管理站点</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'user:logout' %}" rel="nofollow">登出</a></li>
+            {% else %}
+                <li><a href="{% url 'user:login' %}" rel="nofollow">登录</a>
+            {% endif %}
+            {% if user.is_superuser %}
+                <li><a href="#" target="_blank">刷新缓存</a></li>
+                <li><a href="#" target="_blank">运动轨迹记录</a></li>
+            {% endif %}
+        </ul>
+    </aside>
+    <div id="rocket" class="show" title="点我返回顶部"></div>
+</div>

@@ -1,0 +1,41 @@
+{% extends 'base/base.html' %}
+{% load blog_tags %}
+{% block header %}
+    {% if tag_name %}
+        <title>{{ page_type }}:{{ tag_name }} | {{ SITE_DESC }}</title>
+        {% comment %}<meta name="description" content="{{ page_type }}:{{ tag_name }}"/>{% endcomment %}
+    {% else %}
+        <title>{{ SITE_NAME }} | {{ SITE_DESC }}</title>
+    {% endif %}
+    <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
+    <meta name="keywords" content="{{ SITE_KEYWORD }}"/>
+    <meta property="og:type" content="blog"/>
+    <meta property="og:title" content="{{ SITE_NAME }}"/>
+    <meta property="og:description" content="{{ SITE_DESCRIPTION }}"/>
+    <meta property="og:url" content="{{ SITE_BASE_URL }}"/>
+    <meta property="og:site_name" content="{{ SITE_NAME }}"/>
+{% endblock %}
+{% block content %}
+    <div id="primary" class="site-content">
+        <div id="content" role="main">
+            {% if page_type and tag_name %}
+                <header class="archive-header">
+                    <p class="archive-title">{{ page_type }}：<span>{{ tag_name }}</span></p>
+                </header><!-- .archive-header -->
+            {% endif %}
+
+            {% pagination_tag article_list 2 as article_list %}
+
+            {% for article in article_list %}
+                {% inclusion_article_info_tag article True %}
+            {% endfor %}
+
+            {% include 'blog/article_pagination.html' %}
+
+        </div><!-- #content -->
+    </div><!-- #primary -->
+
+{% endblock %}
+{% block sidebar %}
+    {% inclusion_sidebar_tag %}
+{% endblock %}

@@ -1,0 +1,35 @@
+{% load blog_tags %}
+<li class="parent" id="comment-{{ comment.id }}">
+    <div id="div-comment-{{ comment.id }}" class="comment-body">
+        <div class="comment-author vcard">
+            <img alt=""
+                 src="{{ comment.author.email }}"
+                 srcset="{{ comment.author.email }}"
+                 class="avatar avatar-96 photo" height="96" width="96">
+            <cite class="fn">
+                <a rel="nofollow"
+                        {% if comment.author.is_superuser %}
+                   href="{{ comment.author.get_absolute_url }}"
+                        {% else %}
+                   href="#"
+                        {% endif %}
+                   rel="external nofollow"
+                   class="url">{{ comment.author.username }}
+                </a>
+            </cite>
+            <span class="says">说道：</span>
+        </div>
+
+        <div class="comment-meta commentmetadata">
+            {{ comment.created_time }}
+        </div>
+
+        <p>{{ comment.content |escape|article_markdown }}</p>
+
+        <div class="reply"><a rel="nofollow" class="comment-reply-link"
+                              href="javascript:void(0)"
+                              onclick="do_reply({{ comment.pk }})"
+                              aria-label="回复给{{ comment.author.username }}">回复</a></div>
+    </div>
+
+</li><!-- #comment-## -->

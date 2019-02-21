@@ -1,0 +1,45 @@
+<footer id="colophon" role="contentinfo">
+    <div class="site-info" style="text-align: center">
+        Copyright&copy;&nbsp;2019&nbsp;
+        <a href="{% url 'blog:index' %}" target="blank">{{ SITE_NAME }}</a>
+        &nbsp;|&nbsp;
+
+        <a href="#" title="SiteMap" target="_blank">
+            SiteMap
+        </a>
+        &nbsp;|&nbsp;
+        <a href="#" title="RSS Feed" target="_blank">
+            RSS Feed
+        </a>
+        |&nbsp; Hosting On&nbsp;
+        <a href="https://www.linode.com/" target="_blank" rel="nofollow">Linode</a>
+        |&nbsp;
+        <a href="https://tongji.baidu.com/web/welcome/login" target="_blank" rel="nofollow">百度统计</a>
+
+    </div>
+    <div class="site-info" style="text-align: center">
+        Powered by
+        <a href="https://www.djangoproject.com/" rel="nofollow" target="blank">Django</a>
+        |借鉴于
+        <a href="https://www.lylinux.net" target="blank">Lylinux</a>
+        |
+        本页面加载耗时:<!!LOAD_TIMES!!>s
+    </div>
+    {% if BEIAN_CODE %}
+        <div class="site-info" style="text-align: center">
+            <a href="http://www.miitbeian.gov.cn/" rel="nofollow" target="_blank">
+                <p style=" height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">
+                    {{ BEIAN_CODE }}
+                </p>
+            </a>
+            {% if BEIAN_CODE_GONGAN and SHOW_GONGAN_CODE %}
+                {{ BEIAN_CODE_GONGAN |safe }}
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if ANALYTICS_CODE %}
+        {{ ANALYTICS_CODE| safe }}
+    {% endif %}
+</footer>
+
+

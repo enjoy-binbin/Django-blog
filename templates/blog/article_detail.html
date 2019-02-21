@@ -1,0 +1,77 @@
+{% extends 'base/base.html' %}
+{% load blog_tags %}
+{% block header %}
+    <title>{{ article.title }} | {{ SITE_DESCRIPTION }}</title>
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" content="{{ article.title }}"/>
+
+
+    <meta property="og:description" content="{{ article.body|article_markdown|striptags|truncatewords:1 }}"/>
+    <meta property="og:url"
+          content="{{ article.get_full_url }}"/>
+    {#    <meta property="article:published_time" content="{% datetimeformat article.pub_time %}"/>#}
+    {#    <meta property="article:modified_time" content="{% datetimeformat article.pub_time %}"/>#}
+    <meta property="article:author" content="{{ article.author.get_full_url }}"/>
+    <meta property="article:section" content="{{ article.category.name }}"/>
+    {% for t in article.tags.all %}
+        <meta property="article:tag" content="{{ t.name }}"/>
+    {% endfor %}
+    <meta property="og:site_name" content="{{ SITE_NAME }}"/>
+
+    <meta name="description" content="{{ article.body|article_markdown|striptags|truncatewords:1 }}"/>
+    {% if article.tags %}
+        <meta name="keywords" content="{{ article.tags.all|join:"," }}"/>
+    {% else %}
+        <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
+    {% endif %}
+
+{% endblock %}
+{% block content %}
+    <div id="primary" class="site-content">
+        <div id="content" role="main">
+            {% inclusion_article_info_tag article False %}
+
+            <nav class="nav-single">
+                <h3 class="assistive-text">文章导航</h3>
+                {% if next_article %}
+
+                    <span class="nav-previous"><a href="{{ next_article.get_absolute_url }}" rel="prev"><span
+                            class="meta-nav">&larr;</span> {{ next_article.title }}</a></span>
+                {% endif %}
+                {% if prev_article %}
+                    <span class="nav-next"><a href="{{ prev_article.get_absolute_url }}"
+                                              rel="next">{{ prev_article.title }} <span
+                            class="meta-nav">&rarr;</span></a></span>
+                {% endif %}
+            </nav><!-- .nav-single -->
+
+        </div><!-- #content -->
+
+
+        {% comment %}{% load comments_tags %}
+                {% load_post_comment article from %}{% endcomment %}
+        {% include 'blog/tags/comment_list.html' %}
+        {% if user.is_authenticated %}
+            {% include 'blog/tags/post_comment.html' %}
+        {% else %}
+            <div class="comments-area">
+                <h3 class="comment-meta">您还没有登录，请您<a
+                        href="?next={{ request.get_full_path }}">登录</a>后发表评论。</h3>
+
+                {#                    {% load oauth_tags %}#}
+                {#                    {% load_oauth_applications request %}#}
+
+            </div>
+        {% endif %}
+    </div><!-- #primary -->
+
+{% endblock %}
+
+{% block sidebar %}
+    {% with request.user.username|add:'p' as cachekey %}
+        {#        {% cache 36000 sidebar cachekey %}#}
+        {#            {% load_sidebar user 'p' %}#}
+        {#        {% endcache %}#}
+    {% endwith %}
+    {% inclusion_sidebar_tag %}
+{% endblock %}
