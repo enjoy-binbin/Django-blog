@@ -1,24 +1,69 @@
-# 未完成
 
-## 我的开发环境:  先简单的来，前后端不分离。时间 19年1月
+
+# BinBlog
+
+基于 `python3.6` 和 `Django2.1`的博客系统
+
+
+
+### 本地开发环境
 
 1. win10 64位
 2. python 3.6
 3. Django 2.1
 4. Mysql 5.6
 5. PyCharm 2018.1
-6. xadmin后台： `bin 1123`
+6. admin后台： `bin 1123`
 
-### 使用到
-* admin的扩展，ModelAdmin的使用
-* django通用视图, ListView, DetailView
+## 主要功能
+
+* 文章分类，文章，文章标签的增删改查，展示
+* 文章详情支持`Markdown`，支持代码高亮
+* 支持文章列表分页
+* 文章评论功能
+* admin后台管理系统
+* 用户注册登陆
+* 右侧侧边栏功能，最热文章，最新文章，标签云
+
+## 使用到
+
+* django通用视图，ListViewDetailView，FromView，RedirectView
+* admin的扩展，ModelAdmin扩展，SimpleListFilter自定义过滤器
+* 自定义LoginView，RegisterView，LogoutView，部分django自带auth用法
 * context_processors自定义模板全局变量
-* admin编辑页 TextFields使用 `pagedow`n 支持 `markdown`
+* admin编辑页 TextFields使用 `pagedown` 支持 `markdown`
 * templatetags 自定义模板标签 tags
-* logger记录日志
-* cache的使用
-* 使用haystack和whoosh实现搜索功能
+* 使用haystack和whoosh实现的全文文章搜索功能
+* slug的用法
 
+## 将学习
+
+集成 Oauth登陆，使用缓冲。。。。
+
+## 安装
+
+1. 安装依赖（最好新建个虚拟环境）
+   * pip install -Ur requirements -i https://pypi.douban.com/simple
+2. 配置设置
+  * 自行修改 `binblog/settings.py` 里的数据库配置:
+     DATABASES = {
+     	    'default': {
+     	        'ENGINE': 'django.db.backends.mysql',
+     	        'NAME': 'binblog',
+     	        'USER': 'root',
+     	        'PASSWORD': '1123',
+     	        'HOST': '127.0.0.1'
+     	    }
+     	}
+  * 创建数据库 `create database binblog;`
+  * 在终端下进行数据迁移:
+      	./manage.py makemigrations
+            	./manage.py migrate
+  * 根据需要使用Navicat导入目录下的 sql文件
+    		./ manage.py createsuperuser
+  * 运行 `./manage.py runserver 8000`
+  * 浏览器打开 `127.0.0.1:8000`
+3. 配置项（更多设置看settings和blog.model.Setting）
 
 ### 新建虚拟环境
 	cmd > makevirtualenv binblog
