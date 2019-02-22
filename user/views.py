@@ -25,7 +25,9 @@ class RegisterView(FormView):
 
     def form_valid(self, form):
         # 通过表单验证, 保存用户跳转到登陆页
-        user = form.save(True)
+        user = form.save(commit=False)
+        # user.is_active = False  # 未激活
+        user.save()
         url = reverse('user:login')
         return HttpResponseRedirect(url)
 
@@ -35,7 +37,7 @@ class LoginView(FormView):
     form_class = LoginForm
     redirect_field_name = REDIRECT_FIELD_NAME  # 'next'
     template_name = 'user/login.html'
-    redirect_authenticated_user = True  # 已登录用户访问login的url, 是否重定向
+    redirect_authenticated_user = False  # 已登录用户访问login的url, 是否重定向
     success_url = '/'
 
     @method_decorator(sensitive_post_parameters())  # 保护post请求中的敏感数据, 错误信息会显示****
@@ -67,6 +69,9 @@ class LoginView(FormView):
         auth.login(self.request, form.get_user())
         # return super().form_valid(form)  # 这行父类就是调用了下行
         return HttpResponseRedirect(self.get_success_url())
+
+    # def form_invalid(self, form):
+    #     pass
 
     def get_success_url(self):
         url = self.get_redirect_url()

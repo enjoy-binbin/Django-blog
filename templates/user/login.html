@@ -9,10 +9,6 @@
             <img class="img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">
             <form class="form-signin" action="{% url 'user:login' %}" method="post">
                 {% csrf_token %}
-                {% comment %}<label for="inputEmail" class="sr-only">Email address</label>
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
-                <label for="inputPassword" class="sr-only">Password</label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>{% endcomment %}
                 {{ form.non_field_errors }}
                 {% for field in form %}
                     {{ field }}
@@ -36,8 +32,8 @@
         <p class="text-center">
             <a href="{% url "user:register" %}">Create User</a>
             |
-            <a href="/">Home Page</a>
+            <a href="{% url 'blog:index' %}">Home Page</a>
         </p>
 
-    </div> <!-- /container -->
+    </div>
 {% endblock %}

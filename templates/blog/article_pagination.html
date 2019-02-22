@@ -1,15 +1,12 @@
 <nav id="nav-below" class="navigation" role="navigation">
-    <h3 class="assistive-text">文章导航</h3>
-
-
-
     {% if article_list.has_previous %}
         <div class="nav-previous"><a href="?page={{ article_list.previous_page_number }}">
-            <span class="meta-nav">&larr;</span>上一页</a></div>
+            <span class="meta-nav">←</span>上一页</a>
+        </div>
     {% endif %}
     {% if article_list.has_next %}
-    <div class="nav-next"><a href="?page={{ article_list.next_page_number }}">
-        <span class="meta-nav">→</span>下一页</a>
-    </div>
-{% endif %}
+        <div class="nav-next"><a href="?page={{ article_list.next_page_number }}">
+            <span class="meta-nav">→</span>下一页</a>
+        </div>
+    {% endif %}
 </nav>

@@ -155,7 +155,7 @@ img {
     font-size: 0.785714286rem;
     line-height: 2.181818182;
     font-weight: bold;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
     color: #636363;
 }
 
@@ -493,7 +493,6 @@ body {
 body.custom-font-enabled {
     font-family: "Open Sans", Helvetica, Arial, sans-serif;
 }
-
 a {
     outline: none;
     color: #21759b;
@@ -1853,7 +1852,7 @@ img#wpstats {
         margin-top: 3.428571429rem;
         margin-bottom: 48px;
         margin-bottom: 3.428571429rem;
-        box-shadow: 0 2px 6px rgba(100, 100, 100, 0.3);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.65);
     }
 
     body.custom-background-empty {

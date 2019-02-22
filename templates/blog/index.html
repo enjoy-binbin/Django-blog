@@ -24,7 +24,7 @@
                 </header><!-- .archive-header -->
             {% endif %}
 
-            {% pagination_tag article_list 2 as article_list %}
+            {% pagination_tag article_list as article_list %}
 
             {% for article in article_list %}
                 {% inclusion_article_info_tag article True %}

@@ -24,7 +24,7 @@ SECRET_KEY = 'i89n!-gv=7!snicdlre^3v=i0zw3cgbs31@)&wv5gk_g$x1xx3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -35,10 +35,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     'haystack',  # 搜索
     'blog',
     'user',
     'pagedown',  # md编辑器
+    'compressor',  # css/js压缩
 ]
 
 MIDDLEWARE = [
@@ -49,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'blog.middleware.LoadTimeMiddleware'  # 页面加载时间
 ]
 
 ROOT_URLCONF = 'binblog.urls'
@@ -116,28 +120,62 @@ USE_L10N = True
 
 USE_TZ = False  # timeit shows that datetime.now(tz=utc) is 24% slower
 
+# sitemap指定站点, 对应数据表django_site中的id
+SITE_ID = 1
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'  # url上显示的静态文件目录127.0.0.1:8080/static/1.jpg
-# STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')  # 执行静态资源收集后存储的目录
+STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')  # 执行静态资源收集后存储的目录
 STATICFILES_DIRS = (  # 多个存储静态资源的目录
     os.path.join(BASE_DIR, 'static'),
 )
 
+# compress压缩静态文件设置
+COMPRESS_ENABLED = True  # 开启Compressor，因为默认是和DEBUG相反，用于生产环境，显式启动
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',  # 默认开启的, 磁盘中查找
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',  # 默认开启的, app目录中查找
+    'compressor.finders.CompressorFinder',  # compress的
+)
+
 # 用户类
 AUTH_USER_MODEL = 'user.UserProfile'
+AUTHENTICATION_BACKENDS = (
+    # https://docs.djangoproject.com/en/2.1/ref/contrib/auth/#django.contrib.auth.models.User.is_active
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',  # 要验证is_active
+)
 
-# 时间格式
-DATETIME_FORMAT = '%Y-%m-%d'
-TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-
-# haystack搜索
+# 使用haystack进行文章搜索
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'utils.whoosh_cn_backend.WhooshEngine',  # 使用jieba进行中文分词
+        'ENGINE': 'utils.whoosh_cn_backend.WhooshEngine',  # 自定义使用jieba进行中文分词
         'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
     },
 }
 # 自动更新搜索索引
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+# 发送邮件的配置
+EMAIL_HOST = 'smtp.sina.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'binloveplay1314@sina.com'
+EMAIL_HOST_PASSWORD = 'sina1123.0'
+EMAIL_USE_TLS = False  # 不使用TLS协议, 不https:443
+EMAIL_FROM = 'binloveplay1314@sina.com'  # 发件人
+
+# 缓存设置,想在本地看到是否有效,可以实时更改数据库里的数据,缓存里的数据不会变
+# 环境里有memcached就可以使用memcached进行缓存，没有就使用本地缓存
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',  # memcached缓存
+        'LOCATION': '127.0.0.1:11211',
+        'TIMEOUT': 60 * 60 * 1,  # 过期时间 单位为秒
+    },
+    # 'default': {
+    #     'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # 本地内存缓存
+    #     'TIMEOUT': 60 * 60 * 1,  # 过期时间 秒, 一个钟过期
+    #     'LOCATION': 'unique-snowflake',
+    # }
+}

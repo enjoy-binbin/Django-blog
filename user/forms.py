@@ -60,7 +60,8 @@ class LoginForm(AuthenticationForm):
             attrs={
                 'placeholder': 'Username',
                 'class': 'form-control',
-                'style': 'margin-bottom: 10px'
+                'style': 'margin-bottom: 10px',
+                'autofocus': True
             })
         self.fields['password'].widget = widgets.PasswordInput(
             attrs={

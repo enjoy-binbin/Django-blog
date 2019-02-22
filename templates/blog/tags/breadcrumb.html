@@ -1,13 +1,9 @@
 <div class="breadcrumb">
-    {% for name,url in names %}
-        <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
-
+    {% for name,url in category_tree %}
+        <div>
             <a href="{{ url }}" itemprop="url">
-
                 <span itemprop="title"> {{ name }}</span>
-
-            </a>&nbsp;&rsaquo;
-
+            </a>&nbsp;>&nbsp;
         </div>
     {% endfor %}
     {{ title }}
