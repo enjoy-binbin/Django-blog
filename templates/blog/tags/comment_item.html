@@ -5,19 +5,25 @@
             <img alt=""
                  src="{{ comment.author.email }}"
                  srcset="{{ comment.author.email }}"
-                 class="avatar avatar-96 photo" height="96" width="96">
-            <cite class="fn">
-                <a rel="nofollow"
-                        {% if comment.author.is_superuser %}
-                   href="{{ comment.author.get_absolute_url }}"
+                 class="avatar" height="96" width="96">
+            <div class="fn">
+                {% if comment.author.is_superuser %}
+                    <a href="{{ comment.author.get_absolute_url }}">
+                        {% if comment.author.nickname %}
+                            {{ comment.author.nickname }}
                         {% else %}
-                   href="#"
+                            {{ comment.author.username }}
                         {% endif %}
-                   rel="external nofollow"
-                   class="url">{{ comment.author.username }}
-                </a>
-            </cite>
-            <span class="says">说道：</span>
+                    </a>
+                {% else %}
+                    {% if comment.author.nickname %}
+                        {{ comment.author.nickname }}
+                    {% else %}
+                        {{ comment.author.username }}
+                    {% endif %}
+                {% endif %}
+
+            </div>
         </div>
 
         <div class="comment-meta commentmetadata">

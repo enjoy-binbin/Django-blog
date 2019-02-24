@@ -1,4 +1,6 @@
 from django.contrib.admin import AdminSite
+from django.contrib.sites.models import Site
+from django.contrib.sites.admin import SiteAdmin
 
 
 class BinBlogAdminSite(AdminSite):
@@ -18,3 +20,5 @@ class BinBlogAdminSite(AdminSite):
 
 
 admin_site = BinBlogAdminSite(name='admin')
+
+admin_site.register(Site, SiteAdmin)  # 站点, sitemap使用

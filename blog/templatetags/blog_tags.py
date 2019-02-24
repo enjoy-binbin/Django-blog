@@ -120,7 +120,7 @@ def time_filter(time):
 def pagination_tag(context, object_list, page_count=2):
     """ context是Context 对象，object_list是你要分页的对象，page_count表示每页的数量 """
     paginator = Paginator(object_list, page_count)
-    page = context['request'].GET.get('page')
+    page = context['request'].GET.get('page')  # 前端传来的page
 
     try:
         object_list = paginator.page(page)  # 根据页码获取对应页的数据

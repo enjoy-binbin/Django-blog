@@ -4,7 +4,7 @@
 
 基于 `python3.6` 和 `Django2.1`的博客系统
 
-
+![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display.png)
 
 ### 本地开发环境
 
@@ -24,6 +24,7 @@
 * admin后台管理系统
 * 用户注册登陆
 * 右侧侧边栏功能，最热文章，最新文章，标签云
+* 文章根据添加时间进行归档
 
 ## 使用到
 
@@ -32,9 +33,12 @@
 * 自定义LoginView，RegisterView，LogoutView，部分django自带auth用法
 * context_processors自定义模板全局变量
 * admin编辑页 TextFields使用 `pagedown` 支持 `markdown`
-* templatetags 自定义模板标签 tags
+* templatetags 自定义模板标签 tags，支持markdown，代码高亮
 * 使用haystack和whoosh实现的全文文章搜索功能
 * slug的用法
+* 使用django-compress压缩css/js
+* django简单中间件的编写，显示页面加载时间
+* 使用django的sitemap功能
 
 ## 将学习
 

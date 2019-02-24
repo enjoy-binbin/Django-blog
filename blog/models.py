@@ -56,8 +56,8 @@ class Article(BaseModel):
     """ 文章模型 """
     category = models.ForeignKey('Category', verbose_name='文章分类', on_delete=models.CASCADE)
     title = models.CharField('文章标题', max_length=100, unique=True)
-    content = models.TextField('文章内容')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者', on_delete=models.CASCADE)
+    content = models.TextField('文章内容')
     order = models.IntegerField('排序,越大越前', default=0)
     views = models.PositiveIntegerField('浏览量', default=0)
     tags = models.ManyToManyField('Tag', verbose_name='标签', blank=True)
@@ -215,4 +215,4 @@ class Comment(BaseModel):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.author
+        return self.content

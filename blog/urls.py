@@ -22,7 +22,7 @@ urlpatterns = [
     # 作者下的所有文章列表
     path('author/<str:author_name>.html', views.AuthorArticleView.as_view(), name='author_article'),
 
-    # 评论
+    # 对某条文章的评论
     path('article/<int:article_id>/postcomment', views.CommentPostView.as_view(),name='comment')
 
 ]

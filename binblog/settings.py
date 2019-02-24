@@ -35,10 +35,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     'haystack',  # 搜索
     'blog',
     'user',
     'pagedown',  # md编辑器
+    'compressor',  # css/js压缩
 ]
 
 MIDDLEWARE = [
@@ -49,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'blog.middleware.LoadTimeMiddleware'  # 页面加载时间
 ]
 
 ROOT_URLCONF = 'binblog.urls'
@@ -120,13 +124,25 @@ USE_TZ = False  # timeit shows that datetime.now(tz=utc) is 24% slower
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'  # url上显示的静态文件目录127.0.0.1:8080/static/1.jpg
-# STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')  # 执行静态资源收集后存储的目录
+STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')  # 执行静态资源收集后存储的目录
 STATICFILES_DIRS = (  # 多个存储静态资源的目录
     os.path.join(BASE_DIR, 'static'),
 )
 
+# compress设置
+COMPRESS_ENABLED = True  # 开启Compressor，因为默认是和DEBUG相反，用于生产环境，显式启动
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
 # 用户类
 AUTH_USER_MODEL = 'user.UserProfile'
+AUTHENTICATION_BACKENDS = (
+    # https://docs.djangoproject.com/en/2.1/ref/contrib/auth/#django.contrib.auth.models.User.is_active
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',  # 验证is_active
+)
 
 # 时间格式
 DATETIME_FORMAT = '%Y-%m-%d'
@@ -141,3 +157,14 @@ HAYSTACK_CONNECTIONS = {
 }
 # 自动更新搜索索引
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+# 发送邮件的配置
+EMAIL_HOST = 'smtp.sina.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'binloveplay1314@sina.com'
+EMAIL_HOST_PASSWORD = 'sina1123.0'
+EMAIL_USE_TLS = False  # 不使用TLS协议, 不https:443
+EMAIL_FROM = 'binloveplay1314@sina.com'  # 发件人
+
+
+SITE_ID = 1
