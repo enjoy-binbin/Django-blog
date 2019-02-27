@@ -13,41 +13,29 @@
             {% endif %}
         </h1>
         <div class="comments-link">
-            {% if article.comment_status == "o" and open_site_comment %}
-                <a href="{{ article.get_absolute_url }}#comments" class="ds-thread-count" data-thread-key="3815"
-                   rel="nofollow">
-                    <span class="leave-reply">
-                    {% if article.comment and article.comment_set.count %}
-                        {{ article.comment_set.count }}个评论
-                    {% else %}
-                        发表评论
-                    {% endif %}
-                    </span>
-                </a>
-            {% endif %}
+            <a href="{{ article.get_absolute_url }}#comments">
+                <span>发表评论</span>
+            </a>
             <div style="float:right">
                 {{ article.views }} views
             </div>
-        </div><!-- .comments-link -->
+        </div>
         <br/>
-        {% if article.type == 'a' %}
-            {% if not isindex %}
-                {#                {% load_breadcrumb article %}#}
-            {% endif %}
+        {% if not is_index %}
+            {% inclusion_breadcrumb_tag article %}
         {% endif %}
-    </header><!-- .entry-header -->
+    </header>
 
     <div class="entry-content" itemprop="articleBody">
         {% if is_index %}
             {{ article.content|article_markdown|truncatechars_html:ARTICLE_DESC_LEN }}
-            <p class='read-more'><a
-                    href=' {{ article.get_absolute_url }}'>Read more</a></p>
+            <p><a href='{{ article.get_absolute_url }}'>Read more</a></p>
         {% else %}
             {{ article.content|article_markdown }}
         {% endif %}
 
-    </div><!-- .entry-content -->
+    </div>
 
-{#        {% load_article_metas article user %}#}
+    {% inclusion_article_meta_tag article %}
 
-</article><!-- #post -->
+</article>

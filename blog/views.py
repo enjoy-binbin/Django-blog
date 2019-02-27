@@ -3,21 +3,42 @@ from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect
+from django.core.cache import cache
 
 from blog.models import Article, Category, Tag, Comment
 from blog.forms import CommentForm
 
 
 class IndexView(ListView):
-    """ 首页view，返回一些文章列表 """
+    """ 首页view，返回一些文章列表，TODO关于文章列表的展示，可以再抽象一个Base类 """
     model = Article  # 指定的model
     template_name = 'blog/index.html'  # 渲染的模板
     context_object_name = 'article_list'  # 在模板中使用的上下文变量，默认为 object_list
+    page_kwarg = 'page'  # 前端约定好的页码的key
 
     def get_queryset(self):
-        queryset = super().get_queryset()  # 调用父类的方法
+        queryset = cache.get(self.cache_key)  # 查询缓存
+        if not queryset:  # 缓存没命中会返回 None
+            queryset = super().get_queryset()  # 调用父类的方法
+            cache.set(self.cache_key, queryset)  # 设置缓存
         # qs会根据model里定义的 ordering排序
         return queryset
+
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()  # 调用父类的方法
+    #     # qs会根据model里定义的 ordering排序
+    #     return queryset
+
+    @property
+    def page_value(self):
+        """ 前端页码值，用于做缓存key的拼接 """
+        page = self.request.GET.get(self.page_kwarg) or 1
+        return page
+
+    @property
+    def cache_key(self):
+        """ 缓存里的key """
+        return 'index_%s' % self.page_value
 
 
 class ArticleDetailView(DetailView):
@@ -26,7 +47,7 @@ class ArticleDetailView(DetailView):
     pk_url_kwarg = 'article_id'  # url里的id参数, 查找id为 pk_url_kwarg的文章
     model = Article
     context_object_name = 'article'
-    object = None
+    object = None  # 当前文章对象, 感觉可以用property
 
     def get_object(self, queryset=None):
         obj = super().get_object()
@@ -59,36 +80,79 @@ class CategoryArticleView(ListView):
     """ 获取一个分类下的所有文章 """
     template_name = 'blog/index.html'
     context_object_name = 'article_list'
+    object_name = None  # 当前分类对象
+    page_kwarg = 'page'
 
     def get_queryset(self):
-        slug = self.kwargs['slug']
-        category = get_object_or_404(Category, slug=slug)
-        all_category_name = list(map(lambda c: c.name, category.get_sub_categorys()))
-        queryset = Article.objects.filter(category__name__in=all_category_name)
+        queryset = cache.get(self.cache_key)
+        if not queryset:
+            slug = self.kwargs['slug']
+            category = get_object_or_404(Category, slug=slug)
+            self.object_name = category.name
+            all_category_name = list(map(lambda c: c.name, category.get_sub_categorys()))
+            queryset = Article.objects.filter(category__name__in=all_category_name)
+
+            cache.set(self.cache_key, queryset)
         return queryset
+
+    @property
+    def page_value(self):
+        page = self.request.GET.get(self.page_kwarg) or 1
+        return page
+
+    @property
+    def cache_key(self):
+        return '%s_%s' % (self.kwargs['slug'], self.page_value)
 
 
 class TagArticleView(ListView):
     """ 获取一个标签下所有引用之的文章 """
     template_name = 'blog/index.html'
     context_object_name = 'article_list'
+    page_kwarg = 'page'
 
     def get_queryset(self):
-        tag_id = self.kwargs['tag_id']
-        tag = get_object_or_404(Tag, id=tag_id)
-        queryset = Article.objects.filter(tags=tag)
+        queryset = cache.get(self.cache_key)
+        if not queryset:
+            tag_id = self.kwargs['tag_id']
+            tag = get_object_or_404(Tag, id=tag_id)
+            queryset = Article.objects.filter(tags=tag)
+
+            cache.set(self.cache_key, queryset)
         return queryset
+
+    @property
+    def page_value(self):
+        page = self.request.GET.get(self.page_kwarg) or 1
+        return page
+
+    @property
+    def cache_key(self):
+        return '%s_%s' % (self.kwargs['tag_name'], self.page_value)
 
 
 class AuthorArticleView(ListView):
     """ 获取一个作者下的所有文章列表 """
     template_name = 'blog/index.html'
     context_object_name = 'article_list'
+    page_kwarg = 'page'
 
     def get_queryset(self):
-        author_name = self.kwargs['author_name']
-        queryset = Article.objects.filter(author__username=author_name)
+        queryset = cache.get(self.cache_key)
+        if not queryset:
+            author_name = self.kwargs['author_name']
+            queryset = Article.objects.filter(author__username=author_name)
+            cache.set(self.cache_key, queryset)
         return queryset
+
+    @property
+    def page_value(self):
+        page = self.request.GET.get(self.page_kwarg) or 1
+        return page
+
+    @property
+    def cache_key(self):
+        return '%s_%s' % (self.kwargs['author_name'], self.page_value)
 
 
 class ArchivesView(ListView):
@@ -99,11 +163,7 @@ class ArchivesView(ListView):
 
 
 class CommentPostView(FormView):
-    """
-    A view that displays a form.
-    On error, redisplays the form with validation errors;
-    on success, redirects to a new URL.
-    """
+    """ 评论post提交的VIew """
     form_class = CommentForm
     template_name = 'blog/article_detail.html'
 
@@ -149,3 +209,28 @@ class CommentPostView(FormView):
             'form': form,
             'article': article
         })
+
+
+def permission_denied(request, exception, template_name='blog/error_page.html'):
+    """ 处理403错误码 """
+    error_msg = '403错误拉，没有权限访问当前页面，点击首页看看别的？'
+    return render(request, template_name, {
+        'error_msg': error_msg,
+    }, status=403)
+
+
+def page_not_found(request, exception, template_name='blog/error_page.html'):
+    """ 处理404错误码 """
+    url = request.get_full_path()
+    error_msg = '404错误啦，访问的地址 ' + url + ' 不存在。请点击首页看看别的？'
+    return render(request, template_name, {
+        'error_msg': error_msg,
+    }, status=404)
+
+
+def server_error(request, template_name='blog/error_page.html'):
+    """ 处理500错误码 """
+    error_msg = '500错误啦，服务器出错，我已经收集到了错误信息，之后会抓紧抢修，请点击首页看看别的？'
+    return render(request, template_name, {
+        'error_msg': error_msg,
+    }, status=500)

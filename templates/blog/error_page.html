@@ -1,0 +1,31 @@
+{% extends 'base/base.html' %}
+{% load blog_tags %}
+{% block header %}
+    <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
+    <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
+    <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
+    <meta property="og:type" content="blog"/>
+    <meta property="og:title" content="{{ SITE_NAME }}"/>
+    <meta property="og:description" content="{{ SITE_DESCRIPTION }}"/>
+    <meta property="og:url" content="{{ SITE_BASE_URL }}"/>
+    <meta property="og:site_name" content="{{ SITE_NAME }}"/>
+{% endblock %}
+{% block content %}
+    <div id="primary" class="site-content">
+        <div id="content" role="main">
+
+            <header class="archive-header">
+                <h1 class="archive-title">{{ error_msg }}</h1>
+            </header><!-- .archive-header -->
+
+        </div><!-- #content -->
+    </div><!-- #primary -->
+
+{% endblock %}
+
+
+{% block sidebar %}
+    {% inclusion_sidebar_tag %}
+{% endblock %}
+
+

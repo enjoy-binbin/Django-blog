@@ -155,7 +155,7 @@ img {
     font-size: 0.785714286rem;
     line-height: 2.181818182;
     font-weight: bold;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
     color: #636363;
 }
 

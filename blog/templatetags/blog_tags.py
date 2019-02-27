@@ -22,6 +22,7 @@ def inclusion_article_info_tag(context, article, is_index):
     return {
         'article': article,
         'user': context['user'],
+        'aaa': '6666',
         'is_index': is_index,
         'ARTICLE_DESC_LEN': setting.article_desc_len  # 文章摘要长度, 用于index页面
     }
@@ -117,10 +118,10 @@ def time_filter(time):
 
 
 @register.simple_tag(takes_context=True)
-def pagination_tag(context, object_list, page_count=2):
+def pagination_tag(context, object_list, page_count=5):
     """ context是Context 对象，object_list是你要分页的对象，page_count表示每页的数量 """
     paginator = Paginator(object_list, page_count)
-    page = context['request'].GET.get('page')  # 前端传来的page
+    page = context['request'].GET.get('page')  # 前端里规定的字段, 传来的页码page
 
     try:
         object_list = paginator.page(page)  # 根据页码获取对应页的数据
@@ -159,3 +160,25 @@ def parse_comment_tree(comment_list, comment):
 
     parse(comment)
     return child_comments
+
+
+@register.inclusion_tag('blog/tags/breadcrumb.html')
+def inclusion_breadcrumb_tag(article):
+    """ 获得文章分类树, 用作面包屑导航 """
+    category_tree = article.get_category_tree()  # [(分类, 分类url), (父类, 父类url)]
+    category_tree.append((setting.name, '/'))  # 将首页append进去
+    category_tree.reverse()  # 列表倒序 或者切片list[::-1]
+
+    return {
+        'category_tree': category_tree,
+        'title': article.title
+    }
+
+
+@register.inclusion_tag('blog/tags/article_meta_info.html', takes_context=True)
+def inclusion_article_meta_tag(context, article):
+    """ 获得文章meta信息, 发布时间和作者 """
+    return {
+        'article': article,
+        'user': context['user'],  # 文章作者可以直接跳转到后台管理页
+    }

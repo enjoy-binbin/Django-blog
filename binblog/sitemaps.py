@@ -57,7 +57,7 @@ class TagSitemap(Sitemap):
         return Tag.objects.all()
 
     def lastmod(self, obj):
-        return obj.last_mod_time
+        return obj.modify_time
 
 
 class AuthorSitemap(Sitemap):

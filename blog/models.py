@@ -96,6 +96,17 @@ class Article(BaseModel):
         comment_list = self.comment_set.filter(is_enable=True)
         return comment_list
 
+    def get_category_tree(self):
+        """ 获得当前文章的分类树, 用于详情页面包屑 """
+        categorys = self.category.get_parent_categorys()  # [文章分类, 分类的父类1, ...]
+        category_tree = list(map(lambda category: (category.name, category.get_absolute_url()), categorys))
+        return category_tree
+
+    def get_admin_url(self):
+        """ 获取当前文章在admin里的详情页 """
+        info = (self._meta.app_label, self._meta.model_name)
+        return reverse('admin:%s_%s_change' % info, args=(self.id,))
+
 
 class Category(BaseModel):
     """ 文章分类 """
@@ -121,7 +132,7 @@ class Category(BaseModel):
         super().save(*args, **kwargs)
 
     def get_parent_categorys(self):
-        """ 递归获取分类的父级分类 """
+        """ 递归获取分类的父级分类 [自己, 父类1, 父类2] """
         categorys = []
 
         def parse(category):
@@ -163,7 +174,7 @@ class Tag(BaseModel):
     def get_absolute_url(self):
         return reverse('blog:tag_article', kwargs={
             'tag_id': self.id,
-            'name': self.name
+            'tag_name': self.name
         })
 
     def get_article_count(self):
@@ -204,6 +215,7 @@ class SideBar(BaseModel):
 
 
 class Comment(BaseModel):
+    """ 文章评论 """
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='评论者', on_delete=models.CASCADE)
     content = models.TextField('评论内容', max_length=250)
     article = models.ForeignKey(Article, verbose_name='评论文章', on_delete=models.CASCADE)

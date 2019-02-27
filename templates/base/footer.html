@@ -4,17 +4,15 @@
         <a href="{% url 'blog:index' %}" target="blank">{{ SITE_NAME }}</a>
         &nbsp;|&nbsp;
 
-        <a href="#" title="SiteMap" target="_blank">
+        <a href="{% url 'sitemap' %}" title="SiteMap" target="_blank">
             SiteMap
         </a>
         &nbsp;|&nbsp;
-        <a href="#" title="RSS Feed" target="_blank">
+        <a href="{% url 'feed' %}" title="RSS Feed" target="_blank">
             RSS Feed
         </a>
-        |&nbsp; Hosting On&nbsp;
-        <a href="https://www.linode.com/" target="_blank" rel="nofollow">Linode</a>
-        |&nbsp;
-        <a href="https://tongji.baidu.com/web/welcome/login" target="_blank" rel="nofollow">百度统计</a>
+        |&nbsp; Coding in&nbsp;
+        <a href="https://github.com/enjoy-binbin/binblog-Django" target="_blank">Github</a>
 
     </div>
     <div class="site-info" style="text-align: center">
@@ -25,21 +23,6 @@
         |
         本页面加载耗时:<!!LOAD_TIME!!>s
     </div>
-    {% if BEIAN_CODE %}
-        <div class="site-info" style="text-align: center">
-            <a href="http://www.miitbeian.gov.cn/" rel="nofollow" target="_blank">
-                <p style=" height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">
-                    {{ BEIAN_CODE }}
-                </p>
-            </a>
-            {% if BEIAN_CODE_GONGAN and SHOW_GONGAN_CODE %}
-                {{ BEIAN_CODE_GONGAN |safe }}
-            {% endif %}
-        </div>
-    {% endif %}
-    {% if ANALYTICS_CODE %}
-        {{ ANALYTICS_CODE| safe }}
-    {% endif %}
 </footer>
 
 

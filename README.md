@@ -1,5 +1,3 @@
-
-
 # BinBlog
 
 基于 `python3.6` 和 `Django2.1`的博客系统
@@ -39,10 +37,12 @@
 * 使用django-compress压缩css/js
 * django简单中间件的编写，显示页面加载时间
 * 使用django的sitemap功能
+* python-memcached对网站的部分信息缓存
+* 自定义django.manage命令,create_testdata，生成测试数据
 
-## 将学习
+## TOLearn
 
-集成 Oauth登陆，使用缓冲。。。。
+集成 Oauth登陆
 
 ## 安装
 
@@ -61,87 +61,16 @@
      	}
   * 创建数据库 `create database binblog;`
   * 在终端下进行数据迁移:
-      	./manage.py makemigrations
-            	./manage.py migrate
+       `./manage.py makemigrations`
+          ` ./manage.py migrate`
+  * 创建测试数据 `./manage.py create_testdata`
   * 根据需要使用Navicat导入目录下的 sql文件
-    		./ manage.py createsuperuser
+      `./ manage.py createsuperuser`
   * 运行 `./manage.py runserver 8000`
   * 浏览器打开 `127.0.0.1:8000`
-3. 配置项（更多设置看settings和blog.model.Setting）
+3. 配置项（更多设置看settings和blog.model.Setting模型）
 
-### 新建虚拟环境
-	cmd > makevirtualenv binblog
-	cmd > workon binblog
+### 更多笔记在 notes里。标准的md格式，源码中也有大量注释。
 
-### 创建数据库
-	mysql > create databases binblog;
-
-### 安装django2.1
-	pip install django==2.1.5 -i https://pypi.douban.com/simple
-
-### 用django创建项目
-	cmd > django-admin startproject binblog
-
-### 安装mysql和settings配置mysql数据库
-	pip install -i https://pypi.douban.com/simple mysqlclient==1.4.1
-	DATABASES = {
-	    'default': {
-	        'ENGINE': 'django.db.backends.mysql',
-	        'NAME': 'binblog',
-	        'USER': 'root',
-	        'PASSWORD': '1123',
-	        'HOST': '127.0.0.1'
-	    }
-	}
-
-### 在settings里设置模板文件dir
-    'DIRS': [os.path.join(BASE_DIR, 'templates')],
-
-### 静态资源
-	STATIC_URL = '/static/'  # url上显示的静态文件目录127.0.0.1:8080/static/1.jpg
-	# STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')  # 执行静态资源收集后存储的目录
-	STATICFILES_DIRS = (  # 多个存储静态资源的目录
-	    os.path.join(BASE_DIR, 'static'),
-	)
-
-
-
-### 对admin的扩充
-
-
-
-### 安装django-pagedown
-	# github地址: https://github.com/timmyomahony/django-pagedown
-	pip install django-pagedown
-	Add `pagedown` to the `INSTALLED_APPS`
-	用法看文档，提供一个easy addition of Stack Overflow's "Pagedown" Markdown editor
-
-
-### 使用MemcachedCache和本地内存缓冲
-	# settings.py
-	# 使用python-memcached绑定在127.0.0.1:11211
-	CACHES = {
-	    'default': {
-	        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-	        'LOCATION': '127.0.0.1:11211',
-			'TIMEOUT': 10800,
-	    }
-	}
-	
-	# 本地内存缓冲，如果在settings里未指定，则是默认缓冲
-	CACHES = {
-	    'default': {
-	        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-	        'LOCATION': 'unique-snowflake'
-	    }
-	}
-
-
-
-
-### templatetags 自定义标签或者过滤器
-	# 在blog目录下创建 templatetags目录 再创建 blog_tags.py
-
-
-
+### 感谢观看和star，欢迎提issue
 

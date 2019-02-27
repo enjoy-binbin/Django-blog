@@ -17,7 +17,7 @@ urlpatterns = [
     path('category/<slug:slug>.html', views.CategoryArticleView.as_view(), name='category_article'),
 
     # 标签下的所有文章列表
-    path('tag/<int:tag_id>/<str:name>.html', views.TagArticleView.as_view(), name='tag_article'),
+    path('tag/<int:tag_id>/<str:tag_name>.html', views.TagArticleView.as_view(), name='tag_article'),
 
     # 作者下的所有文章列表
     path('author/<str:author_name>.html', views.AuthorArticleView.as_view(), name='author_article'),
