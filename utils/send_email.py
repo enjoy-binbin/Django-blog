@@ -55,4 +55,5 @@ def generate_random_str(str_len=8):
     random = Random()
     for i in range(str_len):
         str += chars[random.randint(0, len(chars) - 1)]
+        # chr(random.randint(65，91))  chr(99) = 'c'
     return str

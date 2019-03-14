@@ -29,7 +29,9 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',  # 会自动 auto-discovery，自动搜索模块下的admin
+    'django.contrib.admin.apps.SimpleAdminConfig',  # 当自定义AdminSite时候使用这个, 禁用auto-discovery
+    'django.contrib.admindocs',  # admin文档, 需要安装 pip install docutils
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -37,11 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
-    'haystack',  # 搜索
     'blog',
     'user',
+    'haystack',  # haystack全文搜索
     'pagedown',  # md编辑器
     'compressor',  # css/js压缩
+    'rest_framework',  # DRF-api
 ]
 
 MIDDLEWARE = [
@@ -179,3 +182,42 @@ CACHES = {
     #     'LOCATION': 'unique-snowflake',
     # }
 }
+
+# Django REST framework配置
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',  # json render
+        'rest_framework.renderers.BrowsableAPIRenderer',  # drf浏览器render
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication'
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',  # 默认为 AllowAny
+    )
+}
+
+# curl 测试jwt, 根据username和password返回了一个 token
+# curl -X POST -d "username=bin&password=1123" http://127.0.0.1:8000/api/auth/token/
+# {"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImJpbiIsImV4cCI6MTU1MjU2MzcyOCwiZW1haWwiOiJiaW5sb3ZlcGxheTEzMTRAcXEuY29tIn0.51CSDqWxiXwxMkuxm8zpCn1SJyI7eapt3Vt1cFFp4aI"}
+
+# 测试命令, 注意权限的设置
+# curl -H "Authorization: JWT <your_token>" http://127.0.0.1:8000/api/blog/article/
+
+# 不使用JWT, 返回不到信息
+# curl http://127.0.0.1:8000/api/blog/article/
+
+# 带上jwt返回信息成功
+# curl -H "Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImJpbiIsImV4cCI6MTU1MjU2MzcyOCwiZW1haWwiOiJiaW5sb3ZlcGxheTEzMTRAcXEuY29tIn0.51CSDqWxiXwxMkuxm8zpCn1SJyI7eapt3Vt1cFFp4aI" http://127.0.0.1:8000/api/blog/article/
+
+# 测试POST数据，不加JWT，注意权限的设置 AllowAny
+# curl -X POST -d "{\"name\": \"a new category\"}" -H "Content-Type:application/json" -H "Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImJpbiIsImV4cCI6MTU1MjU2MzcyOCwiZW1haWwiOiJiaW5sb3ZlcGxheTEzMTRAcXEuY29tIn0.51CSDqWxiXwxMkuxm8zpCn1SJyI7eapt3Vt1cFFp4aI" http://127.0.0.1:8000/api/blog/category/create/
+# 测试POST数据，加了JWT,设置权限需要登陆
+# curl -X POST -H "Content-Type: application/json" -d '{\"name\":\"A new category\"}' -H "Authorization: JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImJpbiIsImV4cCI6MTU1MjU2MzcyOCwiZW1haWwiOiJiaW5sb3ZlcGxheTEzMTRAcXEuY29tIn0.51CSDqWxiXwxMkuxm8zpCn1SJyI7eapt3Vt1cFFp4aI" http://127.0.0.1:8000/api/blog/category/create/

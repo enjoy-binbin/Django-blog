@@ -4,6 +4,8 @@
 
 ![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display.png)
 
+![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display2.png)
+
 ### 本地开发环境
 
 1. win10 64位
@@ -11,7 +13,8 @@
 3. Django 2.1
 4. Mysql 5.6
 5. PyCharm 2018.1
-6. admin后台： `bin 1123`
+6. Djangorestframework 3.9
+7. admin后台： `bin 1123`
 
 ## 主要功能
 
@@ -23,9 +26,11 @@
 * 用户注册登陆
 * 右侧侧边栏功能，最热文章，最新文章，标签云
 * 文章根据添加时间进行归档
+* 使用Djangorestframework对博客进行API开发（在blog/api目录下）
 
 ## 使用到
 
+* djangorestframework和 restframework-jwt进行API学习开发
 * django通用视图，ListViewDetailView，FromView，RedirectView
 * admin的扩展，ModelAdmin扩展，SimpleListFilter自定义过滤器
 * 自定义LoginView，RegisterView，LogoutView，部分django自带auth用法

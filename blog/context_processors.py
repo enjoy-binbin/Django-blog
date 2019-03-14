@@ -11,5 +11,7 @@ def setting(requests):
         'SITE_DESC': s.desc,  # 站点描述
         'SITE_KEYWORD': s.keyword,  # 站点关键字
 
-        'nav_category_list': Category.objects.all()  # 导航栏-> 所有分类
+        'nav_category_list': Category.objects.all(),  # 导航栏-> 所有分类，nav.html模板里调用
+
+        'top_categorys': Category.top_objects.all()  # 对manager的应用，所有的一级分类
     }

@@ -1,11 +1,6 @@
 from django.contrib import admin
 
-from .models import UserProfile
-from binblog.admin import admin_site
-
 
 class UserProfileAdmin(admin.ModelAdmin):
-    pass
-
-
-admin_site.register(UserProfile, UserProfileAdmin)
+    list_display = ('id', 'username', 'nickname', 'email')  # 列表显示的字段
+    list_display_links = ('id', 'username', 'nickname', 'email')  # 列表页可以跳转到详情页的字段
