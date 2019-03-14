@@ -61,12 +61,11 @@ class Article(BaseModel):
     order = models.IntegerField('排序,越大越前', default=0)
     views = models.PositiveIntegerField('浏览量', default=0)
     tags = models.ManyToManyField('Tag', verbose_name='标签', blank=True)
-    pub_time = models.DateTimeField('发布时间', blank=True, null=True)
 
     class Meta:
         verbose_name = '文章'
         verbose_name_plural = verbose_name
-        ordering = ['-order', '-pub_time', '-add_time']
+        ordering = ['-order', '-add_time']
         # get_latest_by = 'id'
 
     def __str__(self):
@@ -108,11 +107,21 @@ class Article(BaseModel):
         return reverse('admin:%s_%s_change' % info, args=(self.id,))
 
 
+class TopCategoryManager(models.Manager):
+    """ Django.Manager的用法，定义管理器，返回一级分类 """
+
+    def get_queryset(self):
+        return super().get_queryset().filter(parent_category=None)
+
+
 class Category(BaseModel):
     """ 文章分类 """
     name = models.CharField('分类名称', max_length=30, unique=True)
     parent_category = models.ForeignKey('self', verbose_name='父级分类', blank=True, null=True, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=50, default='')
+
+    objects = models.Manager()  # 当自定义了管理器，django将不再默认管理对象objects了, 需要手动指定
+    top_objects = TopCategoryManager()  # 调用方式: Category.top_object.all()
 
     class Meta:
         verbose_name = '文章分类'

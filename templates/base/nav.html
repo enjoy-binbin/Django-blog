@@ -6,7 +6,10 @@
             </li>
 
             {% load blog_tags %}
-            {% queryset_filter_tag nav_category_list parent_category=None as top_categorys %}
+
+            {# blog.context_processors里定义了全局的nav_category_list所有分类列表 #}
+            {#{% queryset_filter_tag nav_category_list parent_category=None as top_categorys %}#}
+
             {% for top_category in top_categorys %}
                 {% include 'base/nav_node.html' %}
             {% endfor %}

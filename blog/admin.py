@@ -4,9 +4,8 @@ from django.urls import reverse
 from django.db import models
 from django.utils.html import format_html
 
-from binblog.admin import admin_site
 from pagedown.widgets import AdminPagedownWidget
-from .models import Article, Category, Tag, Link, SideBar, Setting
+from .models import Article
 from .forms import ArticleAdminForm
 
 
@@ -113,11 +112,3 @@ class SideBarAdmin(admin.ModelAdmin):
 
 class SettingAdmin(admin.ModelAdmin):
     pass
-
-
-admin_site.register(Article, ArticleAdmin)
-admin_site.register(Category, CategoryAdmin)
-admin_site.register(Tag, TagAdmin)
-admin_site.register(Link, LinkAdmin)
-admin_site.register(SideBar, SideBarAdmin)
-admin_site.register(Setting, SettingAdmin)
