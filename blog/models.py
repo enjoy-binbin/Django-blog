@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.template.defaultfilters import slugify
-
+from mdeditor.fields import MDTextField
 from unidecode import unidecode
 
 
@@ -54,10 +54,18 @@ class BaseModel(models.Model):
 
 class Article(BaseModel):
     """ 文章模型 """
+
+    TYPE_CHOICES = (
+        ('a', '文章'),
+        ('p', '页面'),
+    )
+
     category = models.ForeignKey('Category', verbose_name='文章分类', on_delete=models.CASCADE)
     title = models.CharField('文章标题', max_length=100, unique=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者', on_delete=models.CASCADE)
-    content = models.TextField('文章内容')
+    # content = models.TextField('文章内容')
+    content = MDTextField('文章内容')  # 使用了django-mdeditor作为md编辑器
+    type = models.CharField('文章类型', max_length=1, default='a', choices=TYPE_CHOICES)
     order = models.IntegerField('排序,越大越前', default=0)
     views = models.PositiveIntegerField('浏览量', default=0)
     tags = models.ManyToManyField('Tag', verbose_name='标签', blank=True)

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'user',
     'haystack',  # haystack全文搜索
     'pagedown',  # md编辑器
+    'mdeditor',  # md编辑器
     'compressor',  # css/js压缩
     'rest_framework',  # DRF-api
 ]
@@ -87,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'binblog',
         'USER': 'root',
-        'PASSWORD': '1123',
+        'PASSWORD': '123456',  # Your mysql password
         'HOST': '127.0.0.1'
     }
 }
@@ -135,6 +136,9 @@ STATICFILES_DIRS = (  # 多个存储静态资源的目录
     os.path.join(BASE_DIR, 'static'),
 )
 
+MEDIA_URL = '/media/'  # url上显示的静态文件目录127.0.0.1:8080/static/1.jpg
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # compress压缩静态文件设置
 COMPRESS_ENABLED = True  # 开启Compressor，因为默认是和DEBUG相反，用于生产环境，显式启动
 STATICFILES_FINDERS = (
@@ -163,24 +167,24 @@ HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 # 发送邮件的配置
 EMAIL_HOST = 'smtp.sina.com'
 EMAIL_PORT = 25
-EMAIL_HOST_USER = 'binloveplay1314@sina.com'
-EMAIL_HOST_PASSWORD = 'sina1123.0'
+EMAIL_HOST_USER = 'xxxx@sina.com'  # Your sina account
+EMAIL_HOST_PASSWORD = '123465'  # Your email password
 EMAIL_USE_TLS = False  # 不使用TLS协议, 不https:443
 EMAIL_FROM = 'binloveplay1314@sina.com'  # 发件人
 
 # 缓存设置,想在本地看到是否有效,可以实时更改数据库里的数据,缓存里的数据不会变
 # 环境里有memcached就可以使用memcached进行缓存，没有就使用本地缓存
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',  # memcached缓存
-        'LOCATION': '127.0.0.1:11211',
-        'TIMEOUT': 60 * 60 * 1,  # 过期时间 单位为秒
-    },
     # 'default': {
-    #     'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # 本地内存缓存
-    #     'TIMEOUT': 60 * 60 * 1,  # 过期时间 秒, 一个钟过期
-    #     'LOCATION': 'unique-snowflake',
-    # }
+    #     'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',  # memcached缓存
+    #     'LOCATION': '127.0.0.1:11211',
+    #     'TIMEOUT': 60 * 60 * 1,  # 过期时间 单位为秒
+    # },
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # 本地内存缓存
+        'TIMEOUT': 60 * 60 * 1,  # 过期时间 秒, 一个钟过期
+        'LOCATION': 'unique-snowflake',
+    }
 }
 
 # Django REST framework配置

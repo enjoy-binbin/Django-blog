@@ -13,5 +13,9 @@ class LoadTimeMiddleware(object):
         response = self.get_response(request)
         load_time = time.time() - start_time
         # 要使用bytes, 将 <!!LOAD_TIME!!> 替换为加载时间
-        response.content = response.content.replace(b'<!!LOAD_TIME!!>', str.encode(str(load_time)[:5]))
+        try:
+            response.content = response.content.replace(b'<!!LOAD_TIME!!>', str.encode(str(load_time)[:5]))
+        except:
+            # 显示图片等媒体文件时跳过
+            pass
         return response

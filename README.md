@@ -1,5 +1,7 @@
 # BinBlog
 
+### 演示地址：http://13.58.211.105/
+
 基于 `python3.6` 和 `Django2.1`的博客系统
 
 ![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display.png)
@@ -15,6 +17,7 @@
 5. PyCharm 2018.1
 6. Djangorestframework 3.9
 7. admin后台： `bin 1123`
+8. 线上环境： AWS ，Ubuntu18.04，Mysql5.7, Python3.6
 
 ## 主要功能
 
@@ -35,7 +38,8 @@
 * admin的扩展，ModelAdmin扩展，SimpleListFilter自定义过滤器
 * 自定义LoginView，RegisterView，LogoutView，部分django自带auth用法
 * context_processors自定义模板全局变量
-* admin编辑页 TextFields使用 `pagedown` 支持 `markdown`
+* 侧边栏编辑页 TextFields使用 `pagedown` 支持 `markdown`
+* 文章内容使用 `mdeditor`支持`markdown`和`图片上传`
 * templatetags 自定义模板标签 tags，支持markdown，代码高亮
 * 使用haystack和whoosh实现的全文文章搜索功能
 * slug的用法
@@ -47,20 +51,20 @@
 
 ## TOLearn
 
-集成 Oauth登陆
+终于有服务器拉， 下次准备 集成 Oauth登陆，之前一直没有服务器做测试
 
 ## 安装
 
 1. 安装依赖（最好新建个虚拟环境）
    * pip install -Ur requirements -i https://pypi.douban.com/simple
-2. 配置设置
+2. 配置设置将settings.py.example改成 settings.py
   * 自行修改 `binblog/settings.py` 里的数据库配置:
      DATABASES = {
      	    'default': {
      	        'ENGINE': 'django.db.backends.mysql',
      	        'NAME': 'binblog',
      	        'USER': 'root',
-     	        'PASSWORD': '1123',
+     	        'PASSWORD': '123456',
      	        'HOST': '127.0.0.1'
      	    }
      	}
