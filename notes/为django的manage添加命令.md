@@ -1,3 +1,5 @@
+### 为django的manage添加命令
+
 文档地址：https://docs.djangoproject.com/en/2.1/howto/custom-management-commands/
 
 2019年2月26日 10:38:31

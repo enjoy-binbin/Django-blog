@@ -129,3 +129,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')  # 执行静态资源收
 python manage.py collectstatic
 python manage.py compress --force
 ```
+
