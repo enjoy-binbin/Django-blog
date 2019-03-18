@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'binblog',
         'USER': 'root',
-        'PASSWORD': '1123',
+        'PASSWORD': '123456',  # Your mysql password
         'HOST': '127.0.0.1'
     }
 }
@@ -167,8 +167,8 @@ HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 # 发送邮件的配置
 EMAIL_HOST = 'smtp.sina.com'
 EMAIL_PORT = 25
-EMAIL_HOST_USER = 'binloveplay1314@sina.com'
-EMAIL_HOST_PASSWORD = 'sina1123.0'
+EMAIL_HOST_USER = 'xxxx@sina.com'  # Your sina account
+EMAIL_HOST_PASSWORD = '123465'  # Your email password
 EMAIL_USE_TLS = False  # 不使用TLS协议, 不https:443
 EMAIL_FROM = 'binloveplay1314@sina.com'  # 发件人
 

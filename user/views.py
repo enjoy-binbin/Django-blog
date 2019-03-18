@@ -99,3 +99,21 @@ class LogoutView(RedirectView):
     def dispatch(self, request, *args, **kwargs):
         logout(request)  # 登出
         return super().dispatch(request, *args, **kwargs)
+
+
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseForbidden
+
+
+@login_required
+def refresh_cache(request):
+    try:
+        if request.user.is_superuser:
+            from django.core.cache import cache
+            if cache and cache is not None:
+                cache.clear()
+            return HttpResponse('ok')
+        else:
+            return HttpResponseForbidden()  # 403封装的HttpResponse
+    except Exception as e:
+        return HttpResponse(e)

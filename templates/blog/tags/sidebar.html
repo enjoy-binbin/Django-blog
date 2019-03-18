@@ -109,8 +109,7 @@
                 <li><a href="{% url 'user:login' %}" rel="nofollow">登录</a>
             {% endif %}
             {% if user.is_superuser %}
-                <li><a href="#" target="_blank">刷新缓存</a></li>
-                <li><a href="#" target="_blank">运动轨迹记录</a></li>
+                <li><a href="{% url 'refresh' %}" target="_blank">刷新缓存</a></li>
             {% endif %}
         </ul>
     </aside>

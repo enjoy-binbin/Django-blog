@@ -6,8 +6,12 @@ from .models import Article, Comment
 
 
 class ArticleAdminForm(forms.ModelForm):
-    """ admin管理form, 在content基础上添加 pagedown """
-    content = forms.CharField(widget=AdminPagedownWidget)
+    """
+    admin管理form, 在content基础上添加 pagedown作为md编辑器
+    注释掉content了现在在正文里使用 mdeditor作为md编辑器
+    """
+
+    # content = forms.CharField(widget=AdminPagedownWidget)
 
     class Meta:
         model = Article
