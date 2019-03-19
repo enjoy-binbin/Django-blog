@@ -7,8 +7,20 @@
 
             {% load blog_tags %}
 
-            {# blog.context_processors里定义了全局的nav_category_list所有分类列表 #}
-            {#{% queryset_filter_tag nav_category_list parent_category=None as top_categorys %}#}
+
+            {% if nav_pages %}
+                {% for node in nav_pages %}
+
+                    <li id="menu-item-{{ node.pk }}"
+                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-{{ node.pk }}">
+                        <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+                    </li>
+                {% endfor %}
+            {% endif %}
+
+
+            {# blog.context_processors里定义了全局的nav_category_list所有分类列表，使用manager完成了 #}
+            {# {% queryset_filter_tag nav_category_list parent_category=None as top_categorys %}#}
 
             {% for top_category in top_categorys %}
                 {% include 'base/nav_node.html' %}

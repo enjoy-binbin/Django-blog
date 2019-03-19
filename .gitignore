@@ -1,4 +1,4 @@
-.idea
+.idea/
 __pycache__/
 whoosh_index/*
 settings.py
