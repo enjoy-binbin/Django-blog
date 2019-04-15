@@ -1,5 +1,7 @@
 # BinBlog
 
+### 演示地址：http://13.58.211.105/
+
 基于 `python3.6` 和 `Django2.1`的博客系统
 
 ![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display.png)
