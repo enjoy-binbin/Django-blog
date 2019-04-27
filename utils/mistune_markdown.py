@@ -1,4 +1,5 @@
 import mistune
+from pygments.util import ClassNotFound
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import html
@@ -17,7 +18,7 @@ class ArticleRenderer(mistune.Renderer):
         :param lang: language of the given code.
         """
         code = code.rstrip('\n')  # 去掉尾部的换行符
-        if not lang:
+        if lang:
             code = mistune.escape(code)
             return '<pre><code>%s\n</code></pre>\n' % code
 
@@ -25,7 +26,11 @@ class ArticleRenderer(mistune.Renderer):
         # ```python
         #   print('666')
         # ```
-        lexer = get_lexer_by_name(lang, stripall=True)
+        try:
+            lexer = get_lexer_by_name(lang, stripall=True)
+        except ClassNotFound:
+            # 如果lang是不合法, 没有匹配到, 就设置为python
+            lexer = get_lexer_by_name('python', stripall=True)
         formatter = html.HtmlFormatter()
         return highlight(code, lexer, formatter)
 
