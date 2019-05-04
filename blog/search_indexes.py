@@ -5,6 +5,9 @@
 # 文档：https://django-haystack.readthedocs.io/en/v2.4.1/tutorial.html
 # haystack只对在安装完毕后，重新添加的有效，之前创建的数据是没有建立索引无法搜索出来的(测试了好久/捂脸)
 
+# 重建索引 ./manage.py rebuild_index
+# 更新索引 ./manage.py update_index
+
 from haystack import indexes
 from blog.models import Article
 

@@ -18,7 +18,8 @@ class ArticleRenderer(mistune.Renderer):
         :param lang: language of the given code.
         """
         code = code.rstrip('\n')  # 去掉尾部的换行符
-        if lang:
+        # 如果没有lang, 就返回代码块
+        if not lang:
             code = mistune.escape(code)
             return '<pre><code>%s\n</code></pre>\n' % code
 
@@ -31,7 +32,7 @@ class ArticleRenderer(mistune.Renderer):
         except ClassNotFound:
             # 如果lang是不合法, 没有匹配到, 就设置为python
             lexer = get_lexer_by_name('python', stripall=True)
-        formatter = html.HtmlFormatter()
+        formatter = html.HtmlFormatter()  # linenos=True
         return highlight(code, lexer, formatter)
 
 

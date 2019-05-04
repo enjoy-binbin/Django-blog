@@ -1,5 +1,5 @@
 .idea/
 __pycache__/
-whoosh_index/*
+binblog/whoosh_index/*
 settings.py
 notes/

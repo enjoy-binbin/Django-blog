@@ -6,7 +6,8 @@ from blog.models import Article, Category, Tag, Link, SideBar, Setting
 from blog.admin import ArticleAdmin, CategoryAdmin, TagAdmin, LinkAdmin, SideBarAdmin, SettingAdmin
 from user.models import UserProfile
 from user.admin import UserProfileAdmin
-
+from oauth.models import OAuthConfig, OAuthUser
+from oauth.admin import OAuthConfigAdmin
 
 class BinBlogAdminSite(AdminSite):
     site_header = 'BinBlog 后台管理'
@@ -34,3 +35,5 @@ admin_site.register(Link, LinkAdmin)
 admin_site.register(SideBar, SideBarAdmin)
 admin_site.register(Setting, SettingAdmin)
 admin_site.register(UserProfile, UserProfileAdmin)
+
+admin_site.register(OAuthConfig, OAuthConfigAdmin)

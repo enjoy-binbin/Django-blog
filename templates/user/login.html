@@ -24,8 +24,8 @@
                         <input type="checkbox" value="remember-me"> Stay signed in
                     </label>
                 </div>
-{#                {% load oauth_tags %}#}
-{#                {% load_oauth_applications request%}#}
+                {% load oauth_tags %}
+                {% inclusion_oauth_apps request %}
             </form>
         </div>
 
