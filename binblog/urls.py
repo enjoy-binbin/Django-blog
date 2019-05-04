@@ -27,6 +27,7 @@ urlpatterns = [
     # md编辑器, 对比与pagedown有在线上传图片的功能
     path('mdeditor/', include('mdeditor.urls')),
 
+    path('', include('oauth.urls', namespace='oauth')),
     path('', include('blog.urls', namespace='blog')),
     path('', include('user.urls', namespace='user')),
     # django自带登陆注册等方法的可以读

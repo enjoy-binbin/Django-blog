@@ -8,6 +8,8 @@ from django.template.defaultfilters import slugify
 from mdeditor.fields import MDTextField
 from unidecode import unidecode
 
+from .manager import TopCategoryManager
+
 
 class Setting(models.Model):
     """ 全局站点设置常量 """
@@ -113,13 +115,6 @@ class Article(BaseModel):
         """ 获取当前文章在admin里的详情页 """
         info = (self._meta.app_label, self._meta.model_name)
         return reverse('admin:%s_%s_change' % info, args=(self.id,))
-
-
-class TopCategoryManager(models.Manager):
-    """ Django.Manager的用法，定义管理器，返回一级分类 """
-
-    def get_queryset(self):
-        return super().get_queryset().filter(parent_category=None)
 
 
 class Category(BaseModel):

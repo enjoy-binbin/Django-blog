@@ -22,7 +22,6 @@ def inclusion_article_info_tag(context, article, is_index):
     return {
         'article': article,
         'user': context['user'],
-        'aaa': '6666',
         'is_index': is_index,
         'ARTICLE_DESC_LEN': setting.article_desc_len  # 文章摘要长度, 用于index页面
     }
