@@ -39,8 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
+
     'blog',
     'user',
+    'oauth',
+
     'haystack',  # haystack全文搜索
     'pagedown',  # md编辑器
     'mdeditor',  # md编辑器
@@ -72,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',  # 如果需要使用到 MEDIA_URL, 就需要启动这个
                 'blog.context_processors.setting',  # 自定义模板全局变量, 网站常量
             ],
         },
@@ -86,29 +90,34 @@ WSGI_APPLICATION = 'binblog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'binblog',
-        'USER': 'root',
-        'PASSWORD': '123456',  # Your mysql password
+        'NAME': 'blog',  # Your db name
+        'USER': 'root',  # Your db username
+        'PASSWORD': '123456',  # Your db pwd
         'HOST': '127.0.0.1'
     }
 }
 
-# Password validation
+# 密码验证类 Password validation
+# https://docs.djangoproject.com/en/2.1/topics/auth/passwords/
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
+        # 检查密码和用户名是否具有相似性
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
+        # 检查密码长度
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 6,
+        }
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # {   # 密码是否非常常用，会比较20000个常用密码
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
+    # {   # 是否是纯数字
+    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    # },
 ]
 
 # Internationalization
@@ -167,10 +176,10 @@ HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 # 发送邮件的配置
 EMAIL_HOST = 'smtp.sina.com'
 EMAIL_PORT = 25
-EMAIL_HOST_USER = 'xxxx@sina.com'  # Your sina account
-EMAIL_HOST_PASSWORD = '123465'  # Your email password
+EMAIL_HOST_USER = 'user@sina.com'  # Your email username
+EMAIL_HOST_PASSWORD = 'sina123456'  # Your email password
 EMAIL_USE_TLS = False  # 不使用TLS协议, 不https:443
-EMAIL_FROM = 'binloveplay1314@sina.com'  # 发件人
+EMAIL_FROM = 'BinBlog<binloveplay1314@sina.com>'  # 发件人
 
 # 缓存设置,想在本地看到是否有效,可以实时更改数据库里的数据,缓存里的数据不会变
 # 环境里有memcached就可以使用memcached进行缓存，没有就使用本地缓存
@@ -186,6 +195,107 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+
+# logging的配置 https://docs.djangoproject.com/en/2.2/topics/logging/
+SERVER_EMAIL = EMAIL_HOST_USER  # 发送错误信息时的邮箱
+ADMINS = [('bin', 'binloveplay1314@qq.com')]  # 管理员元组列表, 500错误邮件通知
+BASE_LOG_DIR = os.path.join(BASE_DIR, 'log')  # 日志存放的目录, 需要手动创建
+LOG_PREFIX = 'binblog_'  # 日志文件命名前缀
+LOGGING = {  # 开发中有用的信息 < 常规操作中有用的信息 < 有问题的警告但不紧要 < 重要的错误信息 < 高于错误的关键信息
+    # 日志等级: DEBUG < INFO < WARNING < ERROR < CRITICAL
+    # 日志处理流程简易版本:
+    # 1) 首先先判断日志是否满足日志器设置的等级
+    # 2) 接着根据过滤器过滤日志
+    # 3) 然后判断日志是否满足处理器设置的等级
+    # 4) 有多个处理器就重复上面的判断
+    # 5) 根据propagate判断日志是否需要传递给上级日志器
+    'version': 1,  # 保留字, 只能为1
+    'disable_existing_loggers': False,  # 禁用已经存在的logger实例
+    # 格式器, 决定日志记录的输出格式
+    'formatters': {
+        # 详细的日志格式, 用于记录到日志文件里
+        'verbose': {
+            # [2019-05-27 16:07:10,530] ERROR [root.get_queryset:25 views] 11
+            'format': '[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d %(module)s] %(message)s',
+        },
+        # 简单的日志格式, 用于console输出
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{'  # format的格式 {}
+        },
+    },
+    # 过滤器, 提供更细粒度的工具决定哪些日志会输出
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',  # 要求debug=True
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        }
+    },
+    # 处理器, 将日志器创建的日志记录发送到合适的目的输出
+    'handlers': {
+        'console': {  # console终端输出打印
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'  # 控制台就打印简单的格式日志
+        },
+        'mail_admins': {  # error, 邮件输出通知管理员
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],  # 上线状态debug=False才处理
+            'include_html': True,  # 邮件显示以html格式显示, 跟debug=True时的窗口一致
+        },
+        'default': {  # 默认的输出写入文件保存
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',  # 保存到文件
+            'filename': os.path.join(BASE_LOG_DIR, LOG_PREFIX + "info.log"),  # 日志文件
+            'maxBytes': 1024 * 1024 * 10,  # 日志大小 10M
+            'backupCount': 3,  # 最多备份几个
+            'encoding': 'utf-8',
+            'formatter': 'verbose',
+        },
+        'error': {  # 错误级别的也输出到文件保存
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_LOG_DIR, LOG_PREFIX + "error.log"),
+            'maxBytes': 1024 * 1024 * 10,
+            'backupCount': 3,
+            'encoding': 'utf-8',
+            'formatter': 'verbose',
+        }
+    },
+    # 日志器, 提供引用程序可使用的接口
+    'loggers': {  # logging.getLogger
+        '': {  # '': root logger 处理logger日志, 高于info等级就都用console显示, error级别的就再写入文件
+            'handlers': ['console', 'error'],
+            'level': 'INFO',
+        },
+        'django': {  # django名称的, 默认将处理所有log
+            'handlers': ['console', 'default'],
+            'level': 'DEBUG',
+            'propagate': False,  # 向不向更高级别的logger传递, 避免root logger双重日志记录
+        },
+        'django.request': {  # django.request的, 会自动处理服务器500错误
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+        },
+        'django.template': {  # django.template, 这里设置为info, 屏蔽admin_login时候的DEBUG信息
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
+# celery的配置, 查看binblog.celery.py里的注释
+# 字库自定义, 一个redis实例下有16个字库, 在redis-cli中使用 select 7 切换字库, keys * 查看所有的key, get key 查看key的数据
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/7'  # 消息传输中间人(任务队列), 一般用RabbitMQ(消息队列) 或者 redis
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/8'  # 数据库存储任务执行结果, 一般用redis
+CELERY_TASK_SERIALIZER = 'json'  # 任务序列化为json, 或者有使用pickle的
+CELERY_RESULT_SERIALIZER = 'json'  # 任务结果序列化为json格式
+CELERY_ACCEPT_CONTENT = ['json']  # 指定任务接收的序列化类型 [pickle, json, yaml, msgpack]
 
 # Django REST framework配置
 REST_FRAMEWORK = {

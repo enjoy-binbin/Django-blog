@@ -2,16 +2,37 @@ from django.contrib.admin import AdminSite
 from django.contrib.sites.models import Site
 from django.contrib.sites.admin import SiteAdmin
 
-from blog.models import Article, Category, Tag, Link, SideBar, Setting
-from blog.admin import ArticleAdmin, CategoryAdmin, TagAdmin, LinkAdmin, SideBarAdmin, SettingAdmin
-from user.models import UserProfile
-from user.admin import UserProfileAdmin
+from blog.models import (
+    Setting,
+    Category,
+    Article,
+    Comment,
+    Tag,
+    Link,
+    SideBar,
+    Photo,
+    GuestBook,
+)
+from blog.admin import (
+    ArticleAdmin,
+    CategoryAdmin,
+    TagAdmin,
+    LinkAdmin,
+    SideBarAdmin,
+    SettingAdmin,
+    CommentAdmin,
+    PhotoAdmin,
+    GuestBookAdmin,
+)
+from user.models import UserProfile, EmailVerifyCode
+from user.admin import UserProfileAdmin, EmailVerifyCodeAdmin
 from oauth.models import OAuthConfig, OAuthUser
 from oauth.admin import OAuthConfigAdmin
 
+
 class BinBlogAdminSite(AdminSite):
-    site_header = 'BinBlog 后台管理'
-    site_title = 'BinBlog 后台管理'
+    site_header = '彬彬博客后台管理'
+    site_title = '彬彬博客后台管理'
 
     def __init__(self, name='admin'):
         """ AdminSite追进去看 """
@@ -27,13 +48,19 @@ class BinBlogAdminSite(AdminSite):
 
 admin_site = BinBlogAdminSite(name='admin')
 
+admin_site.register(Setting, SettingAdmin)  # 站点配置
+admin_site.register(Category, CategoryAdmin)  # 文章分类
+admin_site.register(Article, ArticleAdmin)  # 文章
+admin_site.register(Comment, CommentAdmin)  # 文章评论
+admin_site.register(Tag, TagAdmin)  # 文章标签
+admin_site.register(SideBar, SideBarAdmin)  # 侧边栏
+admin_site.register(Photo, PhotoAdmin)  # 相册
+admin_site.register(GuestBook, GuestBookAdmin)  # 留言板
+admin_site.register(Link, LinkAdmin)  # 友情链接
+
 admin_site.register(Site, SiteAdmin)  # 站点, sitemap使用
-admin_site.register(Article, ArticleAdmin)
-admin_site.register(Category, CategoryAdmin)
-admin_site.register(Tag, TagAdmin)
-admin_site.register(Link, LinkAdmin)
-admin_site.register(SideBar, SideBarAdmin)
-admin_site.register(Setting, SettingAdmin)
-admin_site.register(UserProfile, UserProfileAdmin)
+
+admin_site.register(UserProfile, UserProfileAdmin)  # 用户
+admin_site.register(EmailVerifyCode, EmailVerifyCodeAdmin)  # 邮箱验证码
 
 admin_site.register(OAuthConfig, OAuthConfigAdmin)

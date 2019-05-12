@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils.timezone import now
 from django.core.exceptions import ValidationError
 
+# github 用户信息
 '''
 {"login": "enjoy-binbin", "id": 22811481, "node_id": "MDQ6VXNlcjIyODExNDgx",
  "avatar_url": "https://avatars1.githubusercontent.com/u/22811481?v=4", "gravatar_id": "",
@@ -26,6 +27,32 @@ from django.core.exceptions import ValidationError
 '''
 
 
+class OAuthConfig(models.Model):
+    type = models.CharField('OAuth类型', max_length=10)
+
+    app_key = models.CharField('AppKey', max_length=200)
+    app_secret = models.CharField('APPSecret', max_length=200)
+
+    callback_url = models.CharField('回调地址', max_length=200, default='',
+                                    help_text='http://127.0.0.1:8000/oauth/authorize?type=github')
+    is_enable = models.BooleanField('是否启用', default=False)
+
+    add_time = models.DateTimeField('添加时间', default=now)
+    modify_time = models.DateTimeField('修改时间', default=now)
+
+    class Meta:
+        verbose_name = '0-OAuth配置'
+        verbose_name_plural = verbose_name
+        ordering = ['-add_time']
+
+    def __str__(self):
+        return self.type
+
+    def clean(self):
+        if OAuthConfig.objects.filter(type=self.type).exclude(id=self.id):
+            raise ValidationError(self.type + '已经存在')
+
+
 class OAuthUser(models.Model):
     """ 通过OAuth注册的用户 """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='用户', blank=True, null=True,
@@ -43,35 +70,9 @@ class OAuthUser(models.Model):
     modify_time = models.DateTimeField('修改时间', default=now)
 
     class Meta:
-        verbose_name = 'oauth用户'
+        verbose_name = '1-Oauth用户'
         verbose_name_plural = verbose_name
         ordering = ['-add_time']
 
     def __str__(self):
         return self.nickname
-
-
-class OAuthConfig(models.Model):
-    type = models.CharField('OAuth类型', max_length=10)
-
-    app_key = models.CharField('AppKey', max_length=200)
-    app_secret = models.CharField('APPSecret', max_length=200)
-
-    callback_url = models.CharField('回调地址', max_length=200, default='',
-                                    help_text='http://127.0.0.1:8000/oauth/authorize?type=github')
-    is_enable = models.BooleanField('是否启用', default=False)
-
-    add_time = models.DateTimeField('添加时间', default=now)
-    modify_time = models.DateTimeField('修改时间', default=now)
-
-    class Meta:
-        verbose_name = 'OAuth配置'
-        verbose_name_plural = verbose_name
-        ordering = ['-add_time']
-
-    def __str__(self):
-        return self.type
-
-    def clean(self):
-        if OAuthConfig.objects.filter(type=self.type).exclude(id=self.id):
-            raise ValidationError(self.type + '已经存在')

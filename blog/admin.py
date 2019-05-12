@@ -110,5 +110,17 @@ class SideBarAdmin(admin.ModelAdmin):
     list_editable = ['is_enable']
 
 
+class CommentAdmin(admin.ModelAdmin):
+    pass
+
+
+class PhotoAdmin(admin.ModelAdmin):
+    pass
+
+
+class GuestBookAdmin(admin.ModelAdmin):
+    pass
+
+
 class SettingAdmin(admin.ModelAdmin):
     pass

@@ -1,0 +1,234 @@
+/* 相册展示页 */
+a {
+    outline: none;
+    text-decoration: none;
+}
+
+.photo-card {
+    border-radius: 0.25rem;
+    border: 1px solid rgba(0, 0, 0, .125);
+    width: 32%;
+    margin-bottom: 0.75rem;
+    flex-direction: column;
+}
+
+.photo-card-link {
+    text-decoration: none;
+    outline: none;
+}
+
+.photo-card-img {
+    background-color: transparent;
+    max-height: 100%;
+    outline: none;
+    border: 0;
+}
+
+.photo-card-body {
+    text-align: left;
+    margin-bottom: 0.75rem;
+    padding: 1rem;
+}
+
+.photo-card-title {
+    font-size: 1.25rem;
+    color: #6c757d;
+    font-weight: 500;
+    line-height: 1.2
+}
+
+/* jquery插件 */
+/* 用于显示那些图片字体库 */
+@font-face {
+    font-family: picicon;
+    src: url(data:application/x-font-woff;charset=utf-8;base64,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) format('woff')
+}
+
+.magnify-toolbar .magnify-btn, .magnify-btn-close, .magnify-loader {
+    font-family: picicon !important;
+    font-size: 25px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+.magnify-modal {
+    position: fixed;
+    z-index: 9999;
+    width: 800px;
+    height: 600px;
+    background-color: rgba(0, 0, 0, .85);
+    -webkit-box-shadow: 0 0 3px 1px rgba(0, 0, 0, .3);
+    -moz-box-shadow: 0 0 3px 1px rgba(0, 0, 0, .3);
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, .3);
+    cursor: default
+}
+
+.magnify-header {
+    position: relative;
+    height: 40px;
+    z-index: 9;
+    background-color: rgba(0, 0, 0, .85);
+}
+
+.magnify-footer {
+    height: 50px;
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    z-index: 9
+}
+
+.magnify-toolbar {
+    display: inline-block;
+    height: 50px;
+    background-color: rgba(0, 0, 0, .5);
+    -webkit-border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0
+}
+
+.magnify-toolbar .magnify-btn {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    margin: 0;
+    color: #999;
+    line-height: 50px
+}
+
+.magnify-btn-close {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    color: #999;
+    line-height: 40px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 15px;
+    text-align: center
+}
+
+.magnify-toolbar .magnify-btn:hover, .magnify-btn-close:hover {
+    color: #fff
+}
+
+.magnify-btn-close:before {
+    content: "\ea4f"
+}
+
+.magnify-btn-zoomIn:before {
+    content: "\e7dd"
+}
+
+.magnify-btn-zoomOut:before {
+    content: '\e7dc'
+}
+
+.magnify-btn-prev:before {
+    content: '\e624'
+}
+
+.magnify-btn-next:before {
+    content: '\e9ce'
+}
+
+.magnify-btn-fullScreen:before {
+    content: '\e63f'
+}
+
+.magnify-btn-actualSize:before {
+    content: '\e615'
+}
+
+.magnify-btn-rotateLeft:before {
+    content: '\ece3'
+}
+
+.magnify-btn-rotateRight:before {
+    content: '\ece4'
+}
+
+.magnify-loader:before {
+    content: '\e600'
+}
+
+.magnify-loader {
+    -webkit-animation: icon-spin 1s infinite steps(8);
+    -o-animation: icon-spin 1s infinite steps(8);
+    animation: icon-spin 1s infinite steps(8);
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    color: #999;
+    font-size: 35px;
+    position: absolute;
+    left: 50%;
+    margin-left: -25px;
+    top: 40%
+}
+
+.magnify-title {
+    font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    user-select: none;
+    overflow: hidden;
+    color: white;
+    padding: 0 40px 0 15px;
+    line-height: 40px;
+}
+
+.magnify-image {
+    display: none;
+    position: relative
+}
+
+.magnify-stage {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 50px;
+    top: 40px;
+    border: 0;
+    overflow: hidden;
+    background: black;
+}
+
+.is-grab {
+    cursor: move;
+    cursor: -webkit-grab;
+    cursor: grab
+}
+
+.is-grabbing {
+    cursor: move;
+    cursor: -webkit-grabbing;
+    cursor: grabbing
+}
+
+/* 0412, 在弹出框中, 左右部分分别加上上一页下一页 */
+.my-pre, .my-next {
+    position: relative;
+    z-index: 6;
+}
+
+.my-pre::before, .my-next::before {
+    content: none;
+}
+
+/*遮罩层*/
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    display: none;
+    background-color: black;
+    opacity: 0.6;
+}
+
