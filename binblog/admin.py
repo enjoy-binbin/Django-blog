@@ -2,16 +2,37 @@ from django.contrib.admin import AdminSite
 from django.contrib.sites.models import Site
 from django.contrib.sites.admin import SiteAdmin
 
-from blog.models import Article, Category, Tag, Link, SideBar, Setting
-from blog.admin import ArticleAdmin, CategoryAdmin, TagAdmin, LinkAdmin, SideBarAdmin, SettingAdmin
+from blog.models import (
+    Setting,
+    Category,
+    Article,
+    Comment,
+    Tag,
+    Link,
+    SideBar,
+    Photo,
+    GuestBook,
+)
+from blog.admin import (
+    ArticleAdmin,
+    CategoryAdmin,
+    TagAdmin,
+    LinkAdmin,
+    SideBarAdmin,
+    SettingAdmin,
+    CommentAdmin,
+    PhotoAdmin,
+    GuestBookAdmin,
+)
 from user.models import UserProfile
 from user.admin import UserProfileAdmin
 from oauth.models import OAuthConfig, OAuthUser
 from oauth.admin import OAuthConfigAdmin
 
+
 class BinBlogAdminSite(AdminSite):
-    site_header = 'BinBlog 后台管理'
-    site_title = 'BinBlog 后台管理'
+    site_header = 'GMJ 博客后台管理'
+    site_title = 'GMJ 博客后台管理'
 
     def __init__(self, name='admin'):
         """ AdminSite追进去看 """
@@ -35,5 +56,8 @@ admin_site.register(Link, LinkAdmin)
 admin_site.register(SideBar, SideBarAdmin)
 admin_site.register(Setting, SettingAdmin)
 admin_site.register(UserProfile, UserProfileAdmin)
+admin_site.register(Comment, CommentAdmin)
+admin_site.register(Photo, PhotoAdmin)
+admin_site.register(GuestBook, GuestBookAdmin)
 
-admin_site.register(OAuthConfig, OAuthConfigAdmin)
+# admin_site.register(OAuthConfig, OAuthConfigAdmin)

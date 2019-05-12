@@ -27,6 +27,12 @@
             {% endfor %}
 
             <li class="">
+                <a href="{% url 'blog:guestbook' %}">留言板</a>
+            </li>
+            <li class="">
+                <a href="{% url 'blog:photo' %}">相册</a>
+            </li>
+            <li class="">
                 <a href="{% url 'blog:archives' %}">文章归档</a>
             </li>
         </ul>

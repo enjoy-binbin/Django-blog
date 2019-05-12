@@ -4,9 +4,10 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect
 from django.core.cache import cache
+from django.urls import reverse
 
-from blog.models import Article, Category, Tag, Comment
-from blog.forms import CommentForm
+from blog.models import Article, Category, Tag, Comment, Photo, GuestBook
+from blog.forms import CommentForm, GuestBookForm
 
 
 class IndexView(ListView):
@@ -156,10 +157,48 @@ class AuthorArticleView(ListView):
 
 
 class ArchivesView(ListView):
-    """ 文章日期归档, queryset要有序的 """
+    """ 文章日期归档, 归档的话queryset是要有序的 """
     template_name = 'blog/archives.html'
     context_object_name = 'article_list'
     queryset = Article.objects.all().order_by('-add_time')
+
+
+class PhotoListView(ListView):
+    """ 相册列表 """
+    model = Photo
+    template_name = 'blog/photo.html'
+    context_object_name = 'photo_list'
+
+
+class GuestBookListView(ListView):
+    """ 站点留言板列表 """
+    template_name = 'blog/guestbook.html'
+    context_object_name = 'guestbook_list'
+    queryset = GuestBook.objects.all().order_by('-add_time')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        guestbook_form = GuestBookForm()
+        context['guestbook_form'] = guestbook_form
+
+        return context
+
+
+class GuestBookPostView(FormView):
+    """ 提交留言 """
+    form_class = GuestBookForm
+    template_name = 'blog/guestbook.html'
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(reverse('blog:guestbook'))
+
+    def form_valid(self, form):
+        """ post提交的数据通过表单验证后 """
+        guestbook = form.save(False)
+        guestbook.author = self.request.user
+
+        guestbook.save(True)
+        return HttpResponseRedirect(reverse('blog:guestbook'))
 
 
 class CommentPostView(FormView):
@@ -179,6 +218,7 @@ class CommentPostView(FormView):
         """ post提交的数据通过表单验证后 """
 
         article_id = self.kwargs['article_id']
+
         article = get_object_or_404(Article, id=article_id)
 
         comment = form.save(False)

@@ -1,0 +1,119 @@
+{% extends 'base/base.html' %}
+{% load blog_tags %}
+{% load staticfiles %}
+
+{% block header %}
+    <title>留言板 | {{ SITE_DESC }}</title>
+    <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
+    <meta name="keywords" content="{{ SITE_KEYWORD }}"/>
+    <meta property="og:type" content="blog"/>
+    <meta property="og:title" content="{{ SITE_NAME }}"/>
+    <meta property="og:description" content="{{ SITE_DESC }}"/>
+    <meta property="og:url" content="{{ SITE_BASE_URL }}"/>
+    <meta property="og:site_name" content="{{ SITE_NAME }}"/>
+{% endblock %}
+
+{% block compress_css %}
+    <style>
+        li {
+            list-style: none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="primary" class="site-content">
+        <div id="content" role="main">
+            <header class="archive-header">
+                <p class="archive-title">留言板</p>
+            </header>
+
+            <div class="entry-content">
+                <section id="comments" class="themeform">
+                    {% load blog_tags %}
+
+                    <ul class="comment-tabs group">
+                        <li class="active">
+                            <a href="#commentlist-container">
+                                留言<span>{{ guestbook_list|length }}</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div style="display: block;" id="commentlist-container">
+                        <ol class="commentlist">
+                            {% for guestbook in guestbook_list %}
+                                <li>
+                                    <div class="comment-body">
+                                        <div class="comment-author">
+                                            <img alt="default" src="/media/default.jpg" class="avatar">
+                                            <div class="fn">
+                                                {% if guestbook.author.is_superuser %}
+                                                    <a href="{{ guestbook.author.get_absolute_url }}">
+                                                        {% if guestbook.author.nickname %}
+                                                            {{ guestbook.author.nickname }}
+                                                        {% else %}
+                                                            {{ guestbook.author.username }}
+                                                        {% endif %}
+                                                    </a>
+                                                {% else %}
+                                                    {% if guestbook.author.nickname %}
+                                                        {{ guestbook.author.nickname }}
+                                                    {% else %}
+                                                        {{ guestbook.author.username }}
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="comment-meta commentmetadata">
+                                            {{ guestbook.add_time }}
+                                        </div>
+
+                                        <p>{{ guestbook.content|escape|article_markdown }}</p>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </section>
+
+                {% if user.is_authenticated %}
+                    <div id="comments" class="comments-area">
+
+                        <div id="respond" class="comment-respond">
+                            <h3 id="reply-title" class="comment-reply-title">进行留言</h3>
+                            <form action="{% url 'blog:guestbook_post' %}" method="post" id="commentform"
+                                  class="comment-form">
+                                <p class="comment-form-comment">
+                                    {{ guestbook_form.content.label_tag }}
+                                    {{ guestbook_form.content }}
+                                    {{ guestbook_form.content.errors }}
+                                </p>
+
+                                <div class="form-submit">
+                                    <span class="comment-markdown" style="padding: 10px"> 支持markdown</span>
+                                    <input name="submit" type="submit" id="submit" class="submit" value="发表留言"/>
+                                </div>
+
+                                {% csrf_token %}
+                            </form>
+                        </div>
+                    </div>
+
+                {% else %}
+                    <div class="comments-area">
+                        <h3 class="comment-meta">您还没有登录，请您<a
+                                href="{% url 'user:login' %}?next={{ request.get_full_path }}">登录</a>后发表留言。</h3>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    {% inclusion_sidebar_tag %}
+{% endblock %}
+
+
