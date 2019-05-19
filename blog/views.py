@@ -170,6 +170,13 @@ class PhotoListView(ListView):
     context_object_name = 'photo_list'
 
 
+class PhotoListView2(ListView):
+    """ 相册列表 """
+    model = Photo
+    template_name = 'blog/photo1.html'
+    context_object_name = 'photo_list'
+
+
 class GuestBookListView(ListView):
     """ 站点留言板列表 """
     template_name = 'blog/guestbook.html'

@@ -1,17 +1,17 @@
 from django.views.generic import FormView, RedirectView
-
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.contrib.auth import logout
-
-from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.cache import never_cache
 
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.http import is_safe_url
-from django.contrib.auth import REDIRECT_FIELD_NAME
+
 from django.contrib import auth
+from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.contrib.auth import logout, login
+from django.contrib.auth.models import Group, Permission
 
 from .forms import RegisterForm, LoginForm
 
@@ -28,7 +28,29 @@ class RegisterView(FormView):
         user = form.save(commit=False)
         # user.is_active = False  # 未激活
         user.save()
-        url = reverse('user:login')
+        login(self.request, user)
+        url = reverse('user:index')
+
+        # TODO: 多用户博客系统的权限控制
+        # 添加一个组
+        # res = Group.objects.get_or_create(name='register_user_group')
+        # register_user_group = res[0]
+        #
+        # try:
+        #     p1 = Permission.objects.get(codename='view_category')
+        #     p2 = Permission.objects.get(codename='change_category')
+        #     p3 = Permission.objects.get(codename='add_category')
+        #     p4 = Permission.objects.get(codename='delete_category')
+        #     p5 = Permission.objects.get(codename='view_article')
+        #     p6 = Permission.objects.get(codename='change_article')
+        #     p7 = Permission.objects.get(codename='add_article')
+        #     p8 = Permission.objects.get(codename='delete_article')
+        #     register_user_group.permissions.add(p1, p2, p3, p4, p5, p6, p7, p8)
+        #     # register_user_group.user_set.add(user)
+        #     user.groups.add(register_user_group)
+        # except:
+        #     pass
+
         return HttpResponseRedirect(url)
 
 

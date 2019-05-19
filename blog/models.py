@@ -24,7 +24,7 @@ class Setting(models.Model):
                                          help_text='https://github.com/enjoy-binbin/binblog-Django')
 
     class Meta:
-        verbose_name = '站点配置'
+        verbose_name = '0-站点配置'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -64,7 +64,7 @@ class Category(BaseModel):
     top_objects = TopCategoryManager()  # 调用方式: Category.top_object.all()
 
     class Meta:
-        verbose_name = '文章分类'
+        verbose_name = '1-文章分类'
         verbose_name_plural = verbose_name
         ordering = ['name']
 
@@ -123,7 +123,7 @@ class Article(BaseModel):
     tags = models.ManyToManyField('Tag', verbose_name='标签', blank=True)
 
     class Meta:
-        verbose_name = '文章'
+        verbose_name = '2-文章'
         verbose_name_plural = verbose_name
         ordering = ['-order', '-add_time']
         # get_latest_by = 'id'
@@ -176,7 +176,7 @@ class Comment(BaseModel):
     is_enable = models.BooleanField('是否显示', default=True)
 
     class Meta:
-        verbose_name = '文章评论'
+        verbose_name = '3-文章评论'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -188,7 +188,7 @@ class Tag(BaseModel):
     name = models.CharField('标签名', max_length=25, unique=True)
 
     class Meta:
-        verbose_name = '标签'
+        verbose_name = '4-文章标签'
         verbose_name_plural = verbose_name
         ordering = ['name']
 
@@ -214,7 +214,7 @@ class SideBar(BaseModel):
     is_enable = models.BooleanField('是否启用', default=True)
 
     class Meta:
-        verbose_name = '侧边栏'
+        verbose_name = '5-侧边栏'
         verbose_name_plural = verbose_name
         ordering = ['-order']
 
@@ -230,7 +230,7 @@ class Link(BaseModel):
     is_enable = models.BooleanField('是否启用', default=True)
 
     class Meta:
-        verbose_name = '友情链接'
+        verbose_name = '8-友情链接'
         verbose_name_plural = verbose_name
         ordering = ['order']
 
@@ -251,11 +251,11 @@ def photo_path(instance, filename):
 class Photo(BaseModel):
     """ 相册照片 """
     title = models.CharField('图片标题', max_length=50, help_text='用于当作照片名称')
-    desc = models.TextField('图片描述', max_length=200, help_text='用于title标签')
+    desc = models.TextField('图片描述', max_length=200, help_text='用于title标签', null=True, blank=True)
     image = models.ImageField('图片', upload_to=photo_path, help_text='media/photo/')
 
     class Meta:
-        verbose_name = '图片'
+        verbose_name = '6-相册图片'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -268,7 +268,7 @@ class GuestBook(BaseModel):
     content = models.TextField('留言内容', max_length=250)
 
     class Meta:
-        verbose_name = '留言板'
+        verbose_name = '7-留言板'
         verbose_name_plural = verbose_name
         ordering = ['author', '-id']
 

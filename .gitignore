@@ -3,3 +3,4 @@ __pycache__/
 binblog/whoosh_index/*
 settings.py
 notes/
+binblog.sql

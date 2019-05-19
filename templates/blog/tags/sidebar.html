@@ -20,6 +20,7 @@
         {% endfor %}
     {% endif %}
 
+
     {# github的sidebar #}
     <aside class="widget">
         <h3 class="widget-title">欢迎您star或者fork本站源代码</h3>
@@ -33,6 +34,21 @@
                 </a>
             </p>
         </div>
+    </aside>
+
+    {# 站点功能 #}
+    <aside class="widget"><h3 class="widget-title">站点功能</h3>
+        <ul>
+            <li><a href="{% url 'admin:index' %}" rel="nofollow">管理站点</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'user:logout' %}" rel="nofollow">登出</a></li>
+            {% else %}
+                <li><a href="{% url 'user:login' %}" rel="nofollow">登录</a>
+            {% endif %}
+            {% if user.is_superuser %}
+                <li><a href="{% url 'refresh' %}" target="_blank">刷新缓存</a></li>
+            {% endif %}
+        </ul>
     </aside>
 
     {# 最热文章-阅读数 #}
@@ -99,19 +115,6 @@
         </aside>
     {% endif %}
 
-    {# 站点功能 #}
-    <aside class="widget"><h3 class="widget-title">站点功能</h3>
-        <ul>
-            <li><a href="{% url 'admin:index' %}" rel="nofollow">管理站点</a></li>
-            {% if user.is_authenticated %}
-                <li><a href="{% url 'user:logout' %}" rel="nofollow">登出</a></li>
-            {% else %}
-                <li><a href="{% url 'user:login' %}" rel="nofollow">登录</a>
-            {% endif %}
-            {% if user.is_superuser %}
-                <li><a href="{% url 'refresh' %}" target="_blank">刷新缓存</a></li>
-            {% endif %}
-        </ul>
-    </aside>
+
     <div id="rocket" class="show" title="点我返回顶部"></div>
 </div>

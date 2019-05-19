@@ -39,8 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
+
     'blog',
     'user',
+    'oauth',
+
     'haystack',  # haystack全文搜索
     'pagedown',  # md编辑器
     'mdeditor',  # md编辑器
@@ -72,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',  # 如果需要使用到 MEDIA_URL, 就需要启动这个
                 'blog.context_processors.setting',  # 自定义模板全局变量, 网站常量
             ],
         },
@@ -86,29 +90,34 @@ WSGI_APPLICATION = 'binblog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'binblog',
-        'USER': 'root',
-        'PASSWORD': '123456',  # Your mysql password
+        'NAME': 'blog',  # Your db name
+        'USER': 'root',  # Your db username
+        'PASSWORD': '123456',  # Your db pwd
         'HOST': '127.0.0.1'
     }
 }
 
-# Password validation
+# 密码验证类 Password validation
+# https://docs.djangoproject.com/en/2.1/topics/auth/passwords/
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
+        # 检查密码和用户名是否具有相似性
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
+        # 检查密码长度
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 6,
+        }
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # {   # 密码是否非常常用，会比较20000个常用密码
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
+    # {   # 是否是纯数字
+    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    # },
 ]
 
 # Internationalization
@@ -167,8 +176,8 @@ HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 # 发送邮件的配置
 EMAIL_HOST = 'smtp.sina.com'
 EMAIL_PORT = 25
-EMAIL_HOST_USER = 'xxxx@sina.com'  # Your sina account
-EMAIL_HOST_PASSWORD = '123465'  # Your email password
+EMAIL_HOST_USER = 'user@sina.com'  # Your email username
+EMAIL_HOST_PASSWORD = 'sina123456'  # Your email password
 EMAIL_USE_TLS = False  # 不使用TLS协议, 不https:443
 EMAIL_FROM = 'binloveplay1314@sina.com'  # 发件人
 

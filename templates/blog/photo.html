@@ -11,80 +11,68 @@
     <meta property="og:description" content="{{ SITE_DESC }}"/>
     <meta property="og:url" content="{{ SITE_BASE_URL }}"/>
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
-{% endblock %}
 
-{% block compress_css %}
-    <link rel="stylesheet" href="{% static 'photo/css/photo_show.css' %}">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: inherit;
+        }
+
+        html, body {
+            overflow: auto;
+            height: 100%;
+
+        }
+
+        .container {
+            box-sizing: border-box;
+        }
+
+    </style>
 {% endblock %}
 
 {% block content %}
-    <div id="primary" class="site-content">
-        <div id="content" role="main">
-            <header class="archive-header">
-                <p class="archive-title">相册</p>
-            </header>
-
-            <div class="entry-content">
-                <!-- 主内容页面 -->
+    <div class="container">
+        <div class="row mt-3">
+            <div class="card-columns">
                 {% for photo in photo_list %}
-                    <div style="padding: 0.5rem; width: 30%; float: left">
-                        <div>
-                            <a href="javascript:void(0)" data-magnify="gallery" data-caption="{{ photo.title }}"
-                               data-src="{{ MEDIA_URL }}{{ photo.image }}">
-                                <img style="height: 150px" class="img-thumb" src="{{ MEDIA_URL }}{{ photo.image }}"
-                                     alt="" title="{{ photo.desc }}">
-                            </a>
-                        </div>
-                        <div style="text-align: center">
-                            <span>{{ photo.title }}</span>
+                    <div class="card">
+                        <!-- Button trigger modal -->
+                        <a class="card-link text-muted" href="javascript:void(0)"
+                           data-toggle="modal" data-target="#img_{{ photo.id }}">
+                            <img style="max-width: 100%" src="{{ MEDIA_URL }}{{ photo.image }}"
+                                 alt="{{ photo.title }}" title="{{ photo.desc }}">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    {{ photo.title }}
+                                </h5>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="img_{{ photo.id }}" style="" aria-labelledby="exampleModalCenterTitle"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <img style="max-width: 100%" src="{{ MEDIA_URL }}{{ photo.image }}"
+                                         alt="{{ photo.title }}" title="{{ photo.desc }}">
+                                </div>
+                                <div class="modal-body text-muted">
+                                    <p>{{ photo.desc }}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
             </div>
         </div>
     </div>
-    <!-- 图片展示遮罩层 -->
-    <div id="overlay" class="overlay"></div>
 
-{% endblock %}
-
-{% block sidebar %}
-    {% inclusion_sidebar_tag %}
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 {% endblock %}
 
 {% block compress_js %}
-    <script type="text/javascript" src="{% static 'photo/js/jqueryrotate.js' %}"></script>
-    <script type="text/javascript" src="{% static 'photo/js/photo_show.js' %}"></script>
-    <script type="text/javascript">
-        $(function () {
-            $('[data-magnify]').Magnify({
-                keyboard: true,
-                draggable: false,  // 弹出框不可移动
-                movable: true,
-                beforeOpen: function (obj, data) {
-                    //console.log('beforeOpen')
-                },
-                opened: function (obj, data) {
-                    //console.log('opened')
-                },
-                opened2: function (obj, data) {
-                    //console.log('opened')
-                },
-                beforeClose: function (obj, data) {
-                    //console.log('beforeClose')
-                },
-                closed: function (obj, data) {
-                    //console.log('closed')
-                },
-                beforeChange: function (obj, data) {
-                    //console.log('beforeChange')
-                },
-                changed: function (obj, data) {
-                    //console.log('changed')
-                }
-            });
-        });
-
-
-    </script>
 {% endblock %}

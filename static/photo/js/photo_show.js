@@ -174,9 +174,9 @@
                 '</div>' +
                 '<div class="magnify-stage">' +
                 // '<div class="magnify-toolbar" style="">' + this.createPreBtn() +
-                '<img src="" alt="" class="magnify-image" style="position: absolute;transform: rotate(0deg); transform-origin: 50% 50% 0px;">' +
+                '<img src="" alt="" title="' + '" class="magnify-image" style="position: absolute;transform: rotate(0deg); transform-origin: 50% 50% 0px;">' +
                 this.createNextBtn() + '</div>' +
-                // '</div>' +
+                '<div>555555555</div>' +
                 '<div class="magnify-footer"><div class="magnify-toolbar">' + this.createBtn(this.settings.Toolbar, btnTpl) + '</div></div>' +
                 '</div>';
         }, createTitle: function () {
@@ -219,8 +219,8 @@
                 modalWidth = modalSize[0], modalHeight = modalSize[1];
 
             // 0412: 弹出框要根据页面大小来定，接近全覆盖的大小
-            modalWidth = winWidth * 0.9;
-            modalHeight = winHeight * 0.9;
+            modalWidth = winWidth * 0.6;
+            modalHeight = winHeight * 0.95;
             // 0412, 完成, 根据 jquery的$(window).height() or $(window).width() 获取当前浏览器可视区域宽高
 
             modal.css({

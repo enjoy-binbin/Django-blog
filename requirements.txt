@@ -1,3 +1,5 @@
+certifi==2019.3.9
+chardet==3.0.4
 Django==2.1.5
 django-appconf==1.0.2
 django-compressor==2.2
@@ -7,6 +9,7 @@ django-pagedown==1.0.6
 djangorestframework==3.9.2
 djangorestframework-jwt==1.11.0
 docutils==0.14
+idna==2.8
 jieba==0.39
 mistune==0.8.4
 mysqlclient==1.4.1
@@ -16,7 +19,9 @@ PyJWT==1.7.1
 python-memcached==1.59
 pytz==2018.9
 rcssmin==1.0.6
+requests==2.21.0
 rjsmin==1.0.12
 six==1.12.0
 Unidecode==1.0.23
+urllib3==1.24.3
 Whoosh==2.7.4

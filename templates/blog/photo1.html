@@ -1,0 +1,94 @@
+{% extends 'base/base.html' %}
+{% load blog_tags %}
+{% load staticfiles %}
+
+{% block header %}
+    <title>相册 | {{ SITE_DESC }}</title>
+    <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
+    <meta name="keywords" content="{{ SITE_KEYWORD }}"/>
+    <meta property="og:type" content="blog"/>
+    <meta property="og:title" content="{{ SITE_NAME }}"/>
+    <meta property="og:description" content="{{ SITE_DESC }}"/>
+    <meta property="og:url" content="{{ SITE_BASE_URL }}"/>
+    <meta property="og:site_name" content="{{ SITE_NAME }}"/>
+{% endblock %}
+
+{% block compress_css %}
+    <link rel="stylesheet" href="{% static 'photo/css/photo_show.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div id="primary" class="site-content" style="width: 100%; margin: 0">
+        <div id="content" role="main">
+            {#            <header class="archive-header">#}
+            {#                <p class="archive-title">相册</p>#}
+            {#            </header>#}
+
+            <div class="entry-content" style="display: flex;flex-wrap: wrap; justify-content: space-between">
+                <!-- 主内容页面 -->
+                {% for photo in photo_list %}
+                    <div class="photo-card">
+
+                        <a class="photo-card-link" href="javascript:void(0)"
+                           data-magnify="gallery"
+                           data-caption="{{ photo.title }}"
+                           data-src="{{ MEDIA_URL }}{{ photo.image }}">
+
+                            <img class="photo-card-img"
+                                 src="{{ MEDIA_URL }}{{ photo.image }}"
+                                 alt="{{ photo.image }}" title="{{ photo.desc }}">
+
+                            <div class="photo-card-body">
+                                <span class="photo-card-title">{{ photo.title }}</span>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- 图片展示遮罩层 -->
+    <div id="overlay" class="overlay"></div>
+
+{% endblock %}
+
+{#{% block sidebar %}#}
+{#    {% inclusion_sidebar_tag %}#}
+{#{% endblock %}#}
+
+{% block compress_js %}
+    <script type="text/javascript" src="{% static 'photo/js/jqueryrotate.js' %}"></script>
+    <script type="text/javascript" src="{% static 'photo/js/photo_show.js' %}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('[data-magnify]').Magnify({
+                keyboard: true,
+                draggable: false,  // 弹出框不可移动
+                movable: true,
+                beforeOpen: function (obj, data) {
+                    //console.log('beforeOpen')
+                },
+                opened: function (obj, data) {
+                    //console.log('opened')
+                },
+                opened2: function (obj, data) {
+                    //console.log('opened')
+                },
+                beforeClose: function (obj, data) {
+                    //console.log('beforeClose')
+                },
+                closed: function (obj, data) {
+                    //console.log('closed')
+                },
+                beforeChange: function (obj, data) {
+                    //console.log('beforeChange')
+                },
+                changed: function (obj, data) {
+                    //console.log('changed')
+                }
+            });
+        });
+
+
+    </script>
+{% endblock %}

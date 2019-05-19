@@ -31,8 +31,8 @@ from oauth.admin import OAuthConfigAdmin
 
 
 class BinBlogAdminSite(AdminSite):
-    site_header = 'GMJ 博客后台管理'
-    site_title = 'GMJ 博客后台管理'
+    site_header = '彬彬博客后台管理'
+    site_title = '彬彬博客后台管理'
 
     def __init__(self, name='admin'):
         """ AdminSite追进去看 """

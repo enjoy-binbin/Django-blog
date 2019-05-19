@@ -18,6 +18,7 @@ urlpatterns = [
 
     # 照片墙
     path('photo.html', views.PhotoListView.as_view(), name='photo'),
+    path('photo2.html', views.PhotoListView2.as_view(), name='photo2'),
 
     # 留言板
     path('guestbook.html', views.GuestBookListView.as_view(), name='guestbook'),

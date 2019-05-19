@@ -1,8 +1,43 @@
-.img-thumb {
-    max-width: 100%;
-    max-height: 18rem;
+/* 相册展示页 */
+a {
+    outline: none;
+    text-decoration: none;
 }
 
+.photo-card {
+    border-radius: 0.25rem;
+    border: 1px solid rgba(0, 0, 0, .125);
+    width: 32%;
+    margin-bottom: 0.75rem;
+    flex-direction: column;
+}
+
+.photo-card-link {
+    text-decoration: none;
+    outline: none;
+}
+
+.photo-card-img {
+    background-color: transparent;
+    max-height: 100%;
+    outline: none;
+    border: 0;
+}
+
+.photo-card-body {
+    text-align: left;
+    margin-bottom: 0.75rem;
+    padding: 1rem;
+}
+
+.photo-card-title {
+    font-size: 1.25rem;
+    color: #6c757d;
+    font-weight: 500;
+    line-height: 1.2
+}
+
+/* jquery插件 */
 /* 用于显示那些图片字体库 */
 @font-face {
     font-family: picicon;
@@ -22,7 +57,6 @@
     z-index: 9999;
     width: 800px;
     height: 600px;
-    background-color: #333;
     background-color: rgba(0, 0, 0, .85);
     -webkit-box-shadow: 0 0 3px 1px rgba(0, 0, 0, .3);
     -moz-box-shadow: 0 0 3px 1px rgba(0, 0, 0, .3);
@@ -34,7 +68,7 @@
     position: relative;
     height: 40px;
     z-index: 9;
-    background-color: #535354c7;
+    background-color: rgba(0, 0, 0, .85);
 }
 
 .magnify-footer {
@@ -144,9 +178,9 @@
     text-overflow: ellipsis;
     user-select: none;
     overflow: hidden;
-    color: #fff;
+    color: white;
     padding: 0 40px 0 15px;
-    line-height: 40px
+    line-height: 40px;
 }
 
 .magnify-image {
@@ -158,10 +192,11 @@
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: 50px;
     top: 40px;
     border: 0;
-    overflow: hidden
+    overflow: hidden;
+    background: black;
 }
 
 .is-grab {
@@ -186,6 +221,7 @@
     content: none;
 }
 
+/*遮罩层*/
 .overlay {
     position: absolute;
     top: 0;
@@ -196,6 +232,3 @@
     opacity: 0.6;
 }
 
-a {
-    text-decoration: none;
-}
