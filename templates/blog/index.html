@@ -1,28 +1,27 @@
 {% extends 'base/base.html' %}
 {% load blog_tags %}
 {% block header %}
-    {% if tag_name %}
-        <title>{{ page_type }}:{{ tag_name }} | {{ SITE_DESC }}</title>
-        {% comment %}<meta name="description" content="{{ page_type }}:{{ tag_name }}"/>{% endcomment %}
-    {% else %}
-        <title>{{ SITE_NAME }} | {{ SITE_DESC }}</title>
-    {% endif %}
-    <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
+    <title>{{ SITE_NAME }} | {{ SITE_DESC }}</title>
     <meta name="keywords" content="{{ SITE_KEYWORD }}"/>
     <meta property="og:type" content="blog"/>
     <meta property="og:title" content="{{ SITE_NAME }}"/>
-    <meta property="og:description" content="{{ SITE_DESCRIPTION }}"/>
-    <meta property="og:url" content="{{ SITE_BASE_URL }}"/>
+    <meta property="og:description" content="{{ SITE_DESC }}"/>
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
+
 {% endblock %}
 {% block content %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>{{ message }}</strong>
+                </div>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <div id="primary" class="site-content">
         <div id="content" role="main">
-            {% if page_type and tag_name %}
-                <header class="archive-header">
-                    <p class="archive-title">{{ page_type }}：<span>{{ tag_name }}</span></p>
-                </header><!-- .archive-header -->
-            {% endif %}
 
             {% pagination_tag article_list as article_list %}
 

@@ -1,19 +1,28 @@
-from django.views.generic import FormView, RedirectView
+from django.views.generic import FormView, RedirectView, View
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.cache import never_cache
 
-from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.shortcuts import reverse, redirect
 from django.utils.decorators import method_decorator
 from django.utils.http import is_safe_url
+from django.utils.timezone import now
 
-from django.contrib import auth
-from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.contrib.auth import logout, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model, logout, login, REDIRECT_FIELD_NAME
 from django.contrib.auth.models import Group, Permission
+from django.contrib import messages
+from django.shortcuts import get_object_or_404
 
 from .forms import RegisterForm, LoginForm
+from .tasks import send_email_task
+from .models import EmailVerifyCode
+from utils.get_setting import get_setting
+
+User = get_user_model()
+
+from random import Random
 
 
 # django有一个 path('', include('django.contrib.auth.urls')),
@@ -22,14 +31,32 @@ class RegisterView(FormView):
     """ 用户注册View """
     form_class = RegisterForm
     template_name = 'user/registration_form.html'
+    send_type = 'register'  # 邮件发送类型
 
     def form_valid(self, form):
-        # 通过表单验证, 保存用户跳转到登陆页
+        # 通过表单验证
+        s = get_setting()  # 网站一些配置信息 blog.models.Setting
         user = form.save(commit=False)
-        # user.is_active = False  # 未激活
-        user.save()
-        login(self.request, user)
-        url = reverse('user:index')
+
+        if s.user_verify_email:
+            # 用户注册需要验证邮箱, 需要启动celery的消息队列
+            code_str = self.generate_random_str()  # 验证码
+            email = user.email  # 收件方
+            task_obj = send_email_task.delay(email, code_str, self.send_type)  # celery异步任务对象
+
+            # create里会进行save()
+            EmailVerifyCode.objects.create(email=email, code=code_str, type=self.send_type, task_id=task_obj.task_id)
+
+            user.is_active = False  # 未激活
+            user.save()
+            url = reverse('user:login')
+            messages.success(self.request, '注册成功,前往邮箱激活')
+        else:
+            # 用户注册不需要验证邮箱
+            user.save()
+            login(self.request, user)  # 注册后的自动登录
+            url = reverse('blog:index')
+            messages.success(self.request, '注册成功, 欢迎加入本博客系统')
 
         # TODO: 多用户博客系统的权限控制
         # 添加一个组
@@ -52,6 +79,17 @@ class RegisterView(FormView):
         #     pass
 
         return HttpResponseRedirect(url)
+
+    @staticmethod
+    def generate_random_str(str_len=8):
+        """ 生成长度为str_len的随机字符串 """
+        chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        length = len(chars)
+        random = Random()
+        from functools import reduce
+
+        _str = reduce(lambda x, y: x + y, [chars[random.randint(0, length - 1)] for _ in range(str_len)])
+        return _str
 
 
 class LoginView(FormView):
@@ -88,7 +126,7 @@ class LoginView(FormView):
 
     def form_valid(self, form):  # TOREAD
         # 表单通过了验证
-        auth.login(self.request, form.get_user())
+        login(self.request, form.get_user())
         # return super().form_valid(form)  # 这行父类就是调用了下行
         return HttpResponseRedirect(self.get_success_url())
 
@@ -123,19 +161,38 @@ class LogoutView(RedirectView):
         return super().dispatch(request, *args, **kwargs)
 
 
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseForbidden
+class ActiveView(View):
+    """ 用户激活邮箱 """
+
+    def get(self, request, code):
+        code_obj = EmailVerifyCode.objects.filter(code=code, type='register').last()  # last取默认排序后的最后一个
+        # timestamp = (now() - code_obj.add_time).total_seconds()
+
+        # 验证码过期以后再做吧, 不然又得要写多一个重发验证码
+        if code_obj:  # and timestamp < 600:
+            user = get_object_or_404(User, email=code_obj.email, is_active=False)
+            user.is_active = True
+            code_obj.is_used = True
+            user.save()
+            code_obj.save()
+
+            login(request, user)
+            messages.success(request, '激活成功, 欢迎加入本博客系统')
+            return redirect(reverse('blog:index'))
+
+        messages.success(request, '验证码有误')
+        return redirect(reverse('user:login'))
 
 
 @login_required
 def refresh_cache(request):
-    try:
-        if request.user.is_superuser:
-            from django.core.cache import cache
-            if cache and cache is not None:
-                cache.clear()
-            return HttpResponse('ok')
-        else:
-            return HttpResponseForbidden()  # 403封装的HttpResponse
-    except Exception as e:
-        return HttpResponse(e)
+    """ 清空缓存 """
+    if request.user.is_superuser:
+        from django.core.cache import cache
+        if cache and cache is not None:
+            cache.clear()
+
+        messages.success(request, '缓存刷新成功')
+        return redirect(reverse('blog:index'))
+    else:
+        return HttpResponseForbidden()  # 403封装的HttpResponse

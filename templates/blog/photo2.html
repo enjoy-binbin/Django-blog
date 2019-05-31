@@ -1,0 +1,78 @@
+{% extends 'base/base.html' %}
+{% load blog_tags %}
+{% load staticfiles %}
+
+{% block header %}
+    <title>相册 | {{ SITE_DESC }}</title>
+    <meta name="keywords" content="{{ SITE_KEYWORD }}"/>
+    <meta property="og:type" content="blog"/>
+    <meta property="og:title" content="{{ SITE_NAME }}"/>
+    <meta property="og:description" content="{{ SITE_DESC }}"/>
+    <meta property="og:site_name" content="{{ SITE_NAME }}"/>
+    
+    <link rel="stylesheet" href="{% static 'photo2/css/bootstrap.min.css' %}">
+
+    <style>
+        * {
+            box-sizing: inherit;
+        }
+
+        html, body {
+            overflow: auto;
+            height: 100%;
+
+        }
+
+        .container {
+            box-sizing: border-box;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!-- <header class="archive-header">
+        <p class="archive-title">相册</p>
+    </header> -->
+    <div class="container">
+        <div class="row mt-3">
+            <div class="card-columns">
+                {% for photo in photo_list %}
+                    <div class="card">
+                        <!-- Button trigger modal -->
+                        <a class="card-link text-muted" href="javascript:void(0)"
+                           data-toggle="modal" data-target="#img_{{ photo.id }}">
+                            <img style="max-width: 100%" src="{{ MEDIA_URL }}{{ photo.image }}"
+                                 alt="{{ photo.title }}" title="{{ photo.desc }}">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    {{ photo.title }}
+                                </h5>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="img_{{ photo.id }}" style="" aria-labelledby="exampleModalCenterTitle"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <img style="max-width: 100%" src="{{ MEDIA_URL }}{{ photo.image }}"
+                                         alt="{{ photo.title }}" title="{{ photo.desc }}">
+                                </div>
+                                <div class="modal-body text-muted">
+                                    <p>{{ photo.desc }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block compress_js %}
+    <script src="{% static 'photo2/js/jquery.min.js' %}"></script>
+    <script src="{% static 'photo2/js/bootstrap.min.js' %}"></script>
+{% endblock %}

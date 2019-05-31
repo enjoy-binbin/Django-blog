@@ -7,14 +7,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     {% block header %}
+        <title>{{ SITE_NAME }}</title>
     {% endblock %}
 
     {% compress css %}
+        <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'blog/css/cyrillic.css' %}">
         <link rel='stylesheet' href='{% static 'blog/css/style.css' %}'>
-        <link rel="stylesheet" href="{% static 'blog/css/oauth_style.css' %}">
         <link rel="stylesheet" href="{% static 'pygments/default.css' %}">
-        <link rel="stylesheet" href="{% static 'blog/css/nprogress.css' %}">
         {% block compress_css %}
         {% endblock %}
     {% endcompress %}
@@ -52,6 +52,7 @@
         <script type="text/javascript" src="{% static 'blog/js/nprogress.js' %}"></script>
         <script type="text/javascript" src="{% static 'blog/js/blog.js' %}"></script>
         <script type="text/javascript" src="{% static 'blog/js/navigation.js' %}"></script>
+        <script type="text/javascript" src="{% static 'blog/js/bootstrap.min.js' %}"></script>
         {% block compress_js %}
         {% endblock %}
     {% endcompress %}

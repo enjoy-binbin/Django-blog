@@ -1,13 +1,32 @@
 {% extends 'base/base_user.html' %}
 {% load static %}
 {% block content %}
-    <div class="container">
+    <style>
+        ul {
+            padding: 0;
+            margin: 0;
+        }
 
+        .alert {
+        }
+    </style>
+    <div class="container">
         <h2 class="form-signin-heading text-center">Sign in with your user</h2>
 
         <div class="card card-signin">
             <img class="img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">
+
             <form class="form-signin" action="{% url 'user:login' %}" method="post">
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong style="font-size: 13px;">{{ message }}</strong>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
                 {% csrf_token %}
                 {{ form.non_field_errors }}
                 {% for field in form %}
@@ -24,6 +43,7 @@
                         <input type="checkbox" value="remember-me"> Stay signed in
                     </label>
                 </div>
+
                 {% load oauth_tags %}
                 {% inclusion_oauth_apps request %}
             </form>

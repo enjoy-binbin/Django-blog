@@ -18,6 +18,8 @@ class Setting(models.Model):
     keyword = models.TextField('站点关键字', default='')
     article_desc_len = models.IntegerField('文章摘要长度', default=250)
     sidebar_article_count = models.IntegerField('侧边栏文章条数', default=10)
+    enable_photo = models.BooleanField('是否启用相册', default=True)
+    user_verify_email = models.BooleanField('用户注册是否验证邮箱', default=False)
 
     github_user = models.CharField('github账号', max_length=50, default='', help_text='https://github.com/enjoy-binbin')
     github_repository = models.CharField('github仓库', max_length=50, default='',
@@ -251,8 +253,8 @@ def photo_path(instance, filename):
 class Photo(BaseModel):
     """ 相册照片 """
     title = models.CharField('图片标题', max_length=50, help_text='用于当作照片名称')
-    desc = models.TextField('图片描述', max_length=200, help_text='用于title标签', null=True, blank=True)
-    image = models.ImageField('图片', upload_to=photo_path, help_text='media/photo/')
+    desc = models.TextField('图片描述', max_length=200, help_text='用于图片标签的title属性', null=True, blank=True)
+    image = models.ImageField('图片', upload_to=photo_path, help_text='默认保存在/media/photo/')
 
     class Meta:
         verbose_name = '6-相册图片'

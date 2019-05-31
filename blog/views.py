@@ -1,3 +1,5 @@
+import logging
+
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404
@@ -5,9 +7,15 @@ from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect
 from django.core.cache import cache
 from django.urls import reverse
+from django.contrib import messages
 
 from blog.models import Article, Category, Tag, Comment, Photo, GuestBook
 from blog.forms import CommentForm, GuestBookForm
+from blog.tasks import test_add
+
+# 日志器, 一般都用__name__作为日志器的名字, 在本例中日志器名称为 blog.views
+# 一般如果直接使用 logging.error(msg), 日志器名称是为 root
+logger = logging.getLogger(__name__)
 
 
 class IndexView(ListView):
@@ -18,6 +26,8 @@ class IndexView(ListView):
     page_kwarg = 'page'  # 前端约定好的页码的key
 
     def get_queryset(self):
+        test_add.delay(5, 5)  # celery测试, 里面有睡了5秒, 但是异步体验不到, 看celery控制台的输出
+
         queryset = cache.get(self.cache_key)  # 查询缓存
         if not queryset:  # 缓存没命中会返回 None
             queryset = super().get_queryset()  # 调用父类的方法
@@ -164,16 +174,16 @@ class ArchivesView(ListView):
 
 
 class PhotoListView(ListView):
-    """ 相册列表 """
+    """ 相册列表 -> 这个的模板相对来说没下面的好看 """
     model = Photo
     template_name = 'blog/photo.html'
     context_object_name = 'photo_list'
 
 
 class PhotoListView2(ListView):
-    """ 相册列表 """
+    """ 相册2列表-> 这个的模板有bug: 模态框弹出有多一个滚动条 """
     model = Photo
-    template_name = 'blog/photo1.html'
+    template_name = 'blog/photo2.html'
     context_object_name = 'photo_list'
 
 
@@ -205,6 +215,7 @@ class GuestBookPostView(FormView):
         guestbook.author = self.request.user
 
         guestbook.save(True)
+        messages.success(self.request, '留言成功')
         return HttpResponseRedirect(reverse('blog:guestbook'))
 
 
@@ -258,8 +269,12 @@ class CommentPostView(FormView):
         })
 
 
+# 403的抛出
+# from django.core.exceptions import PermissionDenied
+# raise PermissionDenied
 def permission_denied(request, exception, template_name='blog/error_page.html'):
     """ 处理403错误码 """
+    logger.error(exception)
     error_msg = '403错误拉，没有权限访问当前页面，点击首页看看别的？'
     return render(request, template_name, {
         'error_msg': error_msg,
@@ -268,7 +283,10 @@ def permission_denied(request, exception, template_name='blog/error_page.html'):
 
 def page_not_found(request, exception, template_name='blog/error_page.html'):
     """ 处理404错误码 """
-    url = request.get_full_path()
+    if exception:  # 记录下404的错误地址
+        logger.error({'status': '404', 'path': exception.args[0]['path']})  # 中文链接不会被url encode
+
+    url = request.get_full_path()  # 这个url如果带有中文会被 url encode
     error_msg = '404错误啦，访问的地址 ' + url + ' 不存在。请点击首页看看别的？'
     return render(request, template_name, {
         'error_msg': error_msg,

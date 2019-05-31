@@ -33,12 +33,14 @@
             <li class="">
                 <a href="{% url 'blog:archives' %}">文章归档</a>
             </li>
-            <li class="">
-                <a href="{% url 'blog:photo' %}">相册</a>
-            </li>
-            <li class="">
-                <a href="{% url 'blog:photo2' %}">相册2</a>
-            </li>
+            {% if ENABLE_PHOTO %}
+                <li class="">
+                    <a href="{% url 'blog:photo' %}">相册</a>
+                </li>
+                <li class="">
+                    <a href="{% url 'blog:photo2' %}">相册2</a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav><!-- #site-navigation -->

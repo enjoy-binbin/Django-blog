@@ -7,7 +7,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 }
 
 body {
-    line-height: 1;
+    /*line-height: 1;*/
 }
 
 ol,
@@ -1624,13 +1624,7 @@ img#wpstats {
  * render responsive styling in Windows 8 "snapped" views; IE10+ does not honor
  * the meta tag. See https://core.trac.wordpress.org/ticket/25888.
  */
-@-ms-viewport {
-    width: device-width;
-}
 
-@viewport {
-    width: device-width;
-}
 
 /* Minimum width of 600 pixels. */
 @media screen and (min-width: 600px) {
@@ -2140,7 +2134,7 @@ div {
 }
 
 .commentlist .comment-meta:before, .pinglist .ping-meta:before {
-    content: "\f017";
+    content: " ";
     vertical-align: 4%;
     margin-right: 3px;
     font-size: 10px;

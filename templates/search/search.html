@@ -1,13 +1,11 @@
 {% extends 'base/base.html' %}
 {% load blog_tags %}
 {% block header %}
-    <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
-    <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
+    <title>{{ SITE_NAME }} | {{ SITE_DESC }}</title>
     <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
     <meta property="og:type" content="blog"/>
     <meta property="og:title" content="{{ SITE_NAME }}"/>
-    <meta property="og:description" content="{{ SITE_DESCRIPTION }}"/>
-    <meta property="og:url" content="{{ SITE_BASE_URL }}"/>
+    <meta property="og:description" content="{{ SITE_DESC }}"/>
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
 {% endblock %}
 {% block content %}

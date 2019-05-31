@@ -24,8 +24,8 @@ from blog.admin import (
     PhotoAdmin,
     GuestBookAdmin,
 )
-from user.models import UserProfile
-from user.admin import UserProfileAdmin
+from user.models import UserProfile, EmailVerifyCode
+from user.admin import UserProfileAdmin, EmailVerifyCodeAdmin
 from oauth.models import OAuthConfig, OAuthUser
 from oauth.admin import OAuthConfigAdmin
 
@@ -48,16 +48,19 @@ class BinBlogAdminSite(AdminSite):
 
 admin_site = BinBlogAdminSite(name='admin')
 
-admin_site.register(Site, SiteAdmin)  # 站点, sitemap使用
-admin_site.register(Article, ArticleAdmin)
-admin_site.register(Category, CategoryAdmin)
-admin_site.register(Tag, TagAdmin)
-admin_site.register(Link, LinkAdmin)
-admin_site.register(SideBar, SideBarAdmin)
-admin_site.register(Setting, SettingAdmin)
-admin_site.register(UserProfile, UserProfileAdmin)
-admin_site.register(Comment, CommentAdmin)
-admin_site.register(Photo, PhotoAdmin)
-admin_site.register(GuestBook, GuestBookAdmin)
+admin_site.register(Setting, SettingAdmin)  # 站点配置
+admin_site.register(Category, CategoryAdmin)  # 文章分类
+admin_site.register(Article, ArticleAdmin)  # 文章
+admin_site.register(Comment, CommentAdmin)  # 文章评论
+admin_site.register(Tag, TagAdmin)  # 文章标签
+admin_site.register(SideBar, SideBarAdmin)  # 侧边栏
+admin_site.register(Photo, PhotoAdmin)  # 相册
+admin_site.register(GuestBook, GuestBookAdmin)  # 留言板
+admin_site.register(Link, LinkAdmin)  # 友情链接
 
-# admin_site.register(OAuthConfig, OAuthConfigAdmin)
+admin_site.register(Site, SiteAdmin)  # 站点, sitemap使用
+
+admin_site.register(UserProfile, UserProfileAdmin)  # 用户
+admin_site.register(EmailVerifyCode, EmailVerifyCodeAdmin)  # 邮箱验证码
+
+admin_site.register(OAuthConfig, OAuthConfigAdmin)
