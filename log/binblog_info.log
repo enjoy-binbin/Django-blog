@@ -1,18 +1,1 @@
-[2019-05-31 11:48:21,745] INFO [django.server.log_message:154 basehttp] "GET / HTTP/1.1" 200 22352
-[2019-05-31 11:48:21,785] INFO [django.server.log_message:154 basehttp] "GET /static/CACHE/css/c452646753fb.css HTTP/1.1" 200 221572
-[2019-05-31 11:48:32,906] INFO [django.server.log_message:154 basehttp] "GET /photo2.html HTTP/1.1" 200 6953
-[2019-05-31 11:48:32,932] INFO [django.server.log_message:154 basehttp] "GET /media/photo/%E5%AE%A0%E7%89%A9%E7%8B%97.%E5%AE%A0%E7%89%A9%E7%8B%97.jpg HTTP/1.1" 304 0
-[2019-05-31 11:48:32,933] INFO [django.server.log_message:154 basehttp] "GET /static/CACHE/css/c452646753fb.css HTTP/1.1" 304 0
-[2019-05-31 11:48:32,950] INFO [django.server.log_message:154 basehttp] "GET /static/CACHE/js/28ff749e3a6d.js HTTP/1.1" 200 350217
-[2019-05-31 11:48:34,234] INFO [django.server.log_message:154 basehttp] "GET /photo.html HTTP/1.1" 200 5301
-[2019-05-31 11:48:34,262] INFO [django.server.log_message:154 basehttp] "GET /static/CACHE/js/834aef61c139.js HTTP/1.1" 200 232937
-[2019-05-31 11:48:34,263] INFO [django.server.log_message:154 basehttp] "GET /static/CACHE/css/ecc74f7e65e3.css HTTP/1.1" 200 229186
-[2019-05-31 11:48:37,926] INFO [django.server.log_message:154 basehttp] "GET /static/CACHE/css/ecc74f7e65e3.css HTTP/1.1" 304 0
-[2019-05-31 11:48:38,019] WARNING [django.server.log_message:154 basehttp] "GET /static/CACHE/css/bootstrap.min.css.map HTTP/1.1" 404 1717
-[2019-05-31 11:49:20,138] INFO [django.server.log_message:154 basehttp] "GET /photo.html HTTP/1.1" 200 5301
-[2019-05-31 11:49:20,175] WARNING [django.server.log_message:154 basehttp] "GET /media/photo/aaa.before.png HTTP/1.1" 404 1795
-[2019-05-31 11:49:20,179] INFO [django.server.log_message:154 basehttp] "GET /media/photo/%E5%AE%A0%E7%89%A9%E7%8B%97.%E5%AE%A0%E7%89%A9%E7%8B%97.jpg HTTP/1.1" 200 70596
-[2019-05-31 11:49:20,186] INFO [django.server.log_message:154 basehttp] "GET /static/CACHE/css/ecc74f7e65e3.css HTTP/1.1" 200 229186
-[2019-05-31 11:49:20,187] INFO [django.server.log_message:154 basehttp] "GET /static/CACHE/js/834aef61c139.js HTTP/1.1" 200 232937
-[2019-05-31 11:49:20,306] WARNING [django.server.log_message:154 basehttp] "GET /static/CACHE/css/bootstrap.min.css.map HTTP/1.1" 404 1717
-[2019-05-31 11:49:21,716] INFO [django.server.log_message:154 basehttp] "GET /static/favicon.ico HTTP/1.1" 200 148692
+﻿

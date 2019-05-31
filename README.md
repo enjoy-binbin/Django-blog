@@ -57,23 +57,34 @@
    * pip install -Ur requirements -i https://pypi.douban.com/simple
 2. 配置设置将settings.py.example改成 settings.py
   * 自行修改 `binblog/settings.py` 里的数据库配置:
-     DATABASES = {
-     	    'default': {
-     	        'ENGINE': 'django.db.backends.mysql',
-     	        'NAME': 'binblog',
-     	        'USER': 'root',
-     	        'PASSWORD': '123456',
-     	        'HOST': '127.0.0.1'
-     	    }
-     	}
+
+     ```DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.mysql',
+         'NAME': 'binblog',
+         'USER': 'root',
+         'PASSWORD': '123456',
+         'HOST': '127.0.0.1'
+         }
+     }
+     ```
+
   * 创建数据库 `create database binblog;`
+
   * 在终端下进行数据迁移:
-       `./manage.py makemigrations`
-          ` ./manage.py migrate`
-  * 创建测试数据 `./manage.py create_testdata`
+
+       ```
+           ./manage.py makemigrations
+           ./manage.py migrate
+       ```
+
+  * 创建测试数据 `./manage.py create_fake_data`
+
   * 根据需要使用Navicat导入目录下的 sql文件
       `./ manage.py createsuperuser`
+
   * 运行 `./manage.py runserver 8000`
+
   * 浏览器打开 `127.0.0.1:8000`
 3. 配置项（更多设置看settings和blog.model.Setting模型）
 
