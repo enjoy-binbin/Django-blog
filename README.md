@@ -98,3 +98,5 @@
 ![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display7.png)
 
 ![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display8.png)
+
+![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display9.png)
