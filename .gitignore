@@ -2,5 +2,6 @@
 __pycache__/
 binblog/whoosh_index/*
 log/*
+collectedstatic/*
 settings.py
 binblog-bak.sql
