@@ -32,4 +32,11 @@
             <a href="{{ article.get_admin_url }}">编辑</a>
         {% endifequal %}
     </span>
+
+    <br><span>
+        文章最后修改于
+        <a href="{{ article.get_absolute_url }}" title="{{ article.modify_time }}">
+            <time datetime="{{ article.modify_time }}">{{ article.modify_time }}</time>
+        </a>。
+    </span>
 </footer>

@@ -1,6 +1,10 @@
 .idea/
 __pycache__/
 binblog/whoosh_index/*
-settings.py
+*.log
+collectedstatic/*
 notes/
-binblog.sql
+media/editor/*
+media/photo/*
+settings.py
+binblog-bak.sql

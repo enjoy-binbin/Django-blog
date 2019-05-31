@@ -11,7 +11,7 @@
 3. 数据库：持久化Mysql，缓存Memcache，消息队列Redis
 4. 前端技术栈：Jquery、Bootstrap
 5. 开发工具：PyCharm 2018.1
-6. admin后台： `bin 1123`
+6. admin后台： `fake_admin fake_admin`
 7. 线上环境： AWS ，Ubuntu18.04，Nginx+(gunicorn or uwsgi)，Mysql5.7，Python3.6
 8. 线上代码不同步的，一直在本地开发鼓捣
 
@@ -57,23 +57,34 @@
    * pip install -Ur requirements -i https://pypi.douban.com/simple
 2. 配置设置将settings.py.example改成 settings.py
   * 自行修改 `binblog/settings.py` 里的数据库配置:
-     DATABASES = {
-     	    'default': {
-     	        'ENGINE': 'django.db.backends.mysql',
-     	        'NAME': 'binblog',
-     	        'USER': 'root',
-     	        'PASSWORD': '123456',
-     	        'HOST': '127.0.0.1'
-     	    }
-     	}
+
+     ```DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.mysql',
+         'NAME': 'binblog',
+         'USER': 'root',
+         'PASSWORD': '123456',
+         'HOST': '127.0.0.1'
+         }
+     }
+     ```
+
   * 创建数据库 `create database binblog;`
+
   * 在终端下进行数据迁移:
-       `./manage.py makemigrations`
-          ` ./manage.py migrate`
-  * 创建测试数据 `./manage.py create_testdata`
+
+       ```
+           ./manage.py makemigrations
+           ./manage.py migrate
+       ```
+
+  * 创建测试数据 `./manage.py create_fake_data`
+
   * 根据需要使用Navicat导入目录下的 sql文件
       `./ manage.py createsuperuser`
+
   * 运行 `./manage.py runserver 8000`
+
   * 浏览器打开 `127.0.0.1:8000`
 3. 配置项（更多设置看settings和blog.model.Setting模型）
 
@@ -98,3 +109,5 @@
 ![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display7.png)
 
 ![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display8.png)
+
+![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display9.png)
