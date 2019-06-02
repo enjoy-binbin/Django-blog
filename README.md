@@ -11,7 +11,7 @@
 3. 数据库：持久化Mysql，缓存Memcache，消息队列Redis
 4. 前端技术栈：Jquery、Bootstrap
 5. 开发工具：PyCharm 2018.1
-6. admin后台： `bin 1123`
+6. admin后台： `fake_admin fake_admin`
 7. 线上环境： AWS ，Ubuntu18.04，Nginx+(gunicorn or uwsgi)，Mysql5.7，Python3.6
 8. 线上代码不同步的，一直在本地开发鼓捣
 

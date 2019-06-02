@@ -207,6 +207,8 @@ class Tag(BaseModel):
         """ 获取单个标签引用下的所有文章数量 """
         return Article.objects.filter(tags__name=self.name).count()
 
+    get_article_count.short_description = '标签引用文章数'
+
 
 class SideBar(BaseModel):
     """ 站点右上角的侧边栏，可以显示一些html,markdown内容 """
@@ -241,12 +243,12 @@ class Link(BaseModel):
 
 
 def photo_path(instance, filename):
-    """ 根据图片标题和图片名, 拼接上传路径 """
+    """ 根据图片标题和图片后缀, 拼接上传路径 """
     # idx = filename.rfind('.')
     # name = filename[:idx]  # 返回文件名的前缀
     # ext = filename[idx:]  # 返回文件名的后缀 .ext
-    # ext = filename.split('.')[-1]
-    filename = 'photo/{}.{}'.format(instance.title, filename)
+    ext = filename.split('.')[-1]
+    filename = 'photo/{}.{}'.format(instance.title, ext)
     return filename
 
 

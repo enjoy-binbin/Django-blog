@@ -52,7 +52,7 @@ add_article_order.short_description = '给所选文章的排序权重 加一'
 
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_per_page = 10  # 每页显示几条数据
+    list_per_page = 100  # 每页显示几条数据
     list_display = ('id', 'title', 'author', 'category_link', 'views', 'order')  # 列表显示的字段
     list_display_links = ('id', 'title')  # 列表页可以跳转到详情页的字段
     # list_editable = ('views', 'order')  # 列表页可以编辑的字段
@@ -92,35 +92,64 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    exclude = ['add_time', 'modify_time', 'slug']
+    list_display = ('name', 'parent_category')
+    exclude = ('add_time', 'modify_time', 'slug')
 
 
 class TagAdmin(admin.ModelAdmin):
-    exclude = ['add_time', 'modify_time']
+    list_display = ('name', 'get_article_count')
+    exclude = ('add_time', 'modify_time')
 
 
 class LinkAdmin(admin.ModelAdmin):
-    exclude = ['add_time', 'modify_time']
+    list_display = ('name', 'url', 'order', 'is_enable')
+    list_display_links = ('name', 'url')
+    exclude = ('add_time', 'modify_time')
 
 
 class SideBarAdmin(admin.ModelAdmin):
     formfield_overrides = {models.TextField: {'widget': AdminPagedownWidget}, }
-    exclude = ['add_time', 'modify_time']
-    list_display = ['title', 'is_enable', 'order']
-    list_editable = ['is_enable']
+    exclude = ('add_time', 'modify_time')
+    list_display = ('title', 'is_enable', 'order')
+    list_editable = ('is_enable',)
 
 
 class CommentAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('author_link', 'content', 'parent_comment', 'is_enable')
+    list_display_links = ('content',)
+    search_fields = ('author', 'content', 'parent_comment')
+
+    def author_link(self, obj):
+        """ 链接到评论的作者, obj是一个评论对象 """
+        app_label = obj.author._meta.app_label
+        model_name = obj.author._meta.model_name
+
+        link = reverse('admin:%s_%s_change' % (app_label, model_name), kwargs={'object_id': obj.author.id})
+        return format_html('<a href="%s">%s</a>' % (link, obj.author))
+
+    author_link.short_description = '评论者'
 
 
 class PhotoAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('title', 'desc', 'image', 'add_time')
+    exclude = ('add_time', 'modify_time')
 
 
 class GuestBookAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('author_link', 'content', 'add_time')
+    list_display_links = ('content',)
+
+    def author_link(self, obj):
+        """ 链接到评论的作者, obj是一个评论对象 """
+        app_label = obj.author._meta.app_label
+        model_name = obj.author._meta.model_name
+
+        link = reverse('admin:%s_%s_change' % (app_label, model_name), kwargs={'object_id': obj.author.id})
+        return format_html('<a href="%s">%s</a>' % (link, obj.author))
+
+    author_link.short_description = '留言者'
 
 
 class SettingAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('name', 'article_desc_len', 'sidebar_article_count', 'enable_photo', 'user_verify_email')
+    list_editable = ('enable_photo', 'user_verify_email')
