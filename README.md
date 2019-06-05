@@ -4,6 +4,11 @@
 
 基于 `python3.6` 和 `Django2.1`的博客系统 
 
+### 其他说明：
+1. 以前第一版django-blog。基于Django1.9的<a href="https://github.com/enjoy-binbin/pyblog">pyblog</a>，前端自己设计的/捂脸。不维护了的
+
+2. 目前博客文章，正在逐步改用写静态页面Github Page的方式记录。<a href="https://github.com/enjoy-binbin/enjoy-binbin.github.io">Github Page</a>，这样我就可以随便写些md格式的push上来就好了。简单快速随意记录
+
 ### 本地开发环境
 
 1. win10 64位
