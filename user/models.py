@@ -32,6 +32,9 @@ class UserProfile(AbstractUser):
         if self.is_superuser:
             color = 'green'
             content = '超级管理员'
+        elif self.is_staff:
+            color = 'green'
+            content = '博客用户'
         elif self.is_active:
             color = 'black'
             content = '注册用户'

@@ -87,8 +87,27 @@ class ArticleAdmin(admin.ModelAdmin):
             Return a Form class for use in the admin add view.
         """
         form = super().get_form(request, obj=None, change=False, **kwargs)
-        form.base_fields['author'].queryset = form.base_fields['author'].queryset.filter(is_superuser=True)
+        author_queryset = form.base_fields['author'].queryset
+        if not request.user.is_superuser:
+            # 不是超级管理员, 作者栏就只显示自己, 用于多用户
+            form.base_fields['author'].queryset = author_queryset.filter(username=request.user.username)
+            form.base_fields['order'].disabled = True  # 不允许修改排序和浏览量
+            form.base_fields['views'].disabled = True
+            # choices选择类型是一个list [(),()], 这里可以remove掉, 但是只剩下一个元素会出异常, 会需要try捕获, 表单是正常的
+            # form.base_fields['type'].choices = form.base_fields['type'].choices.remove(('p', '页面'))
+            form.base_fields['type'].disabled = True  # 这里也直接禁用掉吧, 根据默认值选
+        else:
+            form.base_fields['author'].queryset = author_queryset.filter(is_superuser=True)
         return form
+
+    def get_queryset(self, request):
+        """ 根据权限划分用户可以获取到的queryset """
+        queryset = super().get_queryset(request)
+        if not request.user.is_superuser:
+            self.list_filter = ()  # 普通用户取消过滤器
+            return queryset.filter(author=request.user)
+        else:
+            return queryset
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -151,5 +170,6 @@ class GuestBookAdmin(admin.ModelAdmin):
 
 
 class SettingAdmin(admin.ModelAdmin):
-    list_display = ('name', 'article_desc_len', 'sidebar_article_count', 'enable_photo', 'user_verify_email')
-    list_editable = ('enable_photo', 'user_verify_email')
+    list_display = (
+        'name', 'article_desc_len', 'sidebar_article_count', 'enable_photo', 'user_verify_email', 'enable_multi_user')
+    list_editable = ('enable_photo', 'user_verify_email', 'enable_multi_user')
