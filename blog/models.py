@@ -20,6 +20,8 @@ class Setting(models.Model):
     sidebar_article_count = models.IntegerField('侧边栏文章条数', default=10)
     enable_photo = models.BooleanField('是否启用相册', default=True)
     user_verify_email = models.BooleanField('用户注册是否验证邮箱', default=False)
+    enable_multi_user = models.BooleanField('是否启用多用户博客系统', default=False,
+                                            help_text='是否启用多用户博客系统, 注册用户只具有对自己文章的增删改查权限')
 
     github_user = models.CharField('github账号', max_length=50, default='', help_text='https://github.com/enjoy-binbin')
     github_repository = models.CharField('github仓库', max_length=50, default='',

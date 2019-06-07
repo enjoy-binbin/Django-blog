@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 
+
 User = get_user_model()
 
 
@@ -27,6 +28,9 @@ class UserProfileAdmin(admin.ModelAdmin):
             if obj.password != user.password:
                 obj.set_password(obj.password)
                 # obj.save()  # 在后面里有save
+        else:
+            # 增加用户, 就直接设置密码
+            obj.set_password(obj.password)
         return super().save_model(request, obj, form, change)
 
 

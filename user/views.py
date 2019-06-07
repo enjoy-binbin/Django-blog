@@ -1,3 +1,5 @@
+import logging
+
 from django.views.generic import FormView, RedirectView, View
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.csrf import csrf_protect
@@ -21,6 +23,7 @@ from .models import EmailVerifyCode
 from utils.get_setting import get_setting
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 from random import Random
 
@@ -58,25 +61,25 @@ class RegisterView(FormView):
             url = reverse('blog:index')
             messages.success(self.request, '注册成功, 欢迎加入本博客系统')
 
-        # TODO: 多用户博客系统的权限控制
-        # 添加一个组
-        # res = Group.objects.get_or_create(name='register_user_group')
-        # register_user_group = res[0]
-        #
-        # try:
-        #     p1 = Permission.objects.get(codename='view_category')
-        #     p2 = Permission.objects.get(codename='change_category')
-        #     p3 = Permission.objects.get(codename='add_category')
-        #     p4 = Permission.objects.get(codename='delete_category')
-        #     p5 = Permission.objects.get(codename='view_article')
-        #     p6 = Permission.objects.get(codename='change_article')
-        #     p7 = Permission.objects.get(codename='add_article')
-        #     p8 = Permission.objects.get(codename='delete_article')
-        #     register_user_group.permissions.add(p1, p2, p3, p4, p5, p6, p7, p8)
-        #     # register_user_group.user_set.add(user)
-        #     user.groups.add(register_user_group)
-        # except:
-        #     pass
+        if s.enable_multi_user:
+            try:
+                # 添加一个组
+                res = Group.objects.get_or_create(name='register_user_group')
+                register_user_group = res[0]
+
+                # 添加一系列权限, 暂时就只给用户对自己文章的增删改查, view_model
+                p1 = Permission.objects.get(codename='add_article')  # 增
+                p2 = Permission.objects.get(codename='delete_article')  # 删
+                p3 = Permission.objects.get(codename='change_article')  # 改
+                p4 = Permission.objects.get(codename='view_article')  # 查
+                register_user_group.permissions.add(p1, p2, p3, p4)
+
+                # register_user_group.user_set.add(user)  # 两种方式都可以加入组
+                user.groups.add(register_user_group)
+                user.is_staff = True
+                user.save()
+            except Exception as e:
+                logger.error(e)
 
         return HttpResponseRedirect(url)
 
