@@ -11,7 +11,7 @@ from django.contrib import messages
 
 from blog.models import Article, Category, Tag, Comment, Photo, GuestBook
 from blog.forms import CommentForm, GuestBookForm
-from blog.tasks import test_add
+# from blog.tasks import test_add
 
 # 日志器, 一般都用__name__作为日志器的名字, 在本例中日志器名称为 blog.views
 # 一般如果直接使用 logging.error(msg), 日志器名称是为 root
@@ -26,7 +26,7 @@ class IndexView(ListView):
     page_kwarg = 'page'  # 前端约定好的页码的key
 
     def get_queryset(self):
-        test_add.delay(5, 5)  # celery测试, 里面有睡了5秒, 但是异步体验不到, 看celery控制台的输出
+        # test_add.delay(5, 5)  # celery测试, 里面有睡了5秒, 但是异步体验不到, 看celery控制台的输出
 
         queryset = cache.get(self.cache_key)  # 查询缓存
         if not queryset:  # 缓存没命中会返回 None

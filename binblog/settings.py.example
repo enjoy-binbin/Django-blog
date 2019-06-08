@@ -90,10 +90,16 @@ WSGI_APPLICATION = 'binblog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'blog',  # Your db name
-        'USER': 'root',  # Your db username
-        'PASSWORD': '123456',  # Your db pwd
-        'HOST': '127.0.0.1'
+        'NAME': 'blog',  # 数据库名称, 需要自己手动创建, 编码指定为utf8
+        'USER': 'root',  # 数据库账号
+        'PASSWORD': '123456',  # 数据库密码
+        'PORT': 3306,  # 数据库端口, 默认为3306
+        'HOST': '127.0.0.1',  # 数据库地址
+        'TEST': {
+            'NAME': 'test_db',  # 测试数据库名称
+            'CHARSET': 'utf8',  # 测试数据库编码
+            'COLLATION': 'utf8_general_ci'
+        }
     }
 }
 
