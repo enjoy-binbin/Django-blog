@@ -1,4 +1,5 @@
 from django.contrib.admin import AdminSite
+from django.contrib.admin.models import LogEntry
 from django.contrib.sites.models import Site
 from django.contrib.sites.admin import SiteAdmin
 from django.contrib.auth.models import Group, Permission
@@ -27,7 +28,7 @@ from blog.admin import (
     GuestBookAdmin,
 )
 from user.models import UserProfile, EmailVerifyCode
-from user.admin import UserProfileAdmin, EmailVerifyCodeAdmin
+from user.admin import UserProfileAdmin, EmailVerifyCodeAdmin, LogEntryAdmin
 from oauth.models import OAuthConfig, OAuthUser
 from oauth.admin import OAuthConfigAdmin
 from utils.get_setting import get_setting
@@ -74,3 +75,4 @@ admin_site.register(OAuthConfig, OAuthConfigAdmin)  # OAuth设置
 admin_site.register(Site, SiteAdmin)  # 站点, sitemap使用
 admin_site.register(Group, GroupAdmin)  # 用户组, 管理权限
 admin_site.register(Permission)  # 权限
+admin_site.register(LogEntry, LogEntryAdmin)  # 日志管理
