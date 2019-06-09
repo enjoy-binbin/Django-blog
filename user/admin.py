@@ -1,6 +1,6 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth import get_user_model
-
 
 User = get_user_model()
 
@@ -11,8 +11,14 @@ class UserProfileAdmin(admin.ModelAdmin):
     ordering = ('-is_superuser', '-is_staff', '-is_active')  # 默认排序
     list_filter = ('is_superuser', 'is_active')  # 过滤器
     date_hierarchy = 'add_time'  # 添加时间筛选
-    # fieldsets = (('用户信息', {'fields': ('username', 'email', 'password')}),)  # 分块显示
     search_fields = ('username', 'email', 'nickname')  # 可搜索的字段
+    filter_horizontal = ('groups', 'user_permissions')  # 打横显示
+    fieldsets = (  # 分块显示
+        (None, {'fields': ('username', 'password')}),
+        ('用户信息', {'fields': ('first_name', 'last_name', 'email')}),
+        ('用户权限', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('日期相关', {'fields': ('last_login', 'date_joined')}),
+    )
 
     def get_form(self, request, obj=None, change=False, **kwargs):
         """ 获取页面表单 """
