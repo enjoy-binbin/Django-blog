@@ -167,6 +167,7 @@ AUTH_USER_MODEL = 'user.UserProfile'
 AUTHENTICATION_BACKENDS = (
     # https://docs.djangoproject.com/en/2.1/ref/contrib/auth/#django.contrib.auth.models.User.is_active
     'django.contrib.auth.backends.AllowAllUsersModelBackend',  # 要验证is_active
+    'user.backends.LoginByUsernameOrEmailBackend',  # 可以根据邮箱或者用户名登陆
 )
 
 # 使用haystack进行文章搜索
