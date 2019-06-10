@@ -196,6 +196,10 @@ CACHES = {
     #     'LOCATION': '127.0.0.1:11211',
     #     'TIMEOUT': 60 * 60 * 1,  # 过期时间 单位为秒
     # },
+    # 'default': {
+    #     'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+    #     'LOCATION': 'django_cache',
+    # },
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # 本地内存缓存
         'TIMEOUT': 60 * 60 * 1,  # 过期时间 秒, 一个钟过期
