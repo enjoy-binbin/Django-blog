@@ -166,8 +166,8 @@ STATICFILES_FINDERS = (
 AUTH_USER_MODEL = 'user.UserProfile'
 AUTHENTICATION_BACKENDS = (
     # https://docs.djangoproject.com/en/2.1/ref/contrib/auth/#django.contrib.auth.models.User.is_active
-    'django.contrib.auth.backends.AllowAllUsersModelBackend',  # 要验证is_active
-    'user.backends.LoginByUsernameOrEmailBackend',  # 可以根据邮箱或者用户名登陆
+    # 'django.contrib.auth.backends.AllowAllUsersModelBackend',  # 验证is_active, 会显示未激活, 否则会显示账号密码错误
+    'user.backends.LoginByUsernameOrEmailBackend',  # 可以根据邮箱或者用户名登陆, 集成了 AllowAllUsersModelBackend
 )
 
 # 使用haystack进行文章搜索
@@ -195,6 +195,10 @@ CACHES = {
     #     'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',  # memcached缓存
     #     'LOCATION': '127.0.0.1:11211',
     #     'TIMEOUT': 60 * 60 * 1,  # 过期时间 单位为秒
+    # },
+    # 'default': {
+    #     'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+    #     'LOCATION': 'django_cache',
     # },
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # 本地内存缓存

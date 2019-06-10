@@ -1,0 +1,40 @@
+# travis-ci官网: https://docs.travis-ci.com
+language: python  # 语言
+python:
+  - "3.6"  # python版本
+services:
+  - mysql
+branches:
+  only:
+    - master  # master分支
+
+env:
+  global:
+    - DJANGO_SETTINGS_MODULE="binblog.settings_travis"  # 设置Django配置文件
+
+before_install:
+  # mysql -h127.0.0.1 -P3306 -uroot -p -e"create database blog default character set utf8 collate utf8_general_ci;"
+  - mysql -e "create database blog default character set utf8 collate utf8_general_ci;"
+  - cp binblog/settings_example.py binblog/settings.py  # 复制一份配置文件, 用于app引入相关设置
+
+# https://codecov.io && https://coveralls.io
+install:
+  # 安装依赖
+  - pip install -r requirements.txt
+  - pip install python-coveralls
+  - pip install coverage codecov
+
+before_script:
+  # 执行相关脚本
+  - python manage.py makemigrations
+  - python manage.py migrate
+  - python manage.py create_fake_data
+  - python manage.py collectstatic --noinput
+  - python manage.py compress --force
+
+script:
+  - coverage run manage.py test  # 进行测试
+
+after_success:
+  - codecov
+  - coveralls

@@ -4,6 +4,8 @@
 
 基于 `python3.6` 和 `Django2.1`的博客系统 
 
+[![license](https://img.shields.io/github/license/enjoy-binbin/Django-blog.svg)](https://github.com/enjoy-binbin/Django-blog/blob/master/LICENSE)[![Build Status](https://travis-ci.com/enjoy-binbin/Django-blog.svg?branch=master)](https://travis-ci.org/enjoy-binbin/Django-blog)[![codecov](https://codecov.io/gh/enjoy-binbin/Django-blog/branch/master/graph/badge.svg)](https://codecov.io/gh/enjoy-binbin/Django-blog)[![Coverage Status](https://coveralls.io/repos/github/enjoy-binbin/Django-blog/badge.svg?branch=master)](https://coveralls.io/github/enjoy-binbin/Django-blog?branch=master)[![Requirements Status](https://requires.io/github/enjoy-binbin/Django-blog/requirements.svg?branch=master)](https://requires.io/github/enjoy-binbin/Django-blog/requirements/?branch=master)
+
 ### 其他说明：
 1. 以前第一版django-blog。基于Django1.9的<a href="https://github.com/enjoy-binbin/pyblog">pyblog</a>，前端自己设计的/捂脸。不维护了的
 
