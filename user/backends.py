@@ -14,8 +14,20 @@ class LoginByUsernameOrEmailBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
             user = User.objects.get(Q(username=username) | Q(email=username))
-            if user.check_password(password):
+        except User.DoesNotExist:
+            # Run the default password hasher once to reduce the timing
+            # difference between an existing and a nonexistent user (#20760).
+            # User.set_password(password)
+            pass
+        else:
+            if user.check_password(password) and self.user_can_authenticate(user):
                 # 通过密码验证
                 return user
-        except User.DoesNotExist:
-            return None
+
+    def user_can_authenticate(self, user):
+        """ 重载了这个方法, 达到django.contrib.auth.backends.AllowAllUsersModelBackend一样的效果
+            跟 AllowAllUsersModelBackend 一样的效果, 但 is_active为False为False, 会报未激活
+            ModelBackend原先的user_can_authenticate方法, 但is_active为False, 会报账号不存在
+            即 请输入一个正确的 用户名 和密码. 注意他们都是大区分大小写的.
+        """
+        return True
