@@ -4,7 +4,7 @@
 
 基于 `python3.6` 和 `Django2.1`的博客系统 
 
-[![license](https://img.shields.io/github/license/enjoy-binbin/Django-blog.svg)](https://github.com/enjoy-binbin/Django-blog/blob/master/LICENSE)[![Build Status](https://travis-ci.com/enjoy-binbin/Django-blog.svg?branch=master)](https://travis-ci.org/enjoy-binbin/Django-blog)[![codecov](https://codecov.io/gh/enjoy-binbin/Django-blog/branch/master/graph/badge.svg)](https://codecov.io/gh/enjoy-binbin/Django-blog)[![Coverage Status](https://coveralls.io/repos/github/enjoy-binbin/Django-blog/badge.svg?branch=master)](https://coveralls.io/github/enjoy-binbin/Django-blog?branch=master)[![Requirements Status](https://requires.io/github/enjoy-binbin/Django-blog/requirements.svg?branch=master)](https://requires.io/github/enjoy-binbin/Django-blog/requirements/?branch=master)
+[![license](https://img.shields.io/github/license/enjoy-binbin/Django-blog.svg)](https://github.com/enjoy-binbin/Django-blog/blob/master/LICENSE) [![Build Status](https://travis-ci.com/enjoy-binbin/Django-blog.svg?branch=master)](https://travis-ci.org/enjoy-binbin/Django-blog) [![codecov](https://codecov.io/gh/enjoy-binbin/Django-blog/branch/master/graph/badge.svg)](https://codecov.io/gh/enjoy-binbin/Django-blog) [![Coverage Status](https://coveralls.io/repos/github/enjoy-binbin/Django-blog/badge.svg?branch=master)](https://coveralls.io/github/enjoy-binbin/Django-blog?branch=master) [![Requirements Status](https://requires.io/github/enjoy-binbin/Django-blog/requirements.svg?branch=master)](https://requires.io/github/enjoy-binbin/Django-blog/requirements/?branch=master)
 
 ### 其他说明：
 1. 以前第一版django-blog。基于Django1.9的<a href="https://github.com/enjoy-binbin/pyblog">pyblog</a>，前端自己设计的/捂脸。不维护了的
@@ -34,6 +34,7 @@
 * 使用Djangorestframework对博客进行API开发（在blog/api目录下）
 * 使用logging记录错误日志，使用celery+redis进行一些异步任务的调度
 * 增加伪多用户博客系统，用户注册可以拥有对自己文章的增删改查操作，可以写文章
+* 相册功能，有两种样式，不喜欢的可以在admin设置里关闭，或者选其一，在base/nav.html里修改
 
 ## 使用到
 
@@ -57,22 +58,31 @@
 
 ## TOLearn
 
-继续折腾后面的。有域名后进行Oauth登录（QQ、新浪等）。越努力越幸运
+继续折腾后面的。有域名后进行Oauth登录（QQ、新浪等），相册样式优化和分页。越努力越幸运
 
 ## 安装
 
-1. 安装依赖（最好新建个虚拟环境）
+1. 安装依赖（最好新建个虚拟环境），两种方式都可以，前者豆瓣源好记住，后者阿里源包更齐全的感觉
    * pip install -Ur requirements -i https://pypi.douban.com/simple
+   * pip install -i https://mirrors.aliyun.com/pypi/simple -r requirements.txt
 2. 配置设置将settings.py.example改成 settings.py
   * 自行修改 `binblog/settings.py` 里的数据库配置:
 
-     ```DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'binblog',
-         'USER': 'root',
-         'PASSWORD': '123456',
-         'HOST': '127.0.0.1'
+     ```
+     DATABASES = {
+         'default': {
+             'ENGINE': 'django.db.backends.mysql',
+             'NAME': 'blog',  # 数据库名称, 需要自己手动创建, 编码指定为utf8
+            	# create database blog default character set utf8 collate utf8_general_ci;
+             'USER': 'root',  # 数据库账号
+             'PASSWORD': '123456',  # 数据库密码
+             'PORT': 3306,  # 数据库端口, 默认为3306
+             'HOST': '127.0.0.1',  # 数据库地址
+             'TEST': {
+                 'NAME': 'test_db',  # 测试数据库名称
+                 'CHARSET': 'utf8',  # 测试数据库编码
+                 'COLLATION': 'utf8_general_ci'
+             }
          }
      }
      ```
