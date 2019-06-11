@@ -1,0 +1,61 @@
+{% load static %}
+{% load blog_tags %}
+{% load compress %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    {% block header %}
+    {% endblock %}
+
+    {% compress css %}
+        <link rel="stylesheet" href="{% static 'blog/css/cyrillic.css' %}">
+        <link rel='stylesheet' href='{% static 'blog/css/style.css' %}'>
+        <link rel="stylesheet" href="{% static 'blog/css/oauth_style.css' %}">
+        <link rel="stylesheet" href="{% static 'pygments/default.css' %}">
+        <link rel="stylesheet" href="{% static 'blog/css/nprogress.css' %}">
+        {% block compress_css %}
+        {% endblock %}
+    {% endcompress %}
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+</head>
+
+<body class="home blog custom-font-enabled">
+<div id="page" class="hfeed site bin">
+    <header id="masthead" class="site-header" role="banner">
+        <hgroup>
+            <h1 class="site-title bin"><a href="{% url 'blog:index' %}" title="{{ SITE_NAME }}">{{ SITE_NAME }}</a>
+            </h1>
+            <h2 class="site-description">{{ SITE_DESC }}</h2>
+        </hgroup>
+
+        {% include 'base/nav.html' %}
+
+    </header>
+    <div id="main" class="wrapper">
+
+        {% block content %}
+        {% endblock %}
+
+        {% block sidebar %}
+        {% endblock %}
+
+    </div>
+    {% include 'base/footer.html' %}
+</div>
+</body>
+
+<footer>
+    {% compress js %}
+        <script type="text/javascript" src="{% static 'blog/js/jquery-3.1.1.js' %}"></script>
+        <script type="text/javascript" src="{% static 'blog/js/nprogress.js' %}"></script>
+        <script type="text/javascript" src="{% static 'blog/js/blog.js' %}"></script>
+        <script type="text/javascript" src="{% static 'blog/js/navigation.js' %}"></script>
+        {% block compress_js %}
+        {% endblock %}
+    {% endcompress %}
+    {% block footer %}
+    {% endblock %}
+</footer>
+</html>

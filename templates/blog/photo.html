@@ -1,9 +1,9 @@
-{% extends 'base/base.html' %}
+{% extends 'base/base_photo.html' %}
 {% load blog_tags %}
 {% load staticfiles %}
 
 {% block header %}
-    <title>相册 | {{ SITE_DESC }}</title>
+    <title>第一版相册 | {{ SITE_DESC }}</title>
     <meta name="keywords" content="{{ SITE_KEYWORD }}"/>
     <meta property="og:type" content="blog"/>
     <meta property="og:title" content="{{ SITE_NAME }}"/>
@@ -16,37 +16,41 @@
 {% endblock %}
 
 {% block content %}
-    <div id="primary" class="site-content" style="width: 100%; margin: 0">
+    <div id="primary" class="site-content">
         <div id="content" role="main">
-            <!-- <header class="archive-header">
-                <p class="archive-title">相册</p>
-            </header> -->
-            <div class="entry-content" style="display: flex;flex-wrap: wrap; justify-content: space-between">
+            <header class="archive-header">
+                <p class="archive-title">第一版相册, 都是固定宽高了的</p>
+            </header>
+
+            <div class="entry-content">
                 <!-- 主内容页面 -->
-                {% for photo in photo_list %}
-                    <div class="photo-card">
-
-                        <a class="photo-card-link" href="javascript:void(0)"
-                           data-magnify="gallery"
-                           data-caption="{{ photo.title }}"
-                           data-src="{{ MEDIA_URL }}{{ photo.image }}">
-
-                            <img class="photo-card-img"
-                                 src="{{ MEDIA_URL }}{{ photo.image }}"
-                                 alt="{{ photo.image }}" title="{{ photo.desc }}">
-
-                            <div class="photo-card-body">
-                                <span class="photo-card-title">{{ photo.title }}</span>
+                <div class="card">
+                    {% for photo in photo_list %}
+                        <div style="padding: .5rem; width: 30%; float: left">
+                            <div>
+                                <a href="javascript:void(0)" data-magnify="gallery"
+                                   data-caption="{{ photo.title }}"
+                                   data-src="{{ MEDIA_URL }}{{ photo.image }}">
+                                    <img style="height: 150px; width: 100%" title="{{ photo.desc }}" class="img-thumb"
+                                         alt=""
+                                         src="{{ MEDIA_URL }}{{ photo.image }}">
+                                </a>
                             </div>
-                        </a>
-                    </div>
-                {% endfor %}
+                            <div class="k-iconbox__title" style="text-align: center">
+                                <span>{{ photo.title }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
-    <!-- 图片展示遮罩层 -->
     <div id="overlay" class="overlay"></div>
 
+{% endblock %}
+
+{% block sidebar %}
+    {% inclusion_sidebar_tag %}
 {% endblock %}
 
 {% block compress_js %}

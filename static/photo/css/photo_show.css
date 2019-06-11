@@ -1,7 +1,15 @@
 /* 相册展示页 */
+* {
+    box-sizing: border-box;
+}
+
 a {
     outline: none;
     text-decoration: none;
+}
+
+h1 {
+    font-weight: 500;
 }
 
 .photo-card {
