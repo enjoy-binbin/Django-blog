@@ -4,9 +4,12 @@
 
 基于 `python3.6` 和 `Django2.1`的博客系统 
 
+- [English_README](./README_EN.md)
+
 [![license](https://img.shields.io/github/license/enjoy-binbin/Django-blog.svg)](https://github.com/enjoy-binbin/Django-blog/blob/master/LICENSE) [![Build Status](https://travis-ci.com/enjoy-binbin/Django-blog.svg?branch=master)](https://travis-ci.org/enjoy-binbin/Django-blog) [![codecov](https://codecov.io/gh/enjoy-binbin/Django-blog/branch/master/graph/badge.svg)](https://codecov.io/gh/enjoy-binbin/Django-blog) [![Coverage Status](https://coveralls.io/repos/github/enjoy-binbin/Django-blog/badge.svg?branch=master)](https://coveralls.io/github/enjoy-binbin/Django-blog?branch=master) [![Requirements Status](https://requires.io/github/enjoy-binbin/Django-blog/requirements.svg?branch=master)](https://requires.io/github/enjoy-binbin/Django-blog/requirements/?branch=master)
 
 ### 其他说明：
+
 1. 以前第一版django-blog。基于Django1.9的<a href="https://github.com/enjoy-binbin/pyblog">pyblog</a>，前端自己设计的/捂脸。不维护了的
 
 2. 目前博客文章，正在逐步改用写静态页面Github Page的方式记录。<a href="https://github.com/enjoy-binbin/enjoy-binbin.github.io">Github Page</a>，这样我就可以随便写些md格式的push上来就好了。简单快速随意记录
