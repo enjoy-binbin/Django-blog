@@ -1,7 +1,14 @@
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.forms import widgets
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.core.exceptions import ValidationError
+
+
+def email_unique_validate(email):
+    user = get_user_model().objects.filter(email=email).first()
+    if user:
+        raise ValidationError('该邮箱已注册')
 
 
 # Meta中使用fields, 将Model中的字段，对应转化成form字段, 可以在Meta中用 widgets指定 fields里元素对应的 widget
@@ -18,6 +25,7 @@ class RegisterForm(UserCreationForm):
     #         'placeholder': 'Username',
     #         'class': 'form-control'
     #     }))
+    email = forms.EmailField(required=True, validators=(email_unique_validate,))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
