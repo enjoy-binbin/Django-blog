@@ -6,9 +6,11 @@ from django.core.exceptions import ValidationError
 
 
 def email_unique_validate(email):
+    """ 验证邮箱是否已被注册 """
     user = get_user_model().objects.filter(email=email).first()
     if user:
-        raise ValidationError('该邮箱已注册')
+        # raise ValidationError('该邮箱已注册')
+        pass
 
 
 # Meta中使用fields, 将Model中的字段，对应转化成form字段, 可以在Meta中用 widgets指定 fields里元素对应的 widget
@@ -26,6 +28,7 @@ class RegisterForm(UserCreationForm):
     #         'class': 'form-control'
     #     }))
     email = forms.EmailField(required=True, validators=(email_unique_validate,))
+    # email = forms.EmailField(required=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -52,6 +55,18 @@ class RegisterForm(UserCreationForm):
                 'placeholder': 'Repeat password',
                 'class': 'form-control'
             })
+
+    def clean_email(self):
+        """
+        判断邮箱是否已经注册, 如果和validators一起用了
+        会先执行validators, 通过后才会到这里, 如果上面先抛出异常, 这里就不会执行了
+        """
+        email = self.cleaned_data.get('email')
+        user = get_user_model().objects.filter(email=email).first()
+        if user:
+            raise ValidationError('该邮箱已注册.')
+        else:
+            return email
 
     class Meta:
         model = get_user_model()  # UserProfile
