@@ -55,7 +55,7 @@
 * django简单中间件的编写，显示页面加载时间
 * 使用django的sitemap功能
 * python-memcached对网站的部分信息缓存
-* 自定义django.manage命令,create_fake_data，生成测试数据
+* 自定义django.manage命令,create_fake_data，生成测试数据，clear_migrations清理迁移文件
 * django中使用logging模块、message模块
 * 使用celery+redis进行异步的邮件发送
 
@@ -115,20 +115,20 @@
 
 #### 部分演示图，没同步到线上环境的
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display2.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display2.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display3.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display3.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display4.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display4.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display5.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display5.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display6.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display6.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display7.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display7.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display8.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display8.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display9.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display9.png)
