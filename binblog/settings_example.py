@@ -99,7 +99,14 @@ DATABASES = {
             'NAME': 'test_db',  # 测试数据库名称
             'CHARSET': 'utf8',  # 测试数据库编码
             'COLLATION': 'utf8_general_ci'
-        }
+        },
+        # 查看mysql配置文件加载顺序 mysqld --help --verbose | grep -A1 -B1 cnf
+        'OPTIONS': {  # 针对 (mysql.W002) MySQL Strict Mode is not set for database connection 'default'的警告
+            'autocommit': True,  # mysql> show variables like '%autocommit%';
+            # 严格模式文档: https://dev.mysql.com/doc/refman/5.6/en/sql-mode.html
+            # 开启mysql严格模式, 5.6后是默认值NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+            'init_command': "SET sql_mode='NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES'",
+        },
     }
 }
 
@@ -284,7 +291,8 @@ LOGGING = {  # 开发中有用的信息 < 常规操作中有用的信息 < 有�
             'level': 'INFO',
         },
         'django': {  # django名称的, 默认将处理所有log
-            'handlers': ['console', 'default'],
+            'handlers': ['default'],  # 个人调试不看DEBUG
+            # 'handlers': ['console', 'default'],  # 调试的时候看情况输出控制台, 不然DEBUG信息太多了, 主要可以看到sql
             'level': 'DEBUG',
             'propagate': False,  # 向不向更高级别的logger传递, 避免root logger双重日志记录
         },
