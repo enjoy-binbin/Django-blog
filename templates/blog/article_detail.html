@@ -40,9 +40,6 @@
             </nav>
         </div>
 
-
-        {% comment %}{% load comments_tags %}
-                {% load_post_comment article from %}{% endcomment %}
         {% include 'blog/tags/comment_list.html' %}
         {% if user.is_authenticated %}
             {% include 'blog/tags/post_comment.html' %}

@@ -6,7 +6,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from utils.mistune_markdown import article_markdown as _article_markdown
 from utils.get_setting import get_setting
-from blog.models import Article, Category, Link, SideBar, Tag
+from blog.models import Article, Category, Link, SideBar, Tag, Comment
 
 register = template.Library()  # 名字是固定的register
 setting = get_setting()
@@ -58,6 +58,7 @@ def inclusion_sidebar_tag(context):
     all_categorys = Category.objects.all()  # 全部分类
     all_sidebars = SideBar.objects.filter(is_enable=True).order_by('-order')  # 侧边栏
     all_links = Link.objects.filter(is_enable=True)  # 友情链接
+    all_comments = Comment.objects.filter(is_enable=True).order_by('-add_time')[:setting.sidebar_article_count]
 
     # github设置
     github_user = setting.github_user
@@ -88,6 +89,7 @@ def inclusion_sidebar_tag(context):
         'all_sidebars': all_sidebars,
         'all_links': all_links,
         'all_tags': all_tags,
+        'all_comments': all_comments,
         'user': context['user'],  # inclusion_tag的模板里好像接受不到 request全局对象
 
         'github_sidebar': '%s/%s' % (setting.github_user, setting.github_repository)
