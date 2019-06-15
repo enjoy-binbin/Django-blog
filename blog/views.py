@@ -249,7 +249,7 @@ class CommentPostView(FormView):
             comment.parent_comment = parent_comment
 
         comment.save(True)
-        return HttpResponseRedirect("%s#div-comment-%d" % (article.get_absolute_url(), comment.id))
+        return HttpResponseRedirect("%s#comment-%d" % (article.get_absolute_url(), comment.id))
 
     def form_invalid(self, form):
         # 未通过表单验证

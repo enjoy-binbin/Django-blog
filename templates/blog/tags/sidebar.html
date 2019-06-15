@@ -20,7 +20,6 @@
         {% endfor %}
     {% endif %}
 
-
     {# github的sidebar #}
     <aside class="widget">
         <h3 class="widget-title">欢迎您star或者fork本站源代码</h3>
@@ -51,6 +50,28 @@
             {% endif %}
         </ul>
     </aside>
+
+    {# 新的评论 #}
+    {% if all_comments %}
+        <aside class="widget"><h3 class="widget-title">新的评论</h3>
+            <ul>
+                {% for comment in all_comments %}
+                    <li>
+                        <span class="comment-author-link">
+                            {% if comment.author.is_staff %}
+                                <a href="{{ comment.author.get_absolute_url }}">{{ comment.author.username }}</a>
+                            {% else %}
+                                {{ comment.author.username }}
+                            {% endif %}
+                        </span>发表在《
+                        <a href="{{ comment.article.get_absolute_url }}#comment-{{ comment.id }}">
+                            {{ comment.article.title }}
+                        </a>》
+                    </li>
+                {% endfor %}
+            </ul>
+        </aside>
+    {% endif %}
 
     {# 最热文章-阅读数 #}
     {% if hot_articles %}
