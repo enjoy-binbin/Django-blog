@@ -11,8 +11,8 @@
 ### 其他说明：
 
 1. 以前第一版django-blog。基于Django1.9的<a href="https://github.com/enjoy-binbin/pyblog">pyblog</a>，前端自己设计的/捂脸。不维护了的
-
 2. 目前博客文章，正在逐步改用写静态页面Github Page的方式记录。<a href="https://github.com/enjoy-binbin/enjoy-binbin.github.io">Github Page</a>，这样我就可以随便写些md格式的push上来就好了。简单快速随意记录
+3. 对于使用Docker部署，可以看docker目录下的文件或者看<a href="https://github.com/enjoy-binbin/docker-django-blog">Docker-djangoblog</a>仓库。
 
 ### 本地开发环境
 
@@ -132,3 +132,4 @@
 ![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display8.png)
 
 ![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display9.png)
+
