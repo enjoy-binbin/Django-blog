@@ -224,7 +224,7 @@ class SideBar(BaseModel):
     """ 站点右上角的侧边栏，可以显示一些html,markdown内容 """
     title = models.CharField(_('标题'), max_length=30)
     content = models.TextField(_('内容'))
-    order = models.IntegerField(_('排序', default=1, help_text=_('越大越前')))
+    order = models.IntegerField(_('排序'), default=1, help_text=_('越大越前'))
     is_enable = models.BooleanField(_('是否启用'), default=True)
 
     class Meta:

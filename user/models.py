@@ -28,7 +28,7 @@ class UserProfile(AbstractUser):
 
     def save(self, *args, **kwargs):
         self.modify_time = now()
-        super().save(update_fields=('modify_time',))
+        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('blog:author_article', kwargs={'author_name': self.username})

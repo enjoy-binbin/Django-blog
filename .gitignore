@@ -8,3 +8,4 @@ media/editor/*
 media/photo/*
 settings.py
 binblog-bak.sql
+venv/
