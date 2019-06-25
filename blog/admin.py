@@ -63,6 +63,8 @@ class ArticleAdmin(admin.ModelAdmin):
     ordering = ('order',)  # 排序的字段
     actions = (add_article_order,)  # 列表页可执行的动作, 例如选中后执行删除
     exclude = ('add_time', 'modify_time')  # 详情页剔除的字段
+    save_on_top = True  # 编辑页上也显示保存删除等按钮
+    save_as = True  # 已有文章编辑页上 保存为新的
 
     # formfield_overrides = {models.TextField: {'widget': AdminPagedownWidget}, }  # way1
     form = ArticleAdminForm  # 给文章内容 content字段添加django-pagedown 编辑器 way2
@@ -171,5 +173,16 @@ class GuestBookAdmin(admin.ModelAdmin):
 
 class SettingAdmin(admin.ModelAdmin):
     list_display = (
-        'name', 'article_desc_len', 'sidebar_article_count', 'enable_photo', 'user_verify_email', 'enable_multi_user')
+        'name', 'enable_photo', 'user_verify_email', 'enable_multi_user',
+        'article_desc_len', 'sidebar_article_count'
+    )
     list_editable = ('enable_photo', 'user_verify_email', 'enable_multi_user')
+    save_on_top = True
+
+    def has_add_permission(self, request):
+        """ 唯一的站点配置, 不允许添加, 默认站点配置是在utils.get_setting里添加的 """
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        """ 唯一的站点配置, 不允许删除 """
+        return False

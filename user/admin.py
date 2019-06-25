@@ -14,14 +14,14 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'username', 'nickname', 'email', 'user_level')  # 列表页可以跳转到详情页的字段
     ordering = ('-is_superuser', '-is_staff', '-is_active')  # 默认排序
     list_filter = ('is_superuser', 'is_active')  # 过滤器
-    date_hierarchy = 'add_time'  # 添加时间筛选
+    date_hierarchy = 'date_joined'  # 添加时间筛选
     search_fields = ('username', 'email', 'nickname')  # 可搜索的字段
     filter_horizontal = ('groups', 'user_permissions')  # 打横显示
     fieldsets = (  # 分块显示
         (None, {'fields': ('username', 'password')}),
-        ('用户信息', {'fields': ('first_name', 'last_name', 'email')}),
+        ('用户信息', {'fields': ('first_name', 'last_name', 'nickname', 'gender', 'email',)}),
         ('用户权限', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-        ('日期相关', {'fields': ('last_login', 'date_joined')}),
+        ('日期相关', {'fields': ('last_login', 'date_joined', 'modify_time')}),
     )
 
     def get_form(self, request, obj=None, change=False, **kwargs):

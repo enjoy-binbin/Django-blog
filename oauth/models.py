@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.timezone import now
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 # github 用户信息
 '''
@@ -28,20 +29,20 @@ from django.core.exceptions import ValidationError
 
 
 class OAuthConfig(models.Model):
-    type = models.CharField('OAuth类型', max_length=10)
+    type = models.CharField(_('OAuth类型'), max_length=10)
 
-    app_key = models.CharField('AppKey', max_length=200)
-    app_secret = models.CharField('APPSecret', max_length=200)
+    app_key = models.CharField(_('AppKey'), max_length=200)
+    app_secret = models.CharField(_('APPSecret'), max_length=200)
 
-    callback_url = models.CharField('回调地址', max_length=200, default='',
+    callback_url = models.CharField(_('回调地址'), max_length=200, default='',
                                     help_text='http://127.0.0.1:8000/oauth/authorize?type=github')
-    is_enable = models.BooleanField('是否启用', default=False)
+    is_enable = models.BooleanField(_('是否启用'), default=False)
 
-    add_time = models.DateTimeField('添加时间', default=now)
-    modify_time = models.DateTimeField('修改时间', default=now)
+    add_time = models.DateTimeField(_('添加时间'), default=now)
+    modify_time = models.DateTimeField(_('修改时间'), default=now)
 
     class Meta:
-        verbose_name = '0-OAuth配置'
+        verbose_name = _('0-OAuth配置')
         verbose_name_plural = verbose_name
         ordering = ['-add_time']
 
@@ -50,27 +51,27 @@ class OAuthConfig(models.Model):
 
     def clean(self):
         if OAuthConfig.objects.filter(type=self.type).exclude(id=self.id):
-            raise ValidationError(self.type + '已经存在')
+            raise ValidationError(self.type + _('已经存在'))
 
 
 class OAuthUser(models.Model):
     """ 通过OAuth注册的用户 """
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='用户', blank=True, null=True,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('用户'), blank=True, null=True,
                              on_delete=models.CASCADE)
 
-    type = models.CharField('类型', max_length=50)
-    nickname = models.CharField('昵称', max_length=50)
-    email = models.CharField('邮箱', max_length=50, blank=True, null=True)
-    avatar_url = models.CharField('头像链接', max_length=350, blank=True, null=True)
-    user_info = models.TextField('OAuth获取的用户信息', blank=True, null=True)
+    type = models.CharField(_('类型'), max_length=50)
+    nickname = models.CharField(_('昵称'), max_length=50)
+    email = models.CharField(_('邮箱'), max_length=50, blank=True, null=True)
+    avatar_url = models.CharField(_('头像链接'), max_length=350, blank=True, null=True)
+    user_info = models.TextField(_('OAuth获取的用户信息'), blank=True, null=True)
 
-    openid = models.CharField('用户openid', max_length=50)
+    openid = models.CharField(_('用户openid'), max_length=50)
 
-    add_time = models.DateTimeField('添加时间', default=now)
-    modify_time = models.DateTimeField('修改时间', default=now)
+    add_time = models.DateTimeField(_('添加时间'), default=now)
+    modify_time = models.DateTimeField(_('修改时间'), default=now)
 
     class Meta:
-        verbose_name = '1-Oauth用户'
+        verbose_name = _('1-Oauth用户')
         verbose_name_plural = verbose_name
         ordering = ['-add_time']
 
