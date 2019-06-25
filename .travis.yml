@@ -8,14 +8,14 @@ branches:
   only:
     - master  # master分支
 
-env:
-  global:
-    - DJANGO_SETTINGS_MODULE="binblog.settings_travis"  # 设置Django配置文件
+#env:
+#  global:
+#    - DJANGO_SETTINGS_MODULE="binblog.settings_travis"  # 设置Django配置文件
 
 before_install:
   # mysql -h127.0.0.1 -P3306 -uroot -p -e"create database blog default character set utf8 collate utf8_general_ci;"
   - mysql -e "create database blog default character set utf8 collate utf8_general_ci;"
-  - cp binblog/settings_example.py binblog/settings.py  # 复制一份配置文件, 用于app引入相关设置
+  - cp binblog/settings_travis.py binblog/settings.py  # 复制一份配置文件, 用于app引入相关设置
 
 # https://codecov.io && https://coveralls.io
 install:
