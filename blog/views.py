@@ -11,6 +11,7 @@ from django.contrib import messages
 
 from blog.models import Article, Category, Tag, Comment, Photo, GuestBook
 from blog.forms import CommentForm, GuestBookForm
+
 # from blog.tasks import test_add
 
 # 日志器, 一般都用__name__作为日志器的名字, 在本例中日志器名称为 blog.views
@@ -60,6 +61,15 @@ class ArticleDetailView(DetailView):
     context_object_name = 'article'
     object = None  # 当前文章对象, 感觉可以用property
 
+    def get_queryset(self):
+        # 在detail页有调用article.author和article.category和article.tags操作会出现N+1问题
+        # 使用select_related(一对一, 多对一)本质是inner join, 经过测试会少两条sql语句(author, category)
+        # python manage.py shell -->> print(Article.objects.all().select_related('author').query)
+        # 不过一般又不建议使用inner join操作, 因为会涉及到高并发和死锁, TOLearn.
+        # 使用prefetch_related(多对多, 一对多)是分别查询两张表, 然后再使用python处理, N+1次查询 -> 2次查询
+        # 把子查询/join查询分成两次, 虽然会花费更多的cpu时间, 但是避免了系统的死锁, 提高了并发响应能力
+        return super().get_queryset().select_related('author', 'category').prefetch_related("tags")
+
     def get_object(self, queryset=None):
         obj = super().get_object()
         obj.add_views()  # 文章阅读量加一
@@ -68,15 +78,15 @@ class ArticleDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['prev_article'] = self.object.prev_article
-        context['next_article'] = self.object.next_article
+        context['prev_article'] = self.object.prev_article()
+        context['next_article'] = self.object.next_article()
 
         comment_form = CommentForm()
         user = self.request.user
 
-        if user.is_authenticated:
-            comment_form.fields['email'].initial = user.email  # 直接设置initial->value, 前端中这两个字段是hidden的
-            comment_form.fields["name"].initial = user.username
+        # if user.is_authenticated:
+        #     comment_form.fields['email'].initial = user.email  # 直接设置initial->value, 前端中这两个字段是hidden的
+        #     comment_form.fields["name"].initial = user.username
 
         article_comments = self.object.get_comment_list()
 
@@ -258,10 +268,10 @@ class CommentPostView(FormView):
         article_id = self.kwargs['article_id']
         article = get_object_or_404(Article, id=article_id)
 
-        if self.request.user.is_authenticated:
-            user = self.request.user
-            form.fields["email"].initial = user.email
-            form.fields["name"].initial = user.username
+        # if self.request.user.is_authenticated:
+        #     user = self.request.user
+        #     form.fields["email"].initial = user.email
+        #     form.fields["name"].initial = user.username
 
         return self.render_to_response({
             'form': form,

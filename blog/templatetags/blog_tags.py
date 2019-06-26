@@ -1,3 +1,5 @@
+import random
+
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
@@ -52,17 +54,16 @@ def queryset_filter_tag(queryset, **kwargs):
 @register.inclusion_tag('blog/tags/sidebar.html', takes_context=True)
 def inclusion_sidebar_tag(context):
     """ 引入站点右侧侧边栏 """
-    all_articles = Article.objects.all()
-    hot_articles = all_articles.order_by('-views')[:setting.sidebar_article_count]  # 最热文章
-    new_articles = all_articles.order_by('-add_time')[:setting.sidebar_article_count]  # 最新文章
-    all_categorys = Category.objects.all()  # 全部分类
+    count = setting.sidebar_article_count  # 站点设置中侧边栏显示记录条数
+
+    # 相关上下文变量设置
+    all_articles = Article.objects.only('title', 'views', 'add_time')  # only只查这些字段
+    hot_articles = all_articles.order_by('-views')[:count]  # 最热文章
+    new_articles = all_articles.order_by('-add_time')[:count]  # 最新文章
+    all_categories = Category.objects.all()  # 全部分类
     all_sidebars = SideBar.objects.filter(is_enable=True).order_by('-order')  # 侧边栏
     all_links = Link.objects.filter(is_enable=True)  # 友情链接
-    all_comments = Comment.objects.filter(is_enable=True).order_by('-add_time')[:setting.sidebar_article_count]
-
-    # github设置
-    github_user = setting.github_user
-    github_repository = setting.github_repository
+    all_comments = Comment.objects.filter(is_enable=True).order_by('-add_time')[:count]  # 新的评论
 
     # 标签云，根据标签被引用的次数，增大标签的字体大小
     # 算法: 单个标签字体大小 = 单个标签出现次数 / 所有标签被引用的总次数 / 标签个数 * 增长幅度 + 最小字体大小
@@ -77,15 +78,14 @@ def inclusion_sidebar_tag(context):
         # 标签被引用的总次数 / 标签总数, 当文章总引用数为0时, 将fre置为1
         frequency = (tag_ref_count / len(all_tags)) or 1
 
-        all_tags = list(
-            map(lambda x: (x[0], x[1], (x[1] / frequency) * increment + min_pt), tag_ref_list))  # tag,count,size
-        # import random
-        # random.shuffle(all_tags)  # 将标签再随机排序
+        # tag,count,size
+        all_tags = list(map(lambda x: (x[0], x[1], (x[1] / frequency) * increment + min_pt), tag_ref_list))
+        random.shuffle(all_tags)  # 将标签再随机排序
 
     return {
         'hot_articles': hot_articles,
         'new_articles': new_articles,
-        'all_categorys': all_categorys,
+        'all_categories': all_categories,
         'all_sidebars': all_sidebars,
         'all_links': all_links,
         'all_tags': all_tags,

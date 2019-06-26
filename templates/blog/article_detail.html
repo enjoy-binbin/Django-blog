@@ -14,7 +14,7 @@
     {% endfor %}
     <meta name="description" content="{{ article.content|article_markdown|striptags|truncatewords:1 }}"/>
     {% if article.tags %}
-        <meta name="keywords" content="{{ article.tags.all|join:"," }}"/>
+        <meta name="keywords" content="{{ article.tags.all|join:',' }}"/>
     {% else %}
         <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
     {% endif %}
@@ -51,7 +51,6 @@
             </div>
         {% endif %}
     </div>
-
 {% endblock %}
 
 {% block sidebar %}

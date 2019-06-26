@@ -63,10 +63,10 @@
                             {% else %}
                                 {{ comment.author.username }}
                             {% endif %}
-                        </span>发表在《
+                        </span>{{ comment.add_time|time_filter }}发表在
                         <a href="{{ comment.article.get_absolute_url }}#comment-{{ comment.id }}">
-                            {{ comment.article.title }}
-                        </a>》
+                            《{{ comment.article.title }}》
+                        </a>- {{ comment }}
                     </li>
                 {% endfor %}
             </ul>
@@ -89,10 +89,10 @@
     {% endif %}
 
     {# 分类目录 #}
-    {% if all_categorys %}
+    {% if all_categories %}
         <aside class="widget"><h3 class="widget-title">分类目录</h3>
             <ul>
-                {% for category in all_categorys %}
+                {% for category in all_categories %}
                     <li class="cat-item">
                         <a href='{{ category.get_absolute_url }}' title="{{ category.name }}">{{ category.name }}</a>
                     </li>
