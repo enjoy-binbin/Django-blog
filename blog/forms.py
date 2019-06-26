@@ -23,8 +23,8 @@ class ArticleAdminForm(forms.ModelForm):
 # ModelForm中 元Meta中的 fields, 和Model 相关联，可以进行save操作写入Model
 class CommentForm(forms.ModelForm):
     """ 前端评论框form """
-    name = forms.CharField(label='名称', required=True, widget=forms.HiddenInput)
-    email = forms.EmailField(label='邮箱', required=True, widget=forms.HiddenInput)
+    # name = forms.CharField(label='名称', required=True, widget=forms.HiddenInput)
+    # email = forms.EmailField(label='邮箱', required=True, widget=forms.HiddenInput)
     parent_comment_id = forms.IntegerField(widget=forms.HiddenInput, required=False)
 
     class Meta:

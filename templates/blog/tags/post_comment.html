@@ -9,13 +9,14 @@
                 {{ comment_form.content }}
                 {{ comment_form.content.errors }}
             </p>
-            <p class="comment-form-author">
-                {{ comment_form.name }}
-                {{ comment_form.name.errors }}
-            <p class="comment-form-email">
-                {{ comment_form.email }}
-                {{ comment_form.email.errors }}
-            </p>
+            {#            <p class="comment-form-author">#}
+            {#                {{ comment_form.name }}#}
+            {#                {{ comment_form.name.errors }}#}
+            {#            </p>#}
+            {#            <p class="comment-form-email">#}
+            {#                {{ comment_form.email }}#}
+            {#                {{ comment_form.email.errors }}#}
+            {#            </p>#}
             {{ comment_form.parent_comment_id }}
             <div class="form-submit">
                 <span class="comment-markdown" style="padding: 10px"> 支持markdown</span>
