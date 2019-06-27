@@ -1,6 +1,5 @@
-# 自己开发环境内需要把settings_example改成settings.py
 # 用于在docker中运行, 在docker中我设置会将此文件重命名为settings.py用于docker的部署
-from binblog.settings_example import *
+from binblog.settings import *
 
 DEBUG = False  # 关闭DEBUG
 

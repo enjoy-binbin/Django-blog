@@ -118,20 +118,20 @@ Also forgive my pool english lol. But i am working on it . Thank you so much~
 
 #### Some demo 
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display.png)
+![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/media/display/display.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display2.png)
+![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/media/display/display2.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display3.png)
+![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/media/display/display3.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display4.png)
+![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/media/display/display4.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display5.png)
+![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/media/display/display5.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display6.png)
+![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/media/display/display6.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display7.png)
+![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/media/display/display7.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display8.png)
+![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/media/display/display8.png)
 
-![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/display9.png)
+![display](https://github.com/enjoy-binbin/binblog-Django/blob/master/media/display/display9.png)

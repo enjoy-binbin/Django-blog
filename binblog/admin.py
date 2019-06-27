@@ -58,6 +58,7 @@ class BinBlogAdminSite(AdminSite):
 admin_site = BinBlogAdminSite(name='admin')
 
 admin_site.register(Setting, SettingAdmin)  # 站点配置
+
 admin_site.register(Category, CategoryAdmin)  # 文章分类
 admin_site.register(Article, ArticleAdmin)  # 文章
 admin_site.register(Comment, CommentAdmin)  # 文章评论

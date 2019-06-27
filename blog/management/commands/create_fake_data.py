@@ -48,7 +48,7 @@ class Command(BaseCommand):
                 category=sub_category,
                 title='我是测试标题 ' + str(i),
                 content='我是测试内容 ' + str(i),
-                author=user
+                author=user,
             )[0]
             tag = Tag.objects.get_or_create(name='标签' + str(i))[0]
 

@@ -21,13 +21,18 @@ class Setting(models.Model):
     sidebar_article_count = models.IntegerField(_('侧边栏文章条数'), default=10)
     enable_photo = models.BooleanField(_('是否启用相册'), default=True)
     user_verify_email = models.BooleanField(_('用户注册是否验证邮箱'), default=False)
-    enable_multi_user = models.BooleanField(_('是否启用多用户博客系统'), default=False,
-                                            help_text=_('是否启用多用户博客系统, 注册用户只具有对自己文章的增删改查权限'))
-
-    github_user = models.CharField(_('github账号'), max_length=50, default='enjoy-binbin',
-                                   help_text='https://github.com/enjoy-binbin')
-    github_repository = models.CharField(_('github仓库'), max_length=50, default='Django-blog',
-                                         help_text='https://github.com/enjoy-binbin/Django-blog')
+    enable_multi_user = models.BooleanField(
+        _('是否启用多用户博客系统'), default=False,
+        help_text=_('是否启用多用户博客系统, 注册用户只具有对自己文章的增删改查权限')
+    )
+    github_user = models.CharField(
+        _('github账号'), max_length=50, default='enjoy-binbin',
+        help_text='https://github.com/enjoy-binbin'
+    )
+    github_repository = models.CharField(
+        _('github仓库'), max_length=50, default='Django-blog',
+        help_text='https://github.com/enjoy-binbin/Django-blog'
+    )
 
     class Meta:
         verbose_name = _('0-站点配置')
@@ -70,6 +75,7 @@ class Category(BaseModel):
     """ 文章分类 """
     name = models.CharField(_('分类名称'), max_length=30, unique=True)
     parent_category = models.ForeignKey('self', verbose_name=_('父级分类'), blank=True, null=True, on_delete=models.CASCADE)
+    order = models.PositiveSmallIntegerField(_('排序'), default=0, help_text=_('越大越前'))
     slug = models.SlugField(max_length=50, default='')
 
     objects = models.Manager()  # 当自定义了管理器，django将不再默认管理对象objects了, 需要手动指定
@@ -78,7 +84,7 @@ class Category(BaseModel):
     class Meta:
         verbose_name = _('1-文章分类')
         verbose_name_plural = verbose_name
-        ordering = ['name']
+        ordering = ['-order', 'add_time']
 
     def __str__(self):
         return self.name
@@ -130,7 +136,7 @@ class Article(BaseModel):
     title = models.CharField(_('文章标题'), max_length=100, unique=True)
     content = MDTextField(_('文章内容'))  # 使用了django-mdeditor作为md编辑器
     type = models.CharField(_('文章类型'), max_length=1, default='a', choices=TYPE_CHOICES)
-    order = models.IntegerField(_('排序'), default=0, help_text=_('越大越前'))
+    order = models.PositiveSmallIntegerField(_('排序'), default=0, help_text=_('越大越前'))
     views = models.PositiveIntegerField(_('浏览量'), default=0)
     tags = models.ManyToManyField('Tag', verbose_name=_('标签'), blank=True)
 
@@ -224,7 +230,7 @@ class SideBar(BaseModel):
     """ 站点右上角的侧边栏，可以显示一些html,markdown内容 """
     title = models.CharField(_('标题'), max_length=30)
     content = models.TextField(_('内容'))
-    order = models.IntegerField(_('排序'), default=1, help_text=_('越大越前'))
+    order = models.PositiveSmallIntegerField(_('排序'), default=1, help_text=_('越大越前'))
     is_enable = models.BooleanField(_('是否启用'), default=True)
 
     class Meta:
@@ -239,7 +245,7 @@ class SideBar(BaseModel):
 class Link(BaseModel):
     """ 友情链接 """
     name = models.CharField(_('链接名称'), max_length=30, unique=True)
-    order = models.IntegerField(_('排序'), default=0, help_text=_('越大越前'))
+    order = models.PositiveSmallIntegerField(_('排序'), default=0, help_text=_('越大越前'))
     url = models.URLField(_('链接地址'))
     is_enable = models.BooleanField(_('是否启用'), default=True)
 

@@ -1,8 +1,7 @@
 import requests
-from .models import OAuthConfig, OAuthUser
-import json
-
 from urllib import parse
+
+from .models import OAuthConfig, OAuthUser
 
 
 class BaseManager(object):

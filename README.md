@@ -2,7 +2,7 @@
 
 ### 演示地址：http://13.58.211.105/
 
-基于 `python3.6` 和 `Django2.1`的博客系统 
+基于 `python3.6` 和 `Django2.2`的博客系统 
 
 - [English_README](./README_EN.md)
 
@@ -11,13 +11,12 @@
 ### 其他说明：
 
 1. 以前第一版django-blog。基于Django1.9的<a href="https://github.com/enjoy-binbin/pyblog">pyblog</a>，前端自己设计的/捂脸。不维护了的
-2. 目前博客文章，正在逐步改用写静态页面Github Page的方式记录。<a href="https://github.com/enjoy-binbin/enjoy-binbin.github.io">Github Page</a>，这样我就可以随便写些md格式的push上来就好了。简单快速随意记录
-3. 对于使用Docker部署，可以看docker目录下的文件或者看<a href="https://github.com/enjoy-binbin/docker-django-blog">Docker-djangoblog</a>仓库。
+2. 对于使用Docker部署，可以看docker目录下的文件或者看<a href="https://github.com/enjoy-binbin/docker-django-blog">Docker-djangoblog</a>仓库。
 
 ### 本地开发环境
 
 1. win10 64位
-2. 后端技术栈：Python3.6、Django2.1、Djangorestframework 3.9、Celery4
+2. 后端技术栈：Python3.6、Django2.2、Djangorestframework 3.9、Celery4
 3. 数据库：持久化Mysql，缓存Memcache，消息队列Redis
 4. 前端技术栈：Jquery、Bootstrap
 5. 开发工具：PyCharm 2018.1
@@ -115,21 +114,21 @@
 
 #### 部分演示图，没同步到线上环境的
 
-![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/media/display/display.png)
 
-![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display2.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/media/display/display2.png)
 
-![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display3.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/media/display/display3.png)
 
-![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display4.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/media/display/display4.png)
 
-![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display5.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/media/display/display5.png)
 
-![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display6.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/media/display/display6.png)
 
-![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display7.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/media/display/display7.png)
 
-![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display8.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/media/display/display8.png)
 
-![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/display9.png)
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/media/display/display9.png)
 

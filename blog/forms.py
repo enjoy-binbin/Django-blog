@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Article, Comment, GuestBook
+from blog.models import Article, Comment, GuestBook
 
 
 class ArticleAdminForm(forms.ModelForm):

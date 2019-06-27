@@ -20,7 +20,7 @@ before_install:
 # https://codecov.io && https://coveralls.io
 install:
   # 安装依赖
-  - pip install -r requirements.txt
+  - pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple
   - pip install python-coveralls
   - pip install coverage codecov
 

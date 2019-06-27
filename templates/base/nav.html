@@ -1,3 +1,5 @@
+{% load blog_tags %}
+
 <nav id="site-navigation" class="main-navigation" role="navigation">
     <div>
         <ul class="nav-menu">
@@ -5,12 +7,9 @@
                 <a href="/">首页</a>
             </li>
 
-            {% load blog_tags %}
-
             {% if nav_pages %}
                 {% for node in nav_pages %}
-                    <li id="menu-item-{{ node.pk }}"
-                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-{{ node.pk }}">
+                    <li id="menu-item-{{ node.pk }}">
                         <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
                     </li>
                 {% endfor %}
