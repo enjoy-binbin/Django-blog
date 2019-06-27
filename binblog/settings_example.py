@@ -183,6 +183,19 @@ HAYSTACK_CONNECTIONS = {
         'ENGINE': 'utils.whoosh_cn_backend.WhooshEngine',  # 自定义使用jieba进行中文分词
         'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
     },
+    # 如果要使用Es2作为搜索引擎, 因为看过django-haystack的github, 目前最新版2.8.1只支持Es1.x和Es2.x
+    # 新的发行版由于作者一直没有更新, github源码中的backend里有支持Es5.x的, 不过自己不够强emmm
+    # 观察了issue, 原作者时间不够, 希望自己以后对Es深入后有实力去贡献代码, add oil
+    # 1. 下载安装Es(依赖于java) https://www.elastic.co/cn/downloads/past-releases/elasticsearch-2-4-1
+    # 2. 安装对应版本的Es包 pip install elasticsearch==2.4.1
+    # 3. 启动Es, 下载解压后进入bin目录启动bat即可(win), 之后python manage.py rebuild_index重建索引
+    # 4. 其他不变, runserver后进行搜索尝试, 默认支持了中文分词搜索的, 奇了怪了hhh
+    # 5. 研究了Es7和elasticsearch-dsl, 不过自己本地上还是测试失败, 于是放弃折腾了, 使用了Es2, 以后好好学下Es
+    # 'default': {
+    #     'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
+    #     'URL': 'http://127.0.0.1:9200/',  # Es默认使用的是9200端口
+    #     'INDEX_NAME': 'blog',  # 索引名称
+    # },
 }
 # 自动更新搜索索引
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
