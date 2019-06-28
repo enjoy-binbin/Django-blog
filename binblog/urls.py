@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from django.conf import settings
@@ -46,7 +46,30 @@ urlpatterns = [
     path('refresh/', refresh_cache, name='refresh'),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    # 线上模式需要使用nginx来代理这些静态资源, static()其实return了一个 [re_path()对象]
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    if settings.DJANGO_DEBUG_TOOLBAR:
+        # 例如在sql面板中可以看到重复执行的sql语句, 借此可以优化自己的系统
+        import debug_toolbar
+
+        urlpatterns += [path('__debug__/', include(debug_toolbar.urls)), ]
+
+if not settings.DEBUG and settings.LOCAL_DEBUG:
+    # 本地想调试线上环境可以使用 --insecure参数 Allows serving static files even if DEBUG is False.
+    # python manage.py runserver --insecure
+    # 上面的 static()方法在DEBUG=False时是return [], 不会serve media, 可以这样写用于media
+
+    # from django.views.static import serve
+    # from django.urls import re_path
+    # urlpatterns += [re_path(r'^media/(?P<path>.*$)', serve, {'document_root': settings.MEDIA_ROOT}), ]
+    # 上面这行又可以仿照static()里的实现, lstrip('/')去掉字符串左边'/'
+    from django.views.static import serve
+    import re
+
+    urlpatterns += [re_path(r'^%s(?P<path>.*$)' % re.escape(settings.MEDIA_URL.lstrip('/')),
+                            serve, {'document_root': settings.MEDIA_ROOT}), ]
 
 # 全局403 404 500设置
 handler403 = 'blog.views.permission_denied'

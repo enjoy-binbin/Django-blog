@@ -23,6 +23,7 @@ SECRET_KEY = 'i89n!-gv=7!snicdlre^3v=i0zw3cgbs31@)&wv5gk_g$x1xx3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+LOCAL_DEBUG = True  # 本地代理static和media可以使用命令python manage.py runserver --insecure
 
 ALLOWED_HOSTS = ['*']
 
@@ -61,6 +62,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'blog.middleware.LoadTimeMiddleware'  # 页面加载时间
 ]
+
+# 是否启用django-debug-toolbar. 需要安装: pip install django-debug-toolbar
+DJANGO_DEBUG_TOOLBAR = False  # 自己定义的变量, 在urls.py里也需要引入相关路由
+if DJANGO_DEBUG_TOOLBAR:  # 还有另一种 django-silk可以尝试用
+    # debug工具, 只有在debug=True才生效, 开发环境内使用, 其实可以抽多个settings.develop.py
+    INTERNAL_IPS = ['127.0.0.1']
+    INSTALLED_APPS += ['debug_toolbar', ]
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
+    # DEBUG_TOOLBAR_PANELS = []  # 可以自己找更多的插件用
 
 ROOT_URLCONF = 'binblog.urls'
 
