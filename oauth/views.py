@@ -5,8 +5,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login
 
-from .manager import get_manager_by_type
-from .models import OAuthUser
+from oauth.manager import get_manager_by_type
+from oauth.models import OAuthUser
 
 User = get_user_model()
 

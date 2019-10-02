@@ -3,10 +3,10 @@ from django.contrib.admin import SimpleListFilter
 from django.urls import reverse
 from django.db import models
 from django.utils.html import format_html
-
 from pagedown.widgets import AdminPagedownWidget
-from .models import Article
-from .forms import ArticleAdminForm
+
+from blog.models import Article
+from blog.forms import ArticleAdminForm
 
 
 class ArticleAuthorListFilter(SimpleListFilter):

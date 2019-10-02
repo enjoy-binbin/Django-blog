@@ -1,6 +1,6 @@
-from random import Random
 import time
 import hashlib
+from random import Random
 
 from django.core.mail import send_mail
 

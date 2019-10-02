@@ -143,3 +143,4 @@
 [2019-06-28 11:10:53,684] ERROR [blog.views.page_not_found:297 views] {'status': '404', 'path': 'static/CACHE/css/4dae8f1035d4.css'}
 [2019-06-28 11:10:53,687] ERROR [blog.views.page_not_found:297 views] {'status': '404', 'path': 'static/CACHE/js/b3ecec28477c.js'}
 [2019-06-28 11:10:53,912] ERROR [blog.views.page_not_found:297 views] {'status': '404', 'path': 'static/favicon.ico'}
+[2019-09-29 16:14:22,203] ERROR [blog.views.page_not_found:297 views] {'status': '404', 'path': '彬彬冲呀66666666'}

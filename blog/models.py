@@ -21,13 +21,18 @@ class Setting(models.Model):
     sidebar_article_count = models.IntegerField(_('侧边栏文章条数'), default=10)
     enable_photo = models.BooleanField(_('是否启用相册'), default=True)
     user_verify_email = models.BooleanField(_('用户注册是否验证邮箱'), default=False)
-    enable_multi_user = models.BooleanField(_('是否启用多用户博客系统'), default=False,
-                                            help_text=_('是否启用多用户博客系统, 注册用户只具有对自己文章的增删改查权限'))
-
-    github_user = models.CharField(_('github账号'), max_length=50, default='enjoy-binbin',
-                                   help_text='https://github.com/enjoy-binbin')
-    github_repository = models.CharField(_('github仓库'), max_length=50, default='Django-blog',
-                                         help_text='https://github.com/enjoy-binbin/Django-blog')
+    enable_multi_user = models.BooleanField(
+        _('是否启用多用户博客系统'), default=False,
+        help_text=_('是否启用多用户博客系统, 注册用户只具有对自己文章的增删改查权限')
+    )
+    github_user = models.CharField(
+        _('github账号'), max_length=50, default='enjoy-binbin',
+        help_text='https://github.com/enjoy-binbin'
+    )
+    github_repository = models.CharField(
+        _('github仓库'), max_length=50, default='Django-blog',
+        help_text='https://github.com/enjoy-binbin/Django-blog'
+    )
 
     class Meta:
         verbose_name = _('0-站点配置')

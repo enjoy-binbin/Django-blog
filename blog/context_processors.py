@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
-from .models import Category, Article
-from utils.get_setting import get_setting
 from django.contrib.sites.models import Site
+
+from blog.models import Category, Article
+from utils.get_setting import get_setting
 
 
 def setting(requests):
