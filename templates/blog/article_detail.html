@@ -18,7 +18,21 @@
     {% else %}
         <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
     {% endif %}
+    <style>
+        {# 对pc端 md里面的图片进行放大处理 移动端TODO #}
+        .site {
+            overflow: inherit !important;
+        }
 
+        img {
+            cursor: pointer;
+            transition: all 0.6s;
+        }
+
+        img:hover {
+            transform: scale(1.5);
+        }
+    </style>
 {% endblock %}
 {% block content %}
     <div id="primary" class="site-content">

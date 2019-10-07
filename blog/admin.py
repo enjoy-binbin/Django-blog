@@ -12,7 +12,7 @@ from blog.forms import ArticleAdminForm
 class ArticleAuthorListFilter(SimpleListFilter):
     """ 自定义查询的过滤器-根据文章作者过滤文章 """
     parameter_name = 'author_id'  # url中的参数名称
-    title = '作者'  # 右侧过滤器的title名称
+    title = '作者 (自定义的过滤器)'  # 右侧过滤器的title名称
 
     def lookups(self, request, model_admin):
         """ Must be overridden to return a list of tuples (value, verbose value) """
@@ -27,7 +27,7 @@ class ArticleAuthorListFilter(SimpleListFilter):
         # return author_list2
 
         for author in author_list:  # verbose value, 在过滤器里显示的名称
-            yield (author.id, (author.nickname or author.username) + ' 自定义的过滤器')
+            yield (author.id, (author.nickname or author.username))
 
     def queryset(self, request, queryset):
         """ Return the filtered queryset. """
@@ -57,12 +57,12 @@ class ArticleAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'title')  # 列表页可以跳转到详情页的字段
     # list_editable = ('views', 'order')  # 列表页可以编辑的字段
     search_fields = ('title', 'content')  # 搜索框可搜索的字段
-    list_filter = ('author', ArticleAuthorListFilter, 'tags')  # 过滤器
+    list_filter = ('category', ArticleAuthorListFilter, 'tags')  # 过滤器
     filter_horizontal = ('tags',)  # 编辑页多对多关系选择框，默认的不好用, 用这个或filter_vertical
     date_hierarchy = 'add_time'  # 按日期月份筛选
     ordering = ('order',)  # 排序的字段
     actions = (add_article_order,)  # 列表页可执行的动作, 例如选中后执行删除
-    exclude = ('add_time', 'modify_time')  # 详情页剔除的字段
+    exclude = ('modify_time',)  # 详情页剔除的字段
     save_on_top = True  # 编辑页上也显示保存删除等按钮
     save_as = True  # 已有文章编辑页上 保存为新的
 
@@ -113,8 +113,9 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'parent_category')
+    list_display = ('name', 'parent_category', 'order')
     exclude = ('add_time', 'modify_time', 'slug')
+    ordering = ('-order', '-parent_category')
 
 
 class TagAdmin(admin.ModelAdmin):

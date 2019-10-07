@@ -1,9 +1,15 @@
-<li id="menu-item-{{ top_category.pk }}" class="">
-    <a href="{{ top_category.get_absolute_url }}">{{ top_category.name }}</a>
+{% load blog_tags %}
 
-    {% load blog_tags %}
+<li id="menu-item-{{ top_category.pk }}">
+    <a href="{{ top_category.get_absolute_url }}">{{ top_category.name }}</a>
     {% queryset_filter_tag nav_category_list parent_category=top_category as sub_categorys %}
     {% if sub_categorys %}
+        <svg t="1569997020049" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+             p-id="1917" width="16" height="16">
+            <path d="M512 685.248l-278.624-278.624 45.248-45.248L512 594.752l233.376-233.376 45.248 45.248z"
+                  fill="#181818" p-id="1918"></path>
+        </svg>
+        {#        <svg t="1569996928096" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2765" width="16" height="16"><path d="M128 256h64V192H128zM320 256h576V192H320zM128 544h64v-64H128zM320 544h576v-64H320zM128 832h64v-64H128zM320 832h576v-64H320z" fill="#181818" p-id="2766"></path></svg>#}
         <ul class="sub-menu">
             {% for sub_category in sub_categorys %}
                 {# with，将sub_category重命名为top_category再进行后面子分类渲染 #}
