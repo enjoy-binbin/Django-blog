@@ -6,6 +6,7 @@ media/photo/*
 media/editor/*
 binblog/settings.py
 binblog/binblog-bak.sql
+post/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
