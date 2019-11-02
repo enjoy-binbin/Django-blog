@@ -1,6 +1,10 @@
 """
 This is a example settings.py file
+You need to copy and rename this file to settings.py
+Also need to update something. Like SECRET_KEY/DEBUG/DATABASES/EMAIL/CACHE if you need
 
+这是个配置文件的例子, 使用需要复制拷贝一份并重命名为settings.py文件
+同样, 根据需要修改自己的秘钥/DB/邮箱/缓存的设置
 """
 
 import os
@@ -12,7 +16,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'i89n!-gv=7!snicdlre^3v=i0zw3cgbs31@)&wv5gk_g$x1xx3'
+SECRET_KEY = 'xxw#*r=6c8f70g_k4*0kxjhw&9a0ivy*(fsu7#!6-3=qt22w-%s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

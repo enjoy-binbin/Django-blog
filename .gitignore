@@ -1,11 +1,11 @@
 # Binbin
 binblog/whoosh_index/*
-log/*
+#log/*
 collectedstatic/*
 media/photo/*
 media/editor/*
 binblog/settings.py
-binblog/binblog-bak.sql
+binblog/binblog.sql
 post/
 
 # Byte-compiled / optimized / DLL files

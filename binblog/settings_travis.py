@@ -1,4 +1,4 @@
-from binblog.settings import *
+from binblog.settings_example import *
 
 # 覆盖原先settings里的一些配置
 # https://docs.travis-ci.com/user/database-setup/

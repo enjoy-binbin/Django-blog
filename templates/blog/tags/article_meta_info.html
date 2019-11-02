@@ -9,8 +9,10 @@
     </span>
 
     <span>
-        属于<a href="{{ article.category.get_absolute_url }}"
-             title="{{ article.category.name }}">{{ article.category.name }}</a>分类，
+        属于
+        <a href="{{ article.category.get_absolute_url }}"
+           title="{{ article.category.name }}">{{ article.category.name }}
+        </a>分类，
 
         {% if article.tags.all %}
             被贴了
@@ -27,16 +29,16 @@
         <a href="{{ article.author.get_absolute_url }}" title="查看所有由{{ article.author.username }}发布的文章">
             {{ article.author.username }}
         </a>。
-
-        {% ifequal user article.author %}
-            <a href="{{ article.get_admin_url }}">编辑</a>
-        {% endifequal %}
     </span>
 
-    <br><span>
-        文章最后修改于
+    <br>
+    <span>
+        最后更新时间
         <a href="{{ article.get_absolute_url }}" title="{{ article.modify_time }}">
             <time datetime="{{ article.modify_time }}">{{ article.modify_time }}</time>
         </a>。
+        {% ifequal user article.author %}
+            <a href="{{ article.get_admin_url }}">编辑</a>
+        {% endifequal %}
     </span>
 </footer>

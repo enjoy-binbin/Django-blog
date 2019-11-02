@@ -13,24 +13,24 @@ branches:
 #    - DJANGO_SETTINGS_MODULE="binblog.settings_travis"  # 设置Django配置文件
 
 before_install:
-  # mysql -h127.0.0.1 -P3306 -uroot -p -e"create database blog default character set utf8 collate utf8_general_ci;"
-  - mysql -e "create database blog default character set utf8 collate utf8_general_ci;"
   - cp binblog/settings_travis.py binblog/settings.py  # 复制一份配置文件, 用于app引入相关设置
 
 # https://codecov.io && https://coveralls.io
 install:
   # 安装依赖
   - pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple
-  - pip install python-coveralls
-  - pip install coverage codecov
+  - pip install python-coveralls -i https://mirrors.aliyun.com/pypi/simple
+  - pip install coverage codecov -i https://mirrors.aliyun.com/pypi/simple
 
 before_script:
   # 执行相关脚本
+  # mysql -h127.0.0.1 -P3306 -uroot -p -e"create database blog default character set utf8 collate utf8_general_ci;"
+  - mysql -e "create database blog default character set utf8 collate utf8_general_ci;"
   - python manage.py makemigrations
   - python manage.py migrate
-  - python manage.py create_fake_data
   - python manage.py collectstatic --noinput
   - python manage.py compress --force
+  - python manage.py create_fake_data
 
 script:
   - coverage run manage.py test  # 进行测试
