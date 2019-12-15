@@ -1,11 +1,11 @@
-import time
 import hashlib
+import time
 from random import Random
 
+from django.conf import settings
 from django.core.mail import send_mail
 
 from user.models import EmailVerifyCode
-from binblog.settings import EMAIL_FROM
 
 
 def send_email(email, send_type='register'):
@@ -36,7 +36,7 @@ def send_email(email, send_type='register'):
     else:
         return False
 
-    status = send_mail(subject, message, EMAIL_FROM, [email])
+    status = send_mail(subject, message, settings.EMAIL_FROM, [email])
     if status:  # 发送成功
         email_code = EmailVerifyCode()
         email_code.email = email

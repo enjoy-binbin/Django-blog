@@ -1,0 +1,78 @@
+version: '2.4'
+
+# docker-compose up -d binblog
+# docker-compose up -d nginx
+
+services:
+  # nginx服务
+  nginx:  # service_name, docker-compose start nginx
+    image: daocloud.io/nginx:1.15
+    container_name: nginx  # container_name 不使用docker默认容器名, 因为自己玩只会有一个容器, 指定名字后好看 docker ps -a | grep nginx
+    # 暴露80和443的端口
+    ports:
+      - 80:8000  # 这个8000是binblog.conf里nginx监听的端口, 映射到主机的80
+      - 8080:80  # 把容器内默认的80映射到主机的8080, 这样可以看到nginx的欢迎页,
+      - 443:443
+    volumes:
+      # 将配置文件挂载进容器, 并设置:ro 只读, 几个静态资源的挂载位置随意, 能自己对上配置文件即可
+      - ./docker/nginx:/etc/nginx/conf.d:ro
+      - ./media:/var/www/Django-blog/media
+      - ./static:/var/www/Django-blog/static
+      - ./collectedstatic:/var/www/Django-blog/collectedstatic
+    links:
+      - binblog:web  # 把外面这个binblog容器和nginx容器内部的web关联起来, nginx配置文件可以通过`web`找到binblog容器
+    logging:
+      options:
+        max-size: '5m'  # 设置日志最大占5m
+
+  # mysql服务, 并且把自己本地的数据通过卷挂载进容器
+  mysql:
+    image: daocloud.io/mysql:5.7.26
+    container_name: mysql
+    ports:
+      - 3307:3306  # 因为自己机子上也有跑着mysql, 所以这里映射端口改为3307
+    logging:
+      options:
+        max-size: '5m'  # 设置日志最大占5m
+    volumes:
+      # /usr/local/mysql/data/  # mysql > show variables like 'datadir';
+      # 这里在mac下需要注意要在docker-preferences里设置file-sharing, 这里直接挂载其实不太安全
+      # 和注意/data目录的权限相关(如果权限报错) root@HansomedeMacBook-Pro /u/l/mysql# chmod -R 777 /data/
+      - /usr/local/mysql-5.7.28-macos10.14-x86_64/data:/var/lib/mysql
+    # 如果报错111连接不上去, 就进入容器里的mysql进行grant操作
+    # docker exec -it mysql /bin/bash
+    # grant all privileges on *.* to root@'%' identified by 'your_pwd' with grant option;
+    # flush privileges;
+
+  # redis服务, django默认reids缓存会给key加上 `:1:`前缀的
+  redis:
+    image: daocloud.io/redis:4.0
+    container_name: redis
+    expose:
+      - 6379
+
+  # binblog服务
+  binblog:
+    build:
+      context: .  # 设置上下文为当前目录
+      dockerfile: ./Dockerfile  # 可以是绝对环境也可以是相对环境, 只有上下文是确定的即可
+    image: django-blog:1.0  # 有build和image, 会用Dockerfile构建镜像并命名为这个image的值
+    container_name: binblog
+    environment:
+      - DEBUG=True  # DEBUG开关, 环境变量
+      - DJANGO_SETTINGS_MODULE=binblog.settings_docker  # 配置文件的环境变量
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    #expose:  # 可以只暴露端口给那些link里的容器, 不暴露端口给主机, ports是会暴露给主机的
+    #  - 8000
+    depends_on:
+      - mysql
+      - redis
+    volumes:
+      - ./media:/app/media
+      - ./static:/app/static
+      - ./collectedstatic:/app/collectedstatic
+    logging:
+      options:
+        max-size: '5m'  # 设置日志最大占5m
