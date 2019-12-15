@@ -1,11 +1,10 @@
-import time
 import hashlib
+import time
 
-from django.core.mail import send_mail
-from celery.utils.log import get_task_logger
 from celery import shared_task
-
-from binblog.settings import EMAIL_FROM  # setting文件设置的发件人
+from celery.utils.log import get_task_logger
+from django.conf import settings
+from django.core.mail import send_mail
 
 logger = get_task_logger(__name__)
 
@@ -37,7 +36,7 @@ def send_email_task(email, code_str, send_type):
         logger.error('非法的发送类型'.format(email))
         return {'status': 'fail', 'error': 'illegal send_type'}
 
-    status = send_mail(subject, message, EMAIL_FROM, [email])  # ,html_message=
+    status = send_mail(subject, message, settings.EMAIL_FROM, [email])  # ,html_message=
 
     if status:
         logger.info('{0}邮件发送成功'.format(email))
