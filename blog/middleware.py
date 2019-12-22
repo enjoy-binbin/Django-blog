@@ -1,5 +1,7 @@
 import time
 
+from django.http import HttpResponse
+
 
 class LoadTimeMiddleware(object):
     """ 在页面底部显示当前页面的加载时间 """
@@ -18,4 +20,17 @@ class LoadTimeMiddleware(object):
         except:
             # 显示图片等媒体文件时跳过
             pass
+        return response
+
+
+class HealthCheckMiddleware:
+    """ 健康检查, 自动响应health_check开头, 中间件需要加到最顶部 """
+    def __init__(self, get_response=None):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.path.startswith('/health_check'):
+            return HttpResponse()
+
+        response = self.get_response(request)
         return response
