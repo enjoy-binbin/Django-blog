@@ -1,16 +1,16 @@
 import logging
 
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
-from django.shortcuts import get_object_or_404
-from django.views.generic.edit import FormView
-from django.http import HttpResponseRedirect
-from django.core.cache import cache
-from django.urls import reverse
 from django.contrib import messages
+from django.core.cache import cache
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
+from django.urls import reverse
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import FormView
 
-from blog.models import Article, Category, Tag, Comment, Photo, GuestBook
 from blog.forms import CommentForm, GuestBookForm
+from blog.models import Article, Category, Tag, Comment, Photo, GuestBook
 
 # from blog.tasks import test_add
 

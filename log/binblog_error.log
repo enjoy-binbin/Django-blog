@@ -1,1 +1,24 @@
 [2019-11-02 23:38:01,658] ERROR [blog.views.page_not_found:297 views] {'status': '404', 'path': '彬彬冲呀66666666'}
+[2020-01-25 18:02:24,345] ERROR [root.sync:32 github_page] 'QuerySet' object has no attribute 'encode'
+[2020-01-25 18:23:40,237] ERROR [root.sync:32 github_page] Cmd('git') failed due to: exit code(128)
+  cmdline: git push --porcelain origin
+  stderr: 'fatal: You are not currently on a branch.
+To push the history leading to the current (detached HEAD)
+state now, use
+
+    git push origin HEAD:<name-of-remote-branch>
+'
+[2020-01-25 22:08:29,888] ERROR [root.sync:33 github_page] Cmd('git') failed due to: exit code(128)
+  cmdline: git push --porcelain origin
+  stderr: 'fatal: The current branch master has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin master
+'
+[2020-01-25 22:23:47,352] ERROR [root.sync:33 github_page] Cmd('git') failed due to: exit code(128)
+  cmdline: git push --porcelain origin
+  stderr: 'fatal: The current branch master has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+    git push --set-upstream origin master
+'

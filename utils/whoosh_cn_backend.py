@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import json
@@ -8,25 +6,25 @@ import re
 import shutil
 import threading
 import warnings
-from jieba.analyse import ChineseAnalyzer
-# 使用jieba作为中文分词和修改176行的
-# schema_fields[field_class.index_fieldname] = TEXT(stored=True, analyzer=StemmingAnalyzer(),
-# schema_fields[field_class.index_fieldname] = TEXT(stored=True, analyzer=ChineseAnalyzer(),
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils import six
 from django.utils.datetime_safe import datetime
 from django.utils.encoding import force_text
-
 from haystack.backends import BaseEngine, BaseSearchBackend, BaseSearchQuery, EmptyResults, log_query
 from haystack.constants import DJANGO_CT, DJANGO_ID, ID
 from haystack.exceptions import MissingDependency, SearchBackendError, SkipDocument
 from haystack.inputs import Clean, Exact, PythonData, Raw
 from haystack.models import SearchResult
-from haystack.utils import log as logging
 from haystack.utils import get_identifier, get_model_ct
+from haystack.utils import log as logging
 from haystack.utils.app_loading import haystack_get_model
+from jieba.analyse import ChineseAnalyzer
+
+# 使用jieba作为中文分词和修改176行的
+# schema_fields[field_class.index_fieldname] = TEXT(stored=True, analyzer=StemmingAnalyzer(),
+# schema_fields[field_class.index_fieldname] = TEXT(stored=True, analyzer=ChineseAnalyzer(),
 
 try:
     import whoosh
@@ -172,7 +170,7 @@ class WhooshSearchBackend(BaseSearchBackend):
                 schema_fields[field_class.index_fieldname] = NGRAMWORDS(minsize=2, maxsize=15, at='start',
                                                                         stored=field_class.stored,
                                                                         field_boost=field_class.boost)
-            else:# StemmingAnalyzer->ChineseAnalyzer
+            else:  # StemmingAnalyzer->ChineseAnalyzer
                 schema_fields[field_class.index_fieldname] = TEXT(stored=True, analyzer=ChineseAnalyzer(),
                                                                   field_boost=field_class.boost, sortable=True)
 

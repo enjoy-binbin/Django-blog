@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
-from django.urls import reverse
 from django.db import models
+from django.urls import reverse
 from django.utils.html import format_html
 from pagedown.widgets import AdminPagedownWidget
 
-from blog.models import Article
 from blog.forms import ArticleAdminForm
+from blog.models import Article, Link, Setting
 
 
 class ArticleAuthorListFilter(SimpleListFilter):
@@ -39,16 +39,16 @@ class ArticleAuthorListFilter(SimpleListFilter):
             return queryset
 
 
-def add_article_order(modeladmin, request, queryset):
-    """ 列表页可执行的动作, 给所选文章的排序权重 加一
-    action写法: https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/
-    """
-    for article in queryset:
-        article.order += 1
-        article.save()
-
-
-add_article_order.short_description = '给所选文章的排序权重 加一'
+# def add_article_order(modeladmin, request, queryset):
+#     """ 列表页可执行的动作, 给所选文章的排序权重 加一
+#     action写法: https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/
+#     """
+#     for article in queryset:
+#         article.order += 1
+#         article.save(update_fields=['order'])
+#
+#
+# add_article_order.short_description = '给所选文章的排序权重 加一'
 
 
 class ArticleAdmin(admin.ModelAdmin):
@@ -61,7 +61,8 @@ class ArticleAdmin(admin.ModelAdmin):
     filter_horizontal = ('tags',)  # 编辑页多对多关系选择框，默认的不好用, 用这个或filter_vertical
     date_hierarchy = 'add_time'  # 按日期月份筛选
     ordering = ('order',)  # 排序的字段
-    actions = (add_article_order,)  # 列表页可执行的动作, 例如选中后执行删除
+    # actions = (add_article_order, )  # 列表页可执行的动作, 例如选中后执行删除
+    actions = ('add_article_order', 'render_detail_html')  # 列表页可执行的动作, 例如选中后执行删除
     exclude = ('modify_time',)  # 详情页剔除的字段
     save_on_top = True  # 编辑页上也显示保存删除等按钮
     save_as = True  # 已有文章编辑页上 保存为新的
@@ -110,6 +111,42 @@ class ArticleAdmin(admin.ModelAdmin):
             return queryset.filter(author=request.user)
         else:
             return queryset
+
+    def add_article_order(self, request, queryset):
+        """ 列表页可执行的动作, 给所选文章的排序权重 加一
+        action写法: https://docs.djangoproject.com/en/dev/ref/contrib/admin/actions/
+        """
+        success = list()
+        for article in queryset:
+            article.order += 1
+            article.save(update_fields=['order'])
+            success.append(article.title)
+
+        self.message_user(request, f"{success} action successfully.")
+
+    add_article_order.short_description = '给所选文章的排序权重 加一'
+
+    def render_detail_html(self, request, queryset):
+        """ 创建文章html """
+        from utils.github_page import HtmlRender
+
+        blog_setting = Setting.objects.all().first()
+        success, error = [], []
+        error_info = []
+
+        for article in queryset:
+            result, info = HtmlRender().detail(blog_setting, article)
+            _ = success.append(article.title) if result else (error.append(article) or error_info.append(info))
+
+        message = ''
+        if success:
+            message += f'{success} successfully'
+        if error_info:
+            message += f'{error} unsuccessfully, {error_info}'
+
+        self.message_user(request, message)
+
+    render_detail_html.short_description = '给所选的文章创建HTML静态文件'
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -179,6 +216,7 @@ class SettingAdmin(admin.ModelAdmin):
     )
     list_editable = ('enable_photo', 'user_verify_email', 'enable_multi_user')
     save_on_top = True
+    actions = ('render_index_html',)
 
     def has_add_permission(self, request):
         """ 唯一的站点配置, 不允许添加, 默认站点配置是在utils.get_setting里添加的 """
@@ -187,3 +225,19 @@ class SettingAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         """ 唯一的站点配置, 不允许删除 """
         return False
+
+    def render_index_html(self, request, queryset):
+        """ 创建博客首页index_html """
+        from functools import partial
+        from utils.github_page import HtmlRender
+
+        blog_setting = queryset[0]
+        article_list = Article.objects.all().order_by('-add_time')
+        link_list = Link.objects.filter(is_enable=True).all()
+
+        result, info = HtmlRender().index(blog_setting, article_list, link_list)
+
+        message_user = partial(self.message_user, request=request, message=info)
+        message_user(level=20) if result else message_user(level=40)
+
+    render_index_html.short_description = '更新首页并且同步github-page'

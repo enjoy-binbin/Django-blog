@@ -1,4 +1,5 @@
 import os
+
 from celery import Celery
 
 # 把默认的django settings模块配置给celery

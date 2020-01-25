@@ -1,31 +1,27 @@
 import logging
+from random import Random
 
-from django.views.generic import FormView, RedirectView, View
-from django.views.decorators.debug import sensitive_post_parameters
-from django.views.decorators.csrf import csrf_protect
-from django.views.decorators.cache import never_cache
-
+from django.contrib import messages
+from django.contrib.auth import get_user_model, logout, login, REDIRECT_FIELD_NAME
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group, Permission
 from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.shortcuts import get_object_or_404
 from django.shortcuts import reverse, redirect
 from django.utils.decorators import method_decorator
 from django.utils.http import is_safe_url
-from django.utils.timezone import now
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.debug import sensitive_post_parameters
+from django.views.generic import FormView, RedirectView, View
 
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model, logout, login, REDIRECT_FIELD_NAME
-from django.contrib.auth.models import Group, Permission
-from django.contrib import messages
-from django.shortcuts import get_object_or_404
-
-from .forms import RegisterForm, LoginForm
-from .tasks import send_email_task
-from .models import EmailVerifyCode
+from user.forms import RegisterForm, LoginForm
+from user.models import EmailVerifyCode
+from user.tasks import send_email_task
 from utils.get_setting import get_setting
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
-
-from random import Random
 
 
 # django有一个 path('', include('django.contrib.auth.urls')),

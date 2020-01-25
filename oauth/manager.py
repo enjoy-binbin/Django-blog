@@ -1,5 +1,6 @@
-import requests
 from urllib import parse
+
+import requests
 
 from .models import OAuthConfig, OAuthUser
 

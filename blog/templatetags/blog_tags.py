@@ -1,14 +1,14 @@
 import random
 
 from django import template
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from utils.mistune_markdown import article_markdown as _article_markdown
-from utils.get_setting import get_setting
 from blog.models import Article, Category, Link, SideBar, Tag, Comment
+from utils.get_setting import get_setting
+from utils.mistune_markdown import article_markdown as _article_markdown
 
 register = template.Library()  # 名字是固定的register
 setting = get_setting()
