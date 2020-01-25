@@ -25,6 +25,7 @@ class LoadTimeMiddleware(object):
 
 class HealthCheckMiddleware:
     """ 健康检查, 自动响应health_check开头, 中间件需要加到最顶部 """
+
     def __init__(self, get_response=None):
         self.get_response = get_response
 

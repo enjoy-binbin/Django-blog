@@ -1,9 +1,9 @@
-from django.views import View
-from django.urls import reverse
-from django.http import HttpResponseRedirect
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.views import View
 
 from oauth.manager import get_manager_by_type
 from oauth.models import OAuthUser

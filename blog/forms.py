@@ -35,6 +35,7 @@ class CommentForm(forms.ModelForm):
 
 class GuestBookForm(forms.ModelForm):
     """ 前端留言板form """
+
     class Meta:
         model = GuestBook
         fields = ['content']

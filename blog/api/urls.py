@@ -1,10 +1,8 @@
 from django.urls import path
 
-from . import views
+from blog.api import views
 
 app_name = 'api-blog'
-
-# TODO：想想看这个怎么继续分层
 
 urlpatterns = [
     path('article/', views.ArticleListAPIView.as_view(), name='article_list'),

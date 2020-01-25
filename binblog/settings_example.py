@@ -22,6 +22,10 @@ SECRET_KEY = 'xxw#*r=6c8f70g_k4*0kxjhw&9a0ivy*(fsu7#!6-3=qt22w-%s'
 DEBUG = True
 LOCAL_DEBUG = True  # 本地代理static和media可以使用命令python manage.py runserver --insecure
 
+# 是否开启github page同步, 以及同步的路径
+GITHUB_PAGE = False
+GITHUB_PAGE_DIR = '/Users/binbin/code/github/enjoy-binbin.github.io'
+
 ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -114,7 +118,27 @@ DATABASES = {
             # 开启mysql严格模式, 5.6后是默认值NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
             'init_command': "SET sql_mode='NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES'",
         },
-    }
+    },
+    # grant select on *.* to 'binblog_read'@'%' identified by '123456';
+    # show grants for binblog_read;
+    'read': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'blog',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'PORT': 3306,
+        'HOST': '127.0.0.1',
+    },
+    # grant select, insert, update, delete on *.* to 'binblog_write'@'%' identified by '123456';
+    # show grants for binblog_write;
+    'write': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'blog',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'PORT': 3306,
+        'HOST': '127.0.0.1',
+    },
 }
 
 # 密码验证类 Password validation

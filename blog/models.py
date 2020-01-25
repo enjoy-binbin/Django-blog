@@ -1,15 +1,15 @@
-from django.db import models
-from django.utils.timezone import now  # 跟根据USE_TZ的值返回带时区或不带时区的datetime
-from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.urls import reverse
+from django.db import models
+from django.db.models import F
 from django.template.defaultfilters import slugify
-
-from unidecode import unidecode
+from django.urls import reverse
+from django.utils.timezone import now  # 跟根据USE_TZ的值返回带时区或不带时区的datetime
+from django.utils.translation import gettext_lazy as _
 from mdeditor.fields import MDTextField
+from unidecode import unidecode
 
-from .manager import TopCategoryManager
+from blog.manager import TopCategoryManager
 
 
 class Setting(models.Model):
@@ -25,6 +25,10 @@ class Setting(models.Model):
         _('是否启用多用户博客系统'), default=False,
         help_text=_('是否启用多用户博客系统, 注册用户只具有对自己文章的增删改查权限')
     )
+    github_avatar = models.CharField(
+        _('github头像'), max_length=50, default='https://avatars2.githubusercontent.com/u/22811481',
+        help_text='https://avatars2.githubusercontent.com/u/22811481'
+    )
     github_user = models.CharField(
         _('github账号'), max_length=50, default='enjoy-binbin',
         help_text='https://github.com/enjoy-binbin'
@@ -33,6 +37,7 @@ class Setting(models.Model):
         _('github仓库'), max_length=50, default='Django-blog',
         help_text='https://github.com/enjoy-binbin/Django-blog'
     )
+    about_me = models.TextField(_('关于我'), default='Hello World', blank=True)
 
     class Meta:
         verbose_name = _('0-站点配置')
@@ -155,10 +160,14 @@ class Article(BaseModel):
             'title': self.title
         })
 
+    def get_github_page_url(self):
+        return f'/{self.category}/{self.title}.html'
+
     def add_views(self):
         """ 文章浏览量自增 """
-        self.views += 1
-        self.save(update_fields=['views'])
+        self.views = F('views') + 1
+        # self.views += 1
+        # self.save(update_fields=['views'])
 
     def next_article(self):
         """ 下一篇的文章 """

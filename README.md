@@ -1,6 +1,6 @@
 # BinBlog
 
-### 演示地址：http://13.58.211.105/
+### 无演示地址了, github page地址: binloveplay1314.cn
 
 基于 `python3.6` 和 `Django2.2`的博客系统 
 
@@ -12,6 +12,7 @@
 
 1. 以前第一版django-blog。基于Django1.9的<a href="https://github.com/enjoy-binbin/pyblog">pyblog</a>，前端自己设计的/捂脸。不维护了的
 2. 对于使用Docker部署，可以看docker目录下的文件或者看<a href="https://github.com/enjoy-binbin/docker-django-blog">Docker-djangoblog</a>仓库。
+3. 抛弃亚马逊云部署了，使用github page纯静态页面部署，本地开发一键生成HTML文件并进行github push. (演示图看最下，站点看首页)
 
 ### 本地开发环境
 
@@ -21,7 +22,7 @@
 4. 前端技术栈：Jquery、Bootstrap
 5. 开发工具：PyCharm 2018.1
 6. admin后台： `fake_admin fake_admin`
-7. 线上环境： AWS ，Ubuntu18.04，Nginx+(gunicorn or uwsgi)，Mysql5.7，Python3.6
+7. 线上环境： AWS ，Ubuntu18.04，Nginx+(gunicorn or uwsgi)，Mysql5.7，Python3.6(站点已停)
 8. 线上代码不同步的，一直在本地开发鼓捣
 
 ## 主要功能
@@ -37,6 +38,7 @@
 * 使用logging记录错误日志，使用celery+redis进行一些异步任务的调度
 * 增加伪多用户博客系统，用户注册可以拥有对自己文章的增删改查操作，可以写文章
 * 相册功能，有两种样式，不喜欢的可以在admin设置里关闭，或者选其一，在base/nav.html里修改
+* 根据文章内容分类，使用模板生成简单的HTML文件，并且推送到github page托管
 
 ## 使用到
 
@@ -58,9 +60,6 @@
 * django中使用logging模块、message模块
 * 使用celery+redis进行异步的邮件发送
 
-## TOLearn
-
-继续折腾后面的。有域名后进行Oauth登录（QQ、新浪等），相册样式优化和分页。越努力越幸运
 
 ## 安装
 
@@ -131,4 +130,8 @@
 ![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/media/display/display8.png)
 
 ![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/media/display/display9.png)
+
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/media/display/display10.png)
+
+![display](https://raw.githubusercontent.com/enjoy-binbin/Django-blog/master/media/display/display11.png)
 

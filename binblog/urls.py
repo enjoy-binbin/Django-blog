@@ -1,13 +1,12 @@
-from django.urls import path, include, re_path
+from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
-from django.conf import settings
-
+from django.urls import path, include, re_path
 from rest_framework_jwt.views import obtain_jwt_token
 
 from user.views import refresh_cache
-from .admin import admin_site
 from . import sitemaps
+from .admin import admin_site
 from .feeds import BinBlogFeed
 
 sitemaps = {

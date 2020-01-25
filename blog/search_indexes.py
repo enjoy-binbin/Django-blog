@@ -17,6 +17,7 @@
 # 更新索引 ./manage.py update_index
 
 from haystack import indexes
+
 from blog.models import Article
 
 

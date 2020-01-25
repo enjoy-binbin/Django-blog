@@ -1,8 +1,8 @@
 import mistune
-from pygments.util import ClassNotFound
 from pygments import highlight
-from pygments.lexers import get_lexer_by_name
 from pygments.formatters import html
+from pygments.lexers import get_lexer_by_name
+from pygments.util import ClassNotFound
 
 
 # The fastest markdown parser in pure Python with renderer features, inspired by marked.

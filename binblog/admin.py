@@ -1,21 +1,10 @@
 from django.contrib.admin import AdminSite
 from django.contrib.admin.models import LogEntry
-from django.contrib.sites.models import Site
-from django.contrib.sites.admin import SiteAdmin
-from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.admin import GroupAdmin
+from django.contrib.auth.models import Group, Permission
+from django.contrib.sites.admin import SiteAdmin
+from django.contrib.sites.models import Site
 
-from blog.models import (
-    Setting,
-    Category,
-    Article,
-    Comment,
-    Tag,
-    Link,
-    SideBar,
-    Photo,
-    GuestBook,
-)
 from blog.admin import (
     ArticleAdmin,
     CategoryAdmin,
@@ -27,10 +16,21 @@ from blog.admin import (
     PhotoAdmin,
     GuestBookAdmin,
 )
-from user.models import UserProfile, EmailVerifyCode
-from user.admin import UserProfileAdmin, EmailVerifyCodeAdmin, LogEntryAdmin
-from oauth.models import OAuthConfig, OAuthUser
+from blog.models import (
+    Setting,
+    Category,
+    Article,
+    Comment,
+    Tag,
+    Link,
+    SideBar,
+    Photo,
+    GuestBook,
+)
 from oauth.admin import OAuthConfigAdmin
+from oauth.models import OAuthConfig
+from user.admin import UserProfileAdmin, EmailVerifyCodeAdmin, LogEntryAdmin
+from user.models import UserProfile, EmailVerifyCode
 from utils.get_setting import get_setting
 
 
