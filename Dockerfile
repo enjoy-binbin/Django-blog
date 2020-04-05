@@ -7,6 +7,5 @@ MAINTAINER binbin <binloveplay1314@qq.com>
 ADD . /app
 WORKDIR /app
 
-# 安装依赖, 使用阿里云镜像
-RUN pip install --no-cache-dir -i http://mirrors.aliyun.com/pypi/simple/ -r ./requirements.txt --trusted-host mirrors.aliyun.com
-RUN pip install --no-cache-dir -i http://mirrors.aliyun.com/pypi/simple/ gunicorn --trusted-host mirrors.aliyun.com
+# 安装依赖,
+RUN pip install --no-cache-dir -i https://pypi.douban.com/simple -r ./requirements.txt --trusted-host mirrors.aliyun.com

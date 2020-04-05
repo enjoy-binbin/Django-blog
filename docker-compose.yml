@@ -19,6 +19,7 @@ services:
       - ./media:/var/www/Django-blog/media
       - ./static:/var/www/Django-blog/static
       - ./collectedstatic:/var/www/Django-blog/collectedstatic
+      - ./log/nginx:/var/log/nginx  # 将nginx里的日志挂载出来, 然后在filebeat里作为输入源
     links:
       - binblog:web  # 把外面这个binblog容器和nginx容器内部的web关联起来, nginx配置文件可以通过`web`找到binblog容器
     logging:
@@ -38,7 +39,9 @@ services:
       # /usr/local/mysql/data/  # mysql > show variables like 'datadir';
       # 这里在mac下需要注意要在docker-preferences里设置file-sharing, 这里直接挂载其实不太安全
       # 和注意/data目录的权限相关(如果权限报错) root@HansomedeMacBook-Pro /u/l/mysql# chmod -R 777 /data/
+      # ....注意日志冲突, 需要删除宿主机里ib_logfile*等文件
       - /usr/local/mysql-5.7.28-macos10.14-x86_64/data:/var/lib/mysql
+    user: mysql
     # 如果报错111连接不上去, 就进入容器里的mysql进行grant操作
     # docker exec -it mysql /bin/bash
     # grant all privileges on *.* to root@'%' identified by 'your_pwd' with grant option;
@@ -76,3 +79,49 @@ services:
     logging:
       options:
         max-size: '5m'  # 设置日志最大占5m
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
+    container_name: es
+    ports:
+      - 9200:9200
+    environment:
+      - TZ=Asia/Shanghai
+      - ES_JAVA_OPTS=-Xms4g -Xmx4g
+      - discovery.type=single-node
+      - ELASTIC_USER=es_wr
+      - ELASTIC_PASSWORD=es_1123
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    logging:
+      options:
+        max-size: '5m'
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.6.0
+    container_name: kibana
+    ports:
+      - 5601:5601
+    environment:
+      - TZ=Asia/Shanghai
+    logging:
+      options:
+        max-size: '5m'
+    depends_on:
+      - elasticsearch
+
+  filebeat:
+    build:
+      context: .  # 设置上下文为当前目录
+      dockerfile: ./docker/filebeat/Dockerfile  # 可以是绝对环境也可以是相对环境, 只有上下文是确定的即可
+    image: filebeat:7.6.0  # 有build和image, 会用Dockerfile构建镜像并命名为这个image的值
+    container_name: filebeat
+    volumes:
+      - ./log/nginx:/var/log/nginx  # 将nginx里的日志挂载出来, 然后在filebeat里作为输入源
+    logging:
+      options:
+        max-size: '5m'
+    depends_on:
+      - elasticsearch

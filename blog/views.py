@@ -74,6 +74,7 @@ class ArticleDetailView(DetailView):
         obj = super().get_object()
         obj.add_views()  # 文章阅读量加一
         self.object = obj
+        # self.object = self.model.objects.get(id=obj.id)
         return obj
 
     def get_context_data(self, **kwargs):

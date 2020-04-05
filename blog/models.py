@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import F
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils.timezone import now  # 跟根据USE_TZ的值返回带时区或不带时区的datetime
@@ -165,9 +164,10 @@ class Article(BaseModel):
 
     def add_views(self):
         """ 文章浏览量自增 """
-        self.views = F('views') + 1
-        # self.views += 1
-        # self.save(update_fields=['views'])
+        # self.views = models.F('views') + 1  # 会变成: F(views) + Value(1), 得再取过
+        # self.save()
+        self.views += 1
+        self.save(update_fields=['views'])
 
     def next_article(self):
         """ 下一篇的文章 """

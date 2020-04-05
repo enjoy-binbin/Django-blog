@@ -54,6 +54,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'blog.middleware.HealthCheckMiddleware',  # 健康检查
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -61,6 +63,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'blog.middleware.LoggerMiddleware',  # 日志相关
     'blog.middleware.LoadTimeMiddleware'  # 页面加载时间
 ]
 
@@ -303,6 +307,11 @@ LOGGING = {  # 开发中有用的信息 < 常规操作中有用的信息 < 有�
             'class': 'logging.StreamHandler',
             'formatter': 'simple'  # 控制台就打印简单的格式日志
         },
+        'logger': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
         'mail_admins': {  # error, 邮件输出通知管理员
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
@@ -341,8 +350,8 @@ LOGGING = {  # 开发中有用的信息 < 常规操作中有用的信息 < 有�
             'propagate': False,  # 向不向更高级别的logger传递, 避免root logger双重日志记录
         },
         'django.request': {  # django.request的, 会自动处理服务器500错误
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
+            'handlers': ['mail_admins', 'logger'],
+            'level': 'INFO',
         },
         'django.template': {  # django.template, 这里设置为info, 屏蔽admin_login时候的DEBUG信息
             'handlers': ['console'],
