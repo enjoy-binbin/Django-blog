@@ -35,10 +35,10 @@ filebeat.inputs:
 
   tags: ["nginx-access"]
 
-# collect error log
 - type: log
   enabled: true
 
+  # collect error log
   paths:
     - /var/log/nginx/error.log
 
@@ -156,51 +156,34 @@ setup.kibana:
 # Configure what output to use when sending the data collected by the beat.
 
 #-------------------------- Elasticsearch output ------------------------------
-#output.elasticsearch:
-#  # Array of hosts to connect to.
-#  hosts: ["http://elasticsearch:9200"]
-#
-#  # Optional protocol and basic auth credentials.
-#  #protocol: "https"
-#  username: "es_wr"
-#  password: "es_1123"
-#
-#  # configure the index name
-#  # index: "filebeat-%{[agent.version]}-%{+yyyy.MM.dd}"  # default
-#  # index: "nginx-%{[agent.version]}-%{+yyyy.MM}"  # change to nginx
-#
-#  # access and error, 根据when标签设置索引
-#  indices:
-#    - index: "nginx-access-%{[agent.version]}-%{+yyyy.MM}"
-#      when.contains:
-#        tags: "nginx-access"
-#    - index: "nginx-error-%{[agent.version]}-%{+yyyy.MM}"
-#      when.contains:
-#        tags: "nginx-error"
-#
-#
-## configure the index template
-#setup.template.overwrite: true
-#setup.template.enabled: false
-#setup.template.name: "nginx"
-#setup.template.pattern: "nginx-*"
+output.elasticsearch:
+  # Array of hosts to connect to.
+  hosts: ["http://elasticsearch:9200"]
 
-# output to redis, use redis list
-output.redis:
-  hosts: ["redis"]  # alias for a redis container
-  # password: "my_password"
-  # key: "filebeat"
-  db: 1
-  timeout: 5
+  # Optional protocol and basic auth credentials.
+  #protocol: "https"
+  username: "es_wr"
+  password: "es_1123"
 
-  keys:
-    - key: "nginx-access"
+  # configure the index name
+  # index: "filebeat-%{[agent.version]}-%{+yyyy.MM.dd}"  # default
+  # index: "nginx-%{[agent.version]}-%{+yyyy.MM}"  # change to nginx
+
+  # access and error, 根据when标签设置索引
+  indices:
+    - index: "nginx-access-%{[agent.version]}-%{+yyyy.MM}"
       when.contains:
         tags: "nginx-access"
-    - key: "nginx-error"
+    - index: "nginx-error-%{[agent.version]}-%{+yyyy.MM}"
       when.contains:
         tags: "nginx-error"
 
+
+# configure the index template
+setup.template.overwrite: true
+setup.template.enabled: false
+setup.template.name: "nginx"
+setup.template.pattern: "nginx-*"
 
 # A hole: https://www.elastic.co/guide/en/beats/filebeat/current/ilm.html
 setup.ilm.enabled: false

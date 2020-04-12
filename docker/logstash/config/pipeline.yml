@@ -1,0 +1,8 @@
+# This file is where you define your pipelines. You can define multiple.
+# For more information on multiple pipelines, see the documentation:
+#   https://www.elastic.co/guide/en/logstash/current/multiple-pipelines.html
+
+- pipeline.id: main
+  # 默认会加载目录下的所有配置文件, 可以指定单个文件
+  # path.config: "/usr/share/logstash/pipeline"
+  path.config: "/usr/share/logstash/pipeline/logstash.conf"

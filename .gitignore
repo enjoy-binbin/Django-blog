@@ -1,6 +1,6 @@
 # Binbin
 binblog/whoosh_index/*
-log/*
+# log/*
 my_test
 collectedstatic/*
 media/photo/*

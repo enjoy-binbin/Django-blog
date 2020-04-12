@@ -1,7 +1,12 @@
 version: '2.4'
 
+# 清除那些为None的临时镜像
+# docker rmi `docker images | grep "<none>" | awk '{print $3}'`
+
+
 # docker-compose up -d binblog
 # docker-compose up -d nginx
+# docker-compose up -d --build --force-recreate --no-deps nginx
 
 services:
   # nginx服务
@@ -15,16 +20,22 @@ services:
       - 443:443
     volumes:
       # 将配置文件挂载进容器, 并设置:ro 只读, 几个静态资源的挂载位置随意, 能自己对上配置文件即可
-      - ./docker/nginx:/etc/nginx/conf.d:ro
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./media:/var/www/Django-blog/media
       - ./static:/var/www/Django-blog/static
       - ./collectedstatic:/var/www/Django-blog/collectedstatic
       - ./log/nginx:/var/log/nginx  # 将nginx里的日志挂载出来, 然后在filebeat里作为输入源
+    environment:
+      - TZ=Asia/Shanghai
     links:
       - binblog:web  # 把外面这个binblog容器和nginx容器内部的web关联起来, nginx配置文件可以通过`web`找到binblog容器
+    labels:
+      service: nginx
     logging:
       options:
         max-size: '5m'  # 设置日志最大占5m
+        labels: "service"
 
   # mysql服务, 并且把自己本地的数据通过卷挂载进容器
   mysql:
@@ -51,8 +62,13 @@ services:
   redis:
     image: daocloud.io/redis:4.0
     container_name: redis
-    expose:
-      - 6379
+    # expose:
+    #   - 6379
+    ports:
+      - 6379:6379
+    logging:
+      options:
+        max-size: '5m'
 
   # binblog服务
   binblog:
@@ -95,9 +111,24 @@ services:
       memlock:
         soft: -1
         hard: -1
+    volumes:
+      - ./docker/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     logging:
       options:
         max-size: '5m'
+#    networks:
+#      - esnet
+
+  elasticsearch_head:
+    image: mobz/elasticsearch-head:5
+    container_name: es_head
+    ports:
+      - 9100:9100
+    logging:
+      options:
+        max-size: '5m'
+#    networks:
+#      - esnet
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.6.0
@@ -120,8 +151,29 @@ services:
     container_name: filebeat
     volumes:
       - ./log/nginx:/var/log/nginx  # 将nginx里的日志挂载出来, 然后在filebeat里作为输入源
+      - ./docker/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
     logging:
       options:
         max-size: '5m'
     depends_on:
       - elasticsearch
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.6.0
+    container_name: logstash
+    volumes:
+      - ./docker/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./docker/logstash/config/pipeline.yml:/usr/share/logstash/config/pipelines.yml:ro
+      - ./docker/logstash/pipeline/:/usr/share/logstash/pipeline/
+#      - /home/job/projects/wk_log_es/logstash/template/:/data/logstash/templates/
+    environment:
+      - TZ=Asia/Shanghai
+#      - LS_JAVA_OPTS=-Xmx4g -Xms4g
+#      - LS_HEAP_SIZE=4g
+    logging:
+      options:
+        max-size: '5m'
+#    depends_on:
+#      - elasticsearch
+#networks:
+#  esnet:
