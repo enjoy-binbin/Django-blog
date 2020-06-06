@@ -18,6 +18,10 @@ DATABASES['default'] = {
         'COLLATION': 'utf8_general_ci'
     }
 }
+for db in DATABASES:
+    if db == "default":
+        continue
+    DATABASES[db] = DATABASES["default"]
 
 CACHES['default'] = {
     "BACKEND": "django_redis.cache.RedisCache",
@@ -26,3 +30,7 @@ CACHES['default'] = {
         "CLIENT_CLASS": "django_redis.client.DefaultClient",
     }
 }
+for cache in CACHES:
+    if cache == "default":
+        continue
+    CACHES[cache] = CACHES["default"]

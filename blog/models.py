@@ -37,6 +37,11 @@ class Setting(models.Model):
         help_text='https://github.com/enjoy-binbin/Django-blog'
     )
     about_me = models.TextField(_('关于我'), default='Hello World', blank=True)
+    title = models.CharField(_("H1标题"), default="Hello World", blank=True, max_length=50)
+    motto = models.TextField(
+        _("座右铭"), default="Choose what you love. Love what you choose.", blank=True,
+        help_text="GithubPage中的motto",
+    )
 
     class Meta:
         verbose_name = _('0-站点配置')

@@ -67,9 +67,9 @@ template = """
 <header>
     <div class="inner">
         <a href="/">
-            <h1>彬彬同学丶</h1>
+            <h1>{{ h1_title }}</h1>
         </a>
-        <h2>Choose what you love. Love what you choose.</h2>
+        <h2>{{ motto }}</h2>
     </div>
 </header>
 
@@ -159,6 +159,8 @@ class HtmlRender:
                 "about_me": blog_setting.about_me,
                 "article_list": article_list,
                 "link_list": link_list,
+                "h1_title": blog_setting.title,
+                "motto": blog_setting.motto,
             })
             with open(self.blog_dir + '/index.html', 'w', encoding='utf8') as ff:
                 ff.write(Template(template).render(context))
@@ -196,6 +198,8 @@ class HtmlRender:
                 # "category_tree": article.get_category_tree(),
                 # "author": article.author,
                 # "content": markdown(article.content, extensions=['extra', 'codehilite', 'tables', 'toc'])
+                "h1_title": blog_setting.title,
+                "motto": blog_setting.motto,
             })
 
             file = self.blog_dir + '/' + article.category.name.strip() + '/' + article.title.strip() + '.html'
