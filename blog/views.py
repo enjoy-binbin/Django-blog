@@ -68,7 +68,7 @@ class ArticleDetailView(DetailView):
         # 不过一般又不建议使用inner join操作, 因为会涉及到高并发和死锁, TOLearn.
         # 使用prefetch_related(多对多, 一对多)是分别查询两张表, 然后再使用python处理, N+1次查询 -> 2次查询
         # 把子查询/join查询分成两次, 虽然会花费更多的cpu时间, 但是避免了系统的死锁, 提高了并发响应能力
-        return super().get_queryset().select_related('author', 'category').prefetch_related("tags")
+        return super().get_queryset().exclude(status='hide').select_related('author', 'category').prefetch_related("tags")
 
     def get_object(self, queryset=None):
         obj = super().get_object()
@@ -113,7 +113,7 @@ class CategoryArticleView(ListView):
             category = get_object_or_404(Category, slug=slug)
             self.object_name = category.name
             all_category_name = list(map(lambda c: c.name, category.get_sub_categorys()))
-            queryset = Article.objects.filter(category__name__in=all_category_name)
+            queryset = Article.objects.filter(category__name__in=all_category_name).exclude(status="hide")
 
             cache.set(self.cache_key, queryset)
         return queryset
@@ -139,7 +139,7 @@ class TagArticleView(ListView):
         if not queryset:
             tag_id = self.kwargs['tag_id']
             tag = get_object_or_404(Tag, id=tag_id)
-            queryset = Article.objects.filter(tags=tag)
+            queryset = Article.objects.filter(tags=tag).exclude(status="hide")
 
             cache.set(self.cache_key, queryset)
         return queryset
