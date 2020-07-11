@@ -10,6 +10,7 @@ version: '2.4'
 
 services:
   # nginx服务
+  # 如果看不到日志, 可以手动链接重启, ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
   nginx:  # service_name, docker-compose start nginx
     image: daocloud.io/nginx:1.15
     container_name: nginx  # container_name 不使用docker默认容器名, 因为自己玩只会有一个容器, 指定名字后好看 docker ps -a | grep nginx
@@ -22,6 +23,7 @@ services:
       # 将配置文件挂载进容器, 并设置:ro 只读, 几个静态资源的挂载位置随意, 能自己对上配置文件即可
       - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      # 这里挂载相关的静态资源给nginx代理, 如果相关样式丢失, 可以python manage.py collectedstatic 重建文件挂进去
       - ./media:/var/www/Django-blog/media
       - ./static:/var/www/Django-blog/static
       - ./collectedstatic:/var/www/Django-blog/collectedstatic
@@ -38,21 +40,35 @@ services:
         labels: "service"
 
   # mysql服务, 并且把自己本地的数据通过卷挂载进容器
+  # 需要自己先创建数据库, 进入容器create database binblog default character set utf8 collate utf8_general_ci;
+  # 然后如果自己有相关sql, 进行sql文件的导入, 通过挂载盘啥的导入即可
+  # 可以进入mysql使用source导入, mysql> use binblog; source /var/lib/mysql/binblog;
+  # 如果启动错误, 可以手动删除下面mysql数据目录中的ib_logfile0, ib_logfile1文件
   mysql:
     image: daocloud.io/mysql:5.7.26
     container_name: mysql
-    ports:
-      - 3307:3306  # 因为自己机子上也有跑着mysql, 所以这里映射端口改为3307
+    expose:
+      - 3306
+    # ports:
+    #   - 3306:3306
     logging:
       options:
         max-size: '5m'  # 设置日志最大占5m
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}  # 密码记录到机器的环境变量中
     volumes:
+      # 新linux上的逻辑
+      - /root/data/mysql:/var/lib/mysql  # 挂载数据目录
+      - /root/conf/mysql:/etc/mysql/conf.d  # 挂载配置文件目录
+
+      # 下面的是老mac上的逻辑
       # /usr/local/mysql/data/  # mysql > show variables like 'datadir';
       # 这里在mac下需要注意要在docker-preferences里设置file-sharing, 这里直接挂载其实不太安全
       # 和注意/data目录的权限相关(如果权限报错) root@HansomedeMacBook-Pro /u/l/mysql# chmod -R 777 /data/
       # ....注意日志冲突, 需要删除宿主机里ib_logfile*等文件
-      - /usr/local/mysql-5.7.28-macos10.14-x86_64/data:/var/lib/mysql
-    user: mysql
+      # - /usr/local/mysql-5.7.28-macos10.14-x86_64/data:/var/lib/mysql
+    # user: mysql
     # 如果报错111连接不上去, 就进入容器里的mysql进行grant操作
     # docker exec -it mysql /bin/bash
     # grant all privileges on *.* to root@'%' identified by 'your_pwd' with grant option;
@@ -62,15 +78,20 @@ services:
   redis:
     image: daocloud.io/redis:4.0
     container_name: redis
-    # expose:
-    #   - 6379
-    ports:
-      - 6379:6379
+    expose:
+       - 6379
+    #ports:
+    #  - 6379:6379
+    volumes:
+      - /root/data/redis:/data
     logging:
       options:
         max-size: '5m'
 
   # binblog服务
+  # 第一次连上db后, 可能需要进入binblog容器中初始化迁移相关db, 命令可以查看django-blog.Dockerfile
+  # 有相关环境变量的设置变更, 可能需要删除容器后重新创建 docker-compose stop binblog && docker-compose rm binblog
+  # 修改密码后, 如果连接不上db, ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '123456';
   binblog:
     build:
       context: .  # 设置上下文为当前目录
@@ -80,18 +101,20 @@ services:
     environment:
       - DEBUG=True  # DEBUG开关, 环境变量
       - DJANGO_SETTINGS_MODULE=binblog.settings_docker  # 配置文件的环境变量
+      - MYSQL_HOST=mysql
+      - MYSQL_NAME=${MYSQL_NAME}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     command: python manage.py runserver 0.0.0.0:8000
-    ports:
-      - 8000:8000
-    #expose:  # 可以只暴露端口给那些link里的容器, 不暴露端口给主机, ports是会暴露给主机的
-    #  - 8000
+    #ports:
+    # - 8000:8000
+    expose:  # 可以只暴露端口给那些link里的容器, 不暴露端口给主机, ports是会暴露给主机的
+      - 8000
     depends_on:
       - mysql
       - redis
     volumes:
-      - ./media:/app/media
-      - ./static:/app/static
-      - ./collectedstatic:/app/collectedstatic
+      - ./:/app
     logging:
       options:
         max-size: '5m'  # 设置日志最大占5m

@@ -7,11 +7,11 @@ DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', 'yes', 'y')
 # https://docs.travis-ci.com/user/database-setup/
 DATABASES['default'] = {
     'ENGINE': 'django.db.backends.mysql',
-    'NAME': 'binblog',  # 数据库名称
-    'USER': 'root',  # 数据库账号
-    'PASSWORD': 'ppp1123',  # 数据库密码, 根据docker里的设置
-    'PORT': 3306,  # 数据库端口, 默认为3306
-    'HOST': 'mysql',  # 数据库地址, 对应docker里容器的命名
+    'NAME': os.getenv('MYSQL_NAME', 'blog'),  # 数据库名称
+    'USER': os.getenv('MYSQL_USER', 'root'),  # 数据库账号
+    'PASSWORD': os.getenv('MYSQL_PASSWORD', '123456'),  # 数据库密码, 根据docker里的设置
+    'PORT': os.getenv('MYSQL_PORT', 3306),  # 数据库端口, 默认为3306
+    'HOST': os.getenv('MYSQL_HOST', 'mysql'),  # 数据库地址, 对应docker里容器的命名
     'TEST': {
         'NAME': 'test_db',  # 测试数据库名称
         'CHARSET': 'utf8',  # 测试数据库编码
