@@ -17,7 +17,16 @@ DATABASES['default'] = {
 
 }
 
+for db in DATABASES:
+    if db == "default":
+        continue
+    DATABASES[db] = DATABASES["default"]
+
 CACHES['default'] = {
     'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
     'LOCATION': 'django_cache',
 }
+for cache in CACHES:
+    if cache == "default":
+        continue
+    CACHES[cache] = CACHES["default"]
