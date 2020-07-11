@@ -72,7 +72,8 @@ class ArticleDetailView(DetailView):
 
     def get_object(self, queryset=None):
         obj = super().get_object()
-        obj.add_views()  # 文章阅读量加一
+        if not self.request.user.is_superuser:
+            obj.add_views()  # 文章阅读量加一
         self.object = obj
         # self.object = self.model.objects.get(id=obj.id)
         return obj
