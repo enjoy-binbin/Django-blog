@@ -9,6 +9,7 @@ from mdeditor.fields import MDTextField
 from unidecode import unidecode
 
 from blog.manager import TopCategoryManager
+from blog.manager import ArticleManager
 
 
 class Setting(models.Model):
@@ -139,12 +140,19 @@ class Article(BaseModel):
         ('a', _('文章')),  # 对应一篇篇文章
         ('p', _('页面')),  # 也是文章, 但是可以用于渲染当导航烂(例如 关于我)
     )
+    STATUS_CHOICES = (
+        ('normal', _('正常')),
+        ('excellent', _('优秀')),
+        ('hide', _('隐藏')),
+    )
 
+    objects = ArticleManager()
     category = models.ForeignKey('Category', verbose_name=_('文章分类'), on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('作者'), on_delete=models.CASCADE)
     title = models.CharField(_('文章标题'), max_length=100, unique=True)
     content = MDTextField(_('文章内容'))  # 使用了django-mdeditor作为md编辑器
     type = models.CharField(_('文章类型'), max_length=1, default='a', choices=TYPE_CHOICES)
+    status = models.CharField(_('文章状态'), max_length=10, default='normal', choices=STATUS_CHOICES)
     order = models.PositiveSmallIntegerField(_('排序'), default=0, help_text=_('越大越前'))
     views = models.PositiveIntegerField(_('浏览量'), default=0)
     tags = models.ManyToManyField('Tag', verbose_name=_('标签'), blank=True)

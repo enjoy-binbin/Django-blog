@@ -53,7 +53,7 @@ class ArticleAuthorListFilter(SimpleListFilter):
 
 class ArticleAdmin(admin.ModelAdmin):
     list_per_page = 100  # 每页显示几条数据
-    list_display = ('id', 'title', 'author', 'category_link', 'views', 'order')  # 列表显示的字段
+    list_display = ('id', 'title', 'author', 'category_link', 'views', 'order', 'status')  # 列表显示的字段
     list_display_links = ('id', 'title')  # 列表页可以跳转到详情页的字段
     # list_editable = ('views', 'order')  # 列表页可以编辑的字段
     search_fields = ('title', 'content')  # 搜索框可搜索的字段
@@ -105,7 +105,10 @@ class ArticleAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         """ 根据权限划分用户可以获取到的queryset """
-        queryset = super().get_queryset(request)
+        queryset = self.model._default_manager.get_queryset(hide=False)
+        ordering = self.get_ordering(request)
+        queryset = queryset.order_by(*ordering) if ordering else queryset
+
         if not request.user.is_superuser:
             self.list_filter = ()  # 普通用户取消过滤器
             return queryset.filter(author=request.user)
