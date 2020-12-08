@@ -1,6 +1,6 @@
 # BinBlog
 
-### Demo Address：http://13.58.211.105/
+### Demo Address：http://106.52.13.199/
 
 A blog system based on `python3.6` and `Django2.1`
 
@@ -12,6 +12,7 @@ A blog system based on `python3.6` and `Django2.1`
 
 What i use in this blog system.
 
+0. deploy please see the docker-compose.yml. sorry for the chinese
 1. DEBUG system: win10 x64
 2. Python related：Python3.6、Django2.1、Djangorestframework 3.9、Celery4
 3. DB：localize: Mysql，cache: Memcache，MQ: Redis

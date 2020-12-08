@@ -1,6 +1,6 @@
 # BinBlog
 
-### 无演示地址了, github page地址: binloveplay1314.cn
+### [Blog演示地址](http://106.52.13.199/), 后续基本迁移到[语雀](https://www.yuque.com/binbintongxuezhu/oxbcl9)了
 
 基于 `python3.6` 和 `Django2.2`的博客系统 
 
@@ -10,6 +10,7 @@
 
 ### 其他说明：
 
+0. 博客部署请参考`docker-compose.yml`文件说明, 原`docker`目录下的说明已经过时, 如需联系可以直接email我
 1. 以前第一版django-blog。基于Django1.9的<a href="https://github.com/enjoy-binbin/pyblog">pyblog</a>，前端自己设计的/捂脸。不维护了的
 2. 对于使用Docker部署，可以看docker目录下的文件或者看<a href="https://github.com/enjoy-binbin/docker-django-blog">Docker-djangoblog</a>仓库。
 3. 抛弃亚马逊云部署了，使用github page纯静态页面部署，本地开发一键生成HTML文件并进行github push. (演示图看最下，站点看首页)
