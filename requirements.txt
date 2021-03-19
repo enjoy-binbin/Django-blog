@@ -9,7 +9,7 @@ django-compressor==2.3
 django-haystack==2.8.1
 django-mdeditor==0.1.16
 django-pagedown==2.0.3
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 djangorestframework-jwt==1.11.0
 docutils==0.15.2
 idna==2.8
