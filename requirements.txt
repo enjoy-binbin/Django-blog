@@ -20,7 +20,7 @@ mistune==0.8.4
 more-itertools==7.2.0
 mysqlclient==1.4.4
 Pillow==6.2.1
-Pygments==2.4.2
+Pygments==2.7.4
 PyJWT==1.7.1
 pytz==2019.3
 rcssmin==1.0.6
