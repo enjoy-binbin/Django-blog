@@ -30,7 +30,7 @@ rjsmin==1.1.0
 six==1.12.0
 sqlparse==0.3.0
 Unidecode==1.1.1
-urllib3==1.25.6
+urllib3==1.26.5
 vine==1.3.0
 Whoosh==2.7.4
 zipp==0.6.0
