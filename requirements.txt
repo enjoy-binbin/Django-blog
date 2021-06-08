@@ -19,7 +19,7 @@ kombu==4.6.5
 mistune==0.8.4
 more-itertools==7.2.0
 mysqlclient==1.4.4
-Pillow==6.2.1
+Pillow==8.2.0
 Pygments==2.4.2
 PyJWT==1.7.1
 pytz==2019.3
